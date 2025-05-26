@@ -1,7 +1,61 @@
 import styles from "./SignUp.module.css";
 import Button from "../../components/Button/Button";
+import { useRef, useState } from "react";
 
 const SignUp = () => {
+  // Declare state to manage form data
+  const [signUpFormData, setSignUpFormData] = useState({
+    firstname: "",
+    lastname: "",
+    dateOfBirth: "",
+    profilePicture: null,
+    email: "",
+    password: "",
+    confirmPassword: "",
+    previewUrl: "",
+  });
+
+  const fileInputRef = useRef(null);
+
+  // Function to handle file input change
+  const handleInputChange = (e) => {
+    if (e.target.name === "file") return;
+    const { name, value } = e.target;
+    setSignUpFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Retriving the selected image and displaying preview
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const previewUrl = URL.createObjectURL(file);
+      setSignUpFormData((prevData) => ({
+        ...prevData,
+        profilePicture: file,
+        previewUrl: previewUrl,
+      }));
+      console.log("Selected file:", file);
+    } else {
+      setSignUpFormData((prevData) => ({
+        ...prevData,
+        profilePicture: null,
+        previewUrl: "",
+      }));
+    }
+  };
+
+  // Removing the selected image
+  const handleRemoveImage = () => {
+    setSignUpFormData((prevData) => ({
+      ...prevData,
+      profilePicture: null,
+      previewUrl: "",
+    }));
+    fileInputRef.current.value = null; // Clear the file input
+  };
   return (
     <div className={styles.formWrapper}>
       <form className={styles.signUpForm}>
@@ -18,6 +72,8 @@ const SignUp = () => {
             placeholder="Enter your first name"
             maxLength={50}
             className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.firstname}
           />
 
           {/*--------------------------------------------*/}
@@ -29,6 +85,8 @@ const SignUp = () => {
             placeholder="Enter your last name"
             maxLength={50}
             className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.lastname}
           />
 
           {/*--------------------------------------------*/}
@@ -38,6 +96,8 @@ const SignUp = () => {
             id="dateOfBirth"
             name="dateOfBirth"
             className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.dateOfBirth}
           />
           {/*--------------------------------------------*/}
           <label htmlFor="profilePicture">Profile Picture</label>
@@ -47,7 +107,24 @@ const SignUp = () => {
             name="profilePicture"
             accept=".jpg, .jpeg, .png"
             className={styles.formInput}
+            onChange={handleImageChange}
+            ref={fileInputRef}
           />
+          {signUpFormData.previewUrl && (
+            <div className={styles.imagePreviewContainer}>
+              <img
+                src={signUpFormData.previewUrl}
+                alt="User's profile picture preview"
+                className={styles.imagePreview}
+              />
+              <button
+                className={styles.removeImageButton}
+                onClick={handleRemoveImage}
+              >
+                Remove image
+              </button>
+            </div>
+          )}
         </fieldset>
         {/*--------------------------------------------*/}
         <fieldset className={styles.formGroup}>
@@ -62,6 +139,8 @@ const SignUp = () => {
             placeholder="Enter your email"
             maxLength={50}
             className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.email}
           />
 
           {/*--------------------------------------------*/}
@@ -74,6 +153,8 @@ const SignUp = () => {
             minLength={8}
             maxLength={20}
             className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.password}
           />
           {/*--------------------------------------------*/}
           <label htmlFor="confirmPassword">Confirm Password</label>
@@ -85,6 +166,8 @@ const SignUp = () => {
             minLength={8}
             maxLength={20}
             className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.confirmPassword}
           />
         </fieldset>
         {/*--------------------------------------------*/}
