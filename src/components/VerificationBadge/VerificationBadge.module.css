@@ -1,0 +1,35 @@
+.verificationBadge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.verifiedIcon {
+    color: #10b981 !important;
+    font-size: var(--x-large-font-size);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.unverifiedIcon {
+    color: #f59e0b !important;
+    font-size: var(--x-large-font-size);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+@media screen and (max-width: 768px) {
+    .verificationBadge {
+        right: -5px;
+        width: 35px;
+        height: 35px;
+    }
+
+    .verifiedIcon,
+    .unverifiedIcon {
+        font-size: var(--large-font-size);
+    }
+}

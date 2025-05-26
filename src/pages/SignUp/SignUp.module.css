@@ -1,0 +1,170 @@
+.formWrapper {
+    width: 100%;
+    min-height: 100vh;
+    max-height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    padding: var(--space-x-large);
+    color: var(--primary-color);
+    position: relative;
+}
+
+.signUpForm {
+    width: 50%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-medium);
+    padding: var(--space-large);
+    background-color: var(--primary-color-light);
+    border-radius: var(--border-radius-medium);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+    padding: var(--space-medium);
+    border-radius: var(--border-radius-medium);
+
+    .imagePreviewContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        padding: 8px;
+        overflow: hidden;
+    }
+
+    .imagePreview {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--box-shadow-base);
+    }
+
+    .removeImageButton {
+        margin-top: 8px;
+        background-color: #ff4d4d;
+        color: var(--primary-color-light);
+        border: none;
+        border-radius: 4px;
+        padding: 6px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        box-shadow: var(--box-shadow-base);
+    }
+
+    .removeImageButton:hover {
+        background-color: #e60000;
+    }
+}
+
+.formGroupTitle {
+    font-weight: bold;
+}
+
+.formInput {
+    width: 100%;
+    height: 32px;
+    padding: 0 var(--space-small);
+}
+
+.imagePreviewContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.imagePreview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--box-shadow-base);
+}
+
+.removeImageButton {
+    margin-top: 8px;
+    background-color: #ff4d4d;
+    color: var(--primary-color-light);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: var(--box-shadow-base);
+}
+
+.removeImageButton:hover {
+    background-color: #e60000;
+}
+
+.createAccountButton {
+    height: 48px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-radius: var(--border-radius-small);
+    border: none;
+    transition: all 0.3s ease-in-out;
+    font-size: var(--base-font-size);
+    box-shadow: var(--box-shadow-base);
+}
+
+.createAccountButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.errorMessage {
+    color: var(--text-error);
+}
+
+@media screen and (max-width: 768px) {
+    .formWrapper {
+        padding: var(--space-medium);
+    }
+
+    .signUpForm {
+        width: 100%;
+        padding: var(--space-medium);
+    }
+
+    .formInput {
+        height: 40px;
+    }
+
+    .createAccountButton {
+        height: 50px;
+        font-size: var(--base-font-size-large);
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+    .signUpForm {
+        padding: var(--space-small);
+    }
+
+}
