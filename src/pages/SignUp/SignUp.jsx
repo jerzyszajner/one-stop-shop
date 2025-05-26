@@ -2,6 +2,8 @@ import styles from "./SignUp.module.css";
 import Button from "../../components/Button/Button";
 import { useRef, useState } from "react";
 import { useSignUpValidation } from "../../hooks/useSignUpValidation";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   // Declare state to manage form data
@@ -21,6 +23,11 @@ const SignUp = () => {
   // Validate function from the custom hook
   const { errors, validate } = useSignUpValidation();
 
+  // Sign up function from the custom hook
+  const { signUp, signUpErrors, user } = useAuth();
+
+  // Redirect users after successful sign up
+  const navigate = useNavigate();
   // Function to handle file input change
   const handleInputChange = (e) => {
     if (e.target.name === "file") return;
@@ -67,6 +74,33 @@ const SignUp = () => {
     if (!validate(signUpFormData)) {
       console.log("Form is invalid");
       return;
+    }
+
+    try {
+      const userCredential = await signUp(
+        signUpFormData.email,
+        signUpFormData.password
+      );
+      console.log("User created successfully:", userCredential);
+      navigate("/verify-email");
+      // Reset the form data
+      setSignUpFormData({
+        firstname: "",
+        lastname: "",
+        dateOfBirth: "",
+        profilePicture: null,
+        email: "",
+        password: "",
+        confirmPassword: "",
+        previewUrl: "",
+      });
+
+      // Check if the ref exists before resetting and reset
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null;
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
   return (
