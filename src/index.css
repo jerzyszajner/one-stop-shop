@@ -1,5 +1,49 @@
+@font-face {
+    font-family: Lato-Regular;
+    src: url("/public/assets/fonts/Lato-Regular.ttf");
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+}
+
+input {
+    font-size: var(--base-font-size);
+}
+
+:root {
+    /* Colors */
+    --primary-color: #191e29;
+    --secondary-color: #2d3748;
+    --primary-color-light: #ffffff;
+    --secondary-color-light: #f7fafc;
+    --card-color: #ffffff;
+    --text-light: #ffffff;
+    --text-error: #e53e3e;
+    --box-shadow-base: 0 5px 15px rgba(0, 0, 0, 0.5);
+
+    /* Fonts */
+    --base-font-size: 1rem;
+    --small-font-size: 0.875rem;
+    --medium-font-size: 1.5rem;
+    --large-font-size: 2rem;
+    --x-large-font-size: 3rem;
+    --xx-large-font-size: 4rem;
+
+    /* Spacing */
+    --space-small: 0.5rem;
+    --space-medium: 1rem;
+    --space-large: 2rem;
+    --space-x-large: 4rem;
+
+    /* Border Radius */
+    --border-radius-small: 0.25rem;
+    --border-radius-medium: 0.5rem;
+    --border-radius-large: 1rem;
 }
