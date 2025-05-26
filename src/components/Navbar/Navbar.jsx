@@ -5,13 +5,26 @@ import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { getAuthContext } from "../../context/AuthContext";
 import Button from "../Button/Button";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../firebaseConfig";
 import { useState } from "react";
 
 const Navbar = () => {
   const { user } = getAuthContext();
-
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Function to sign out users
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      navigate("/");
+      console.log("User signed out successfully");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   // Toggle menu visibility
   const toggleMenu = () => {
@@ -33,7 +46,11 @@ const Navbar = () => {
         {/* ----------------------------------------- */}
         <div className={styles.cartHamburgerMenu}>
           {user ? (
-            <Button className={styles.signOutButton} ariaLabel={"Sign out"}>
+            <Button
+              className={styles.signOutButton}
+              onClick={handleSignOut}
+              ariaLabel={"Sign out"}
+            >
               Sign out
             </Button>
           ) : (
