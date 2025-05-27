@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import { useSignUpValidation } from "../../hooks/useSignUpValidation";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { database } from "../../../firebaseConfig";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const SignUp = () => {
   // Declare state to manage form data
@@ -81,8 +83,24 @@ const SignUp = () => {
         signUpFormData.email,
         signUpFormData.password
       );
-      console.log("User created successfully:", userCredential);
+
+      const user = userCredential.user;
+      console.log("User created successfully:", user);
+
+      // Save user data to Firestore
+      await setDoc(doc(database, "users", user.uid), {
+        uid: user.uid,
+        firstname: signUpFormData.firstname,
+        lastname: signUpFormData.lastname,
+        email: user.email,
+        dateOfBirth: signUpFormData.dateOfBirth || "",
+        profilePicture: null,
+        createdAt: serverTimestamp(),
+      });
+
       navigate("/verify-email");
+      console.log("User data saved to Firestore successfully");
+
       // Reset the form data
       setSignUpFormData({
         firstname: "",
@@ -107,10 +125,12 @@ const SignUp = () => {
     <div className={styles.formWrapper}>
       <form className={styles.signUpForm} onSubmit={handleSubmit} noValidate>
         <h2>Sign-up Form</h2>
+        {/*----------------Personal Information----------------*/}
         <fieldset className={styles.formGroup}>
           <legend className={styles.formGroupTitle}>
             Personal Information
           </legend>
+          {/*----------------First Name----------------*/}
           <label htmlFor="firstname">First name</label>
           <input
             type="text"
@@ -123,7 +143,7 @@ const SignUp = () => {
             value={signUpFormData.firstname}
           />
           {errors && <p className={styles.errorMessage}>{errors.firstname}</p>}
-          {/*--------------------------------------------*/}
+          {/*--------------------Last Name------------------------*/}
           <label htmlFor="lastname">Last name</label>
           <input
             type="text"
@@ -136,7 +156,7 @@ const SignUp = () => {
             value={signUpFormData.lastname}
           />
           {errors && <p className={styles.errorMessage}>{errors.lastname}</p>}
-          {/*--------------------------------------------*/}
+          {/*-------------------Date of Birth-------------------------*/}
           <label htmlFor="dateOfBirth">Date of Birth</label>
           <input
             type="date"
@@ -146,7 +166,7 @@ const SignUp = () => {
             onChange={handleInputChange}
             value={signUpFormData.dateOfBirth}
           />
-          {/*--------------------------------------------*/}
+          {/*-------------------Profile Picture-------------------------*/}
           <label htmlFor="profilePicture">Profile Picture</label>
           <input
             type="file"
@@ -173,11 +193,12 @@ const SignUp = () => {
             </div>
           )}
         </fieldset>
-        {/*--------------------------------------------*/}
+        {/*------------------------Additional Information--------------------*/}
         <fieldset className={styles.formGroup}>
           <legend className={styles.formGroupTitle}>
             Additional Information
           </legend>
+          {/*-------------------Email-------------------------*/}
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -190,7 +211,7 @@ const SignUp = () => {
             value={signUpFormData.email}
           />
           {errors && <p className={styles.errorMessage}>{errors.email}</p>}
-          {/*--------------------------------------------*/}
+          {/*-----------------------Password---------------------*/}
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -204,7 +225,7 @@ const SignUp = () => {
             value={signUpFormData.password}
           />
           {errors && <p className={styles.errorMessage}>{errors.password}</p>}
-          {/*--------------------------------------------*/}
+          {/*-----------------------Confirm Password---------------------*/}
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
             type="password"
@@ -220,9 +241,8 @@ const SignUp = () => {
           {errors && (
             <p className={styles.errorMessage}>{errors.confirmPassword}</p>
           )}
-          {/*--------------------------------------------*/}
         </fieldset>
-
+        {/*-----------------------End of Confirmation---------------------*/}
         <Button className={styles.createAccountButton}>Create account</Button>
       </form>
     </div>
