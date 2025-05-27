@@ -1,0 +1,6 @@
+.filter {
+  min-width: 150px;
+  height: 32px;
+  padding: 0 var(--space-small);
+  border-radius: var(--border-radius-small);
+}

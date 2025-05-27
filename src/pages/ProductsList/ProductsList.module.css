@@ -1,0 +1,32 @@
+.productsWrapper {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sortFilterContainer {
+  width: 100%;
+  height: auto;
+  padding: var(--space-medium) var(--space-x-large);
+  background-color: var(--secondary-color);
+  display: flex;
+  justify-content: center;
+  gap: var(--space-medium);
+}
+
+.productsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  padding: var(--space-large) var(--space-x-large);
+  background-color: var(--secondary-color-light);
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .productsContainer {
+    padding: var(--space-medium) var(--space-small);
+  }
+}
