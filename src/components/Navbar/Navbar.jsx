@@ -4,16 +4,23 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { getAuthContext } from "../../context/AuthContext";
+import { getCartContext } from "../../context/CartContext";
 import Button from "../Button/Button";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const Navbar = () => {
+  const { cart } = getCartContext();
   const { user } = getAuthContext();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Number of items in the cart
+  const CartItemsCount = useMemo(() => {
+    return cart.reduce((count, item) => count + item.quantity, 0);
+  }, [cart]);
 
   // Function to sign out users
   const handleSignOut = async () => {
@@ -46,28 +53,16 @@ const Navbar = () => {
         {/* ----------------------------------------- */}
         <div className={styles.cartHamburgerMenu}>
           {user ? (
-            <Button
-              className={styles.signOutButton}
-              onClick={handleSignOut}
-              ariaLabel={"Sign out"}
-            >
+            <Button className={styles.signOutButton} onClick={handleSignOut}>
               Sign out
             </Button>
           ) : (
-            <Link
-              to="/sign-in"
-              className={styles.signInLink}
-              aria-label="Sign in"
-            >
+            <Link to="/sign-in" className={styles.signInLink}>
               Sign in
             </Link>
           )}
           {user && (
-            <Link
-              to="/profile"
-              className={styles.profileButton}
-              aria-label="Go to Profile"
-            >
+            <Link to="/profile" className={styles.profileButton}>
               {user.imageUrl ? (
                 <img src={user.imageUrl} alt="User's profile picture" />
               ) : (
@@ -76,19 +71,14 @@ const Navbar = () => {
             </Link>
           )}
 
-          <Link
-            to="/cart"
-            className={styles.cartButton}
-            aria-label="Go to Cart"
-          >
+          <Link to="/cart" className={styles.cartButton}>
             <FontAwesomeIcon icon={faCartPlus} className={styles.cartIcon} />
+            {CartItemsCount > 0 && (
+              <span className={styles.cartBadge}>{CartItemsCount}</span>
+            )}
           </Link>
 
-          <Button
-            className={styles.hamburgerButton}
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-          >
+          <Button className={styles.hamburgerButton} onClick={toggleMenu}>
             <FontAwesomeIcon
               icon={faBars}
               className={styles.hamburgerMenuIcon}
@@ -109,7 +99,6 @@ const Navbar = () => {
           to="/"
           className={({ isActive }) => (isActive ? styles.activeLink : "")}
           onClick={closeMenu}
-          aria-label="Go to Home"
         >
           Home
         </NavLink>
@@ -118,7 +107,6 @@ const Navbar = () => {
           to="/products"
           className={({ isActive }) => (isActive ? styles.activeLink : "")}
           onClick={closeMenu}
-          aria-label="Go to Products"
         >
           Products
         </NavLink>
@@ -127,7 +115,6 @@ const Navbar = () => {
           to="/about"
           className={({ isActive }) => (isActive ? styles.activeLink : "")}
           onClick={closeMenu}
-          aria-label="Go to About"
         >
           About
         </NavLink>
@@ -136,7 +123,6 @@ const Navbar = () => {
           to="/contact"
           className={({ isActive }) => (isActive ? styles.activeLink : "")}
           onClick={closeMenu}
-          aria-label="Go to Contact"
         >
           Contact
         </NavLink>

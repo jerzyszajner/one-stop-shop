@@ -1,0 +1,57 @@
+.counterCard {
+  min-width: 120px;
+  /* Slightly wider for better layout */
+  background-color: rgba(255, 255, 255, 0.15);
+  /* ✅ Match cart transparency */
+  backdrop-filter: blur(10px);
+  /* ✅ Soft background blur */
+  border-radius: var(--border-radius-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--space-small);
+  justify-content: space-between;
+  /* ✅ Balanced button spacing */
+  padding: var(--space-small);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  /* ✅ Subtle depth */
+}
+
+.increaseButton,
+.decreaseButton {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-small);
+  border: none;
+  background-color: var(--secondary-color);
+  color: var(--text-light);
+  font-size: var(--medium-font-size);
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.increaseButton:hover,
+.decreaseButton:hover {
+  opacity: 0.9;
+  transform: scale(1.1);
+  /* ✅ Subtle interactive effect */
+}
+
+.countDisplay {
+  font-size: var(--medium-font-size);
+  font-weight: bold;
+  padding: 0 var(--space-small);
+  /* color: var(--primary-color-light); */
+  min-width: 28px;
+  /* ✅ Keeps alignment consistent */
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .counterCard {
+    width: 100%;
+  }
+}
