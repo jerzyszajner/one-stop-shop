@@ -1,15 +1,18 @@
 import styles from "./Navbar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faCartPlus,
+  faUser,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import { getAuthContext } from "../../context/AuthContext";
 import { getCartContext } from "../../context/CartContext";
 import Button from "../Button/Button";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 const Navbar = () => {
   const { cart } = getCartContext();
@@ -17,138 +20,188 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Number of items in the cart
-  const CartItemsCount = useMemo(() => {
-    return cart.reduce((count, item) => count + item.quantity, 0);
-  }, [cart]);
+  const cartItemsCount = useMemo(
+    () => cart.reduce((count, item) => count + item.quantity, 0),
+    [cart]
+  );
 
-  // Function to sign out users
   const handleSignOut = async () => {
     try {
       await signOut(auth);
       navigate("/");
-      console.log("User signed out successfully");
     } catch (error) {
-      console.log(error.message);
+      console.error("Sign out error:", error.message);
     }
   };
 
-  // Toggle menu visibility
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
-  // Close menu
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
 
   return (
     <nav className={styles.navbar}>
-      {/* ----------------------------------------- */}
-      <div className={styles.firstRow}>
-        <Link className={styles.logo} to="/" aria-label="Home">
-          <img src="/assets/icons/nav-logo.png" alt="One Stop Shop Logo" />
+      <div className={styles.container}>
+        {/* Logo */}
+        <Link
+          to="/"
+          className={styles.logo}
+          onClick={closeMenu}
+          aria-label="Home"
+        >
+          <img src="/assets/icons/nav-logo.png" alt="One Stop Shop" />
         </Link>
-        {/* ----------------------------------------- */}
-        <div className={styles.cartHamburgerMenu}>
+
+        {/* Desktop Navigation */}
+        <div className={styles.desktopNav}>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `${styles.navLink} ${isActive ? styles.activeLink : ""}`
+            }
+            aria-label="Home"
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/products"
+            className={({ isActive }) =>
+              `${styles.navLink} ${isActive ? styles.activeLink : ""}`
+            }
+            aria-label="Products"
+          >
+            Products
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `${styles.navLink} ${isActive ? styles.activeLink : ""}`
+            }
+            aria-label="About"
+          >
+            About
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `${styles.navLink} ${isActive ? styles.activeLink : ""}`
+            }
+            aria-label="Contact"
+          >
+            Contact
+          </NavLink>
+        </div>
+
+        {/* Actions */}
+        <div className={styles.actions}>
+          {/* Auth Button */}
           {user ? (
-            <Button
-              className={styles.signOutButton}
-              onClick={handleSignOut}
-              ariaLabel={"Sign out"}
-            >
-              <FontAwesomeIcon icon={faUser} className={styles.signOutIcon} />
-              Sign out
-            </Button>
+            <div className={styles.userSection}>
+              <Link to="/profile" className={styles.profileBtn}>
+                {user.imageUrl ? (
+                  <img
+                    src={user.imageUrl}
+                    alt="Profile"
+                    className={styles.avatar}
+                    aria-label="Profile"
+                  />
+                ) : (
+                  <FontAwesomeIcon icon={faUser} />
+                )}
+              </Link>
+              <Button
+                onClick={handleSignOut}
+                className={styles.signOutBtn}
+                aria-label="Sign out"
+              >
+                Sign out
+              </Button>
+            </div>
           ) : (
             <Link
               to="/sign-in"
-              className={styles.signInLink}
+              className={styles.signInBtn}
               aria-label="Sign in"
             >
               Sign in
             </Link>
           )}
-          {user && (
-            <Link
-              to="/profile"
-              className={styles.profileButton}
-              aria-label="View Profile"
-              onClick={closeMenu}
-            >
-              {user.imageUrl ? (
-                <img src={user.imageUrl} alt="User's profile picture" />
-              ) : (
-                <FontAwesomeIcon icon={faUser} className={styles.profileIcon} />
-              )}
-            </Link>
-          )}
 
-          <Link to="/cart" className={styles.cartButton} aria-label="View Cart">
-            <FontAwesomeIcon icon={faCartPlus} className={styles.cartIcon} />
-            {CartItemsCount > 0 && (
-              <span className={styles.cartBadge}>{CartItemsCount}</span>
+          {/* Cart */}
+          <Link to="/cart" className={styles.cartBtn} aria-label="Cart">
+            <FontAwesomeIcon icon={faCartPlus} />
+            {cartItemsCount > 0 && (
+              <span className={styles.cartBadge}>{cartItemsCount}</span>
             )}
           </Link>
 
+          {/* Mobile Menu Toggle */}
           <Button
-            className={styles.hamburgerButton}
             onClick={toggleMenu}
-            ariaLabel="Toggle Menu"
+            className={styles.menuToggle}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
             <FontAwesomeIcon
-              icon={faBars}
-              className={styles.hamburgerMenuIcon}
+              icon={isMenuOpen ? faTimes : faBars}
+              className={styles.hamburgerIcon}
             />
           </Button>
         </div>
       </div>
-      {/* ----------------------------------------- */}
+
+      {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className={styles.menuOverlay} onClick={closeMenu}></div>
+        <>
+          <div className={styles.overlay} onClick={closeMenu} />
+          <div className={styles.mobileNav}>
+            <NavLink
+              to="/"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
+              }
+              aria-label="Home"
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/products"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
+              }
+              aria-label="Products"
+            >
+              Products
+            </NavLink>
+            <NavLink
+              to="/about"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
+              }
+              aria-label="About"
+            >
+              About
+            </NavLink>
+            <NavLink
+              to="/contact"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
+              }
+              aria-label="Contact"
+            >
+              Contact
+            </NavLink>
+          </div>
+        </>
       )}
-      <div
-        className={`${styles.secondRow} ${
-          isMenuOpen ? styles.displayNavbarLinks : ""
-        }`}
-      >
-        <NavLink
-          to="/"
-          className={({ isActive }) => (isActive ? styles.activeLink : "")}
-          onClick={closeMenu}
-          aria-label="Home"
-        >
-          Home
-        </NavLink>
-
-        <NavLink
-          to="/products"
-          className={({ isActive }) => (isActive ? styles.activeLink : "")}
-          onClick={closeMenu}
-          aria-label="Products"
-        >
-          Products
-        </NavLink>
-
-        <NavLink
-          to="/about"
-          className={({ isActive }) => (isActive ? styles.activeLink : "")}
-          onClick={closeMenu}
-          aria-label="About"
-        >
-          About
-        </NavLink>
-
-        <NavLink
-          to="/contact"
-          className={({ isActive }) => (isActive ? styles.activeLink : "")}
-          onClick={closeMenu}
-          aria-label="Contact"
-        >
-          Contact
-        </NavLink>
-      </div>
     </nav>
   );
 };

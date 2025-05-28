@@ -1,149 +1,258 @@
 .navbar {
-  width: 100%;
-  padding: var(--space-medium) var(--space-x-large);
-  background-color: var(--primary-color);
-  display: flex;
-  flex-direction: column;
-  /* gap: var(--space-medium); */
+  position: sticky;
+  top: 0;
+  background: var(--primary-color);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 1000;
 }
 
-.firstRow {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-medium) var(--space-large);
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: var(--space-large);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 .logo img {
-  width: 80px;
+  width: 60px;
   height: auto;
-  object-fit: cover;
+  transition: transform 0.2s ease;
 }
 
-.cartHamburgerMenu {
+.logo:hover img {
+  transform: scale(1.05);
+}
+
+/* Desktop Navigation */
+.desktopNav {
   display: flex;
-  align-items: center;
   gap: var(--space-large);
 }
 
-.cartButton,
-.profileButton,
-.hamburgerButton {
-  background-color: transparent;
-  border: none;
-}
-
-.profileIcon,
-.cartIcon,
-.hamburgerMenuIcon {
-  font-size: var(--medium-font-size);
-  color: var(--primary-color-light);
-}
-
-.signInLink,
-.signOutButton {
-  border: 1px solid var(--primary-color-light);
-  background-color: var(--primary-color-light);
-  text-decoration: none;
-  padding: var(--space-small);
-  border-radius: var(--border-radius-small);
-}
-
-.signInLink:hover,
-.signOutButton:hover {
-  opacity: 0.8;
-}
-
-.secondRow {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-large);
-}
-
-.secondRow a {
-  font-size: var(--medium-font-size);
-  text-decoration: none;
+.navLink {
   color: var(--text-light);
-}
-
-.hamburgerButton {
-  display: none;
-}
-
-.activeLink {
-  border-bottom: 2px solid var(--primary-color-light);
-  transition: all 0.2s;
-}
-
-/* CART ITEMS COUNT */
-.cartButton {
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--space-small) var(--space-medium);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
   position: relative;
 }
 
-.cartBadge {
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  top: -10px;
-  right: -8px;
-  background-color: orangered;
-  /* Use a standout color */
-  font-size: var(--small-font-size);
-  font-weight: bold;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  color: var(--text-light);
-
-  align-items: center;
+.navLink:hover {
+  color: var(--active-link-color);
+  background: var(--glass-bg-hover);
 }
 
-/* ------------------------- */
-@media screen and (max-width: 680px) {
-  .navbar {
-    padding: var(--space-medium) var(--space-large);
+.activeLink {
+  color: var(--active-link-color);
+  background: var(--active-link-bg);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-medium);
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-medium);
+}
+
+.profileBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg-light);
+  color: var(--text-light);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.profileBtn:hover {
+  background: var(--glass-bg-medium);
+  transform: translateY(-1px);
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.signInBtn,
+.signOutBtn {
+  background: var(--active-link-color);
+  color: var(--text-light);
+  padding: var(--space-small) var(--space-medium);
+  border-radius: var(--border-radius-medium);
+  text-decoration: none;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signInBtn:hover,
+.signOutBtn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.cartBtn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg-light);
+  color: var(--text-light);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.cartBtn:hover {
+  background: var(--glass-bg-medium);
+  transform: translateY(-1px);
+}
+
+.cartBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--cart-badge-color);
+  color: var(--text-light);
+  font-size: 0.75rem;
+  font-weight: bold;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuToggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--glass-bg-light);
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menuToggle:hover {
+  background: var(--glass-bg-medium);
+}
+
+/* Mobile Navigation */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--overlay-bg);
+  z-index: 998;
+  backdrop-filter: blur(2px);
+}
+
+.mobileNav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--primary-color);
+  padding: var(--space-large);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-medium);
+  z-index: 999;
+  transform: translateX(0);
+  animation: slideInFromLeft 0.3s ease;
+  border-right: 1px solid var(--border-light);
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
   }
 
-  .hamburgerButton {
-    display: block;
-    z-index: 99999;
+  to {
+    transform: translateX(0);
+  }
+}
+
+.mobileNavLink {
+  color: var(--text-light);
+  text-decoration: none;
+  padding: var(--space-medium);
+  border-radius: var(--border-radius-medium);
+  transition: all 0.2s ease;
+  font-weight: 500;
+  width: 100%;
+  text-align: center;
+}
+
+.mobileNavLink:hover,
+.mobileNavLink.activeLink {
+  background: var(--active-link-bg);
+  color: var(--active-link-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-medium);
   }
 
-  .hamburgerMenuIcon {
-    font-size: var(--large-font-size);
+  .desktopNav {
+    display: none;
   }
 
-  .secondRow {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 70%;
-    height: 100vh;
-    flex-direction: column;
-    justify-content: center;
+  .menuToggle {
+    display: flex;
     align-items: center;
-    background-color: var(--primary-color);
-    z-index: 1000;
-    transition: left 0.4s ease;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-    padding: var(--space-x-large) 0;
-    gap: var(--space-x-large);
+    justify-content: center;
   }
 
-  .displayNavbarLinks {
-    left: 0;
+  .hamburgerIcon {
+    width: 25px;
+    height: 25px;
   }
 
-  .secondRow a {
-    font-size: var(--medium-font-size);
-    padding: var(--space-small) var(--space-medium);
+  .userSection {
+    gap: var(--space-small);
   }
 
-  .menuOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+  .signOutBtn {
+    padding: var(--space-small);
+    font-size: 0.875rem;
   }
 }
