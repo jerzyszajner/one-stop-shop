@@ -178,7 +178,7 @@ const Filter = ({ products, onProductsFilter }) => {
 
         {/* Special Filters */}
         <optgroup label="🚀 Special">
-          <option value="onSale">🔥 On Sale (10%+ discount)</option>
+          <option value="onSale">🔥 On Sale (10%+)</option>
           <option value="highRated">⭐ Highly Rated (4.0+)</option>
           <option value="lowStock">⚡ Low Stock</option>
           <option value="inStock">✅ In Stock</option>

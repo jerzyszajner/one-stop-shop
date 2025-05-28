@@ -1,7 +1,9 @@
 import styles from "./SignUp.module.css";
 import Button from "../../components/Button/Button";
+import Spinner from "../../components/Spinner/Spinner";
 import { useRef, useState } from "react";
 import { useSignUpValidation } from "../../hooks/useSignUpValidation";
+import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { database } from "../../../firebaseConfig";
@@ -20,16 +22,21 @@ const SignUp = () => {
     previewUrl: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   // Validate function from the custom hook
   const { errors, validate } = useSignUpValidation();
 
   // Sign up function from the custom hook
-  const { signUp, signUpErrors, user } = useAuth();
+  const { user, signUp, signUpErrors } = useAuth();
 
   // Redirect users after successful sign up
   const navigate = useNavigate();
+
+  // Image upload function from the custom hook
+  const { uploadImage } = useImageUpload();
+
   // Function to handle file input change
   const handleInputChange = (e) => {
     if (e.target.name === "file") return;
@@ -50,7 +57,6 @@ const SignUp = () => {
         profilePicture: file,
         previewUrl: previewUrl,
       }));
-      console.log("Selected file:", file);
     } else {
       setSignUpFormData((prevData) => ({
         ...prevData,
@@ -77,15 +83,19 @@ const SignUp = () => {
       console.log("Form is invalid");
       return;
     }
+    setIsLoading(true);
 
     try {
       const userCredential = await signUp(
         signUpFormData.email,
         signUpFormData.password
       );
-
       const user = userCredential.user;
       console.log("User created successfully:", user);
+
+      const uploadedImage = signUpFormData.profilePicture
+        ? await uploadImage(signUpFormData.profilePicture)
+        : null;
 
       // Save user data to Firestore
       await setDoc(doc(database, "users", user.uid), {
@@ -94,12 +104,11 @@ const SignUp = () => {
         lastname: signUpFormData.lastname,
         email: user.email,
         dateOfBirth: signUpFormData.dateOfBirth || "",
-        profilePicture: null,
+        profilePicture: uploadedImage,
         createdAt: serverTimestamp(),
       });
-
       navigate("/verify-email");
-      console.log("User data saved to Firestore successfully");
+      console.log("User added to the Firestore database");
 
       // Reset the form data
       setSignUpFormData({
@@ -112,13 +121,15 @@ const SignUp = () => {
         confirmPassword: "",
         previewUrl: "",
       });
-
-      // Check if the ref exists before resetting and reset
+      // Reset the file input
+      // Check if the ref exists before resetting
       if (fileInputRef.current) {
         fileInputRef.current.value = null;
       }
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -243,8 +254,13 @@ const SignUp = () => {
           )}
         </fieldset>
         {/*-----------------------End of Confirmation---------------------*/}
-        <Button className={styles.createAccountButton}>Create account</Button>
+        <Button className={styles.createAccountButton} disabled={isLoading}>
+          {isLoading ? "Creating account..." : "Create account"}
+        </Button>
       </form>
+
+      {/* Spinner overlay */}
+      {isLoading && <Spinner />}
     </div>
   );
 };
