@@ -47,22 +47,36 @@ const Navbar = () => {
     <nav className={styles.navbar}>
       {/* ----------------------------------------- */}
       <div className={styles.firstRow}>
-        <div className={styles.logo}>
+        <Link className={styles.logo} to="/" aria-label="Home">
           <img src="/assets/icons/nav-logo.png" alt="One Stop Shop Logo" />
-        </div>
+        </Link>
         {/* ----------------------------------------- */}
         <div className={styles.cartHamburgerMenu}>
           {user ? (
-            <Button className={styles.signOutButton} onClick={handleSignOut}>
+            <Button
+              className={styles.signOutButton}
+              onClick={handleSignOut}
+              ariaLabel={"Sign out"}
+            >
+              <FontAwesomeIcon icon={faUser} className={styles.signOutIcon} />
               Sign out
             </Button>
           ) : (
-            <Link to="/sign-in" className={styles.signInLink}>
+            <Link
+              to="/sign-in"
+              className={styles.signInLink}
+              aria-label="Sign in"
+            >
               Sign in
             </Link>
           )}
           {user && (
-            <Link to="/profile" className={styles.profileButton}>
+            <Link
+              to="/profile"
+              className={styles.profileButton}
+              aria-label="View Profile"
+              onClick={closeMenu}
+            >
               {user.imageUrl ? (
                 <img src={user.imageUrl} alt="User's profile picture" />
               ) : (
@@ -71,14 +85,18 @@ const Navbar = () => {
             </Link>
           )}
 
-          <Link to="/cart" className={styles.cartButton}>
+          <Link to="/cart" className={styles.cartButton} aria-label="View Cart">
             <FontAwesomeIcon icon={faCartPlus} className={styles.cartIcon} />
             {CartItemsCount > 0 && (
               <span className={styles.cartBadge}>{CartItemsCount}</span>
             )}
           </Link>
 
-          <Button className={styles.hamburgerButton} onClick={toggleMenu}>
+          <Button
+            className={styles.hamburgerButton}
+            onClick={toggleMenu}
+            ariaLabel="Toggle Menu"
+          >
             <FontAwesomeIcon
               icon={faBars}
               className={styles.hamburgerMenuIcon}
@@ -99,6 +117,7 @@ const Navbar = () => {
           to="/"
           className={({ isActive }) => (isActive ? styles.activeLink : "")}
           onClick={closeMenu}
+          aria-label="Home"
         >
           Home
         </NavLink>
@@ -107,6 +126,7 @@ const Navbar = () => {
           to="/products"
           className={({ isActive }) => (isActive ? styles.activeLink : "")}
           onClick={closeMenu}
+          aria-label="Products"
         >
           Products
         </NavLink>
@@ -115,6 +135,7 @@ const Navbar = () => {
           to="/about"
           className={({ isActive }) => (isActive ? styles.activeLink : "")}
           onClick={closeMenu}
+          aria-label="About"
         >
           About
         </NavLink>
@@ -123,6 +144,7 @@ const Navbar = () => {
           to="/contact"
           className={({ isActive }) => (isActive ? styles.activeLink : "")}
           onClick={closeMenu}
+          aria-label="Contact"
         >
           Contact
         </NavLink>
