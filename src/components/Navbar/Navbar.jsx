@@ -54,7 +54,7 @@ const Navbar = () => {
           onClick={closeMenu}
           aria-label="Home"
         >
-          <img src="/assets/icons/nav-logo.png" alt="One Stop Shop" />
+          <img src="/assets/icons/nav-logo.webp" alt="One Stop Shop" />
         </Link>
 
         {/* Desktop Navigation */}

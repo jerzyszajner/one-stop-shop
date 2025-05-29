@@ -4,7 +4,7 @@ const NotFound = () => {
   return (
     <div className={styles.notFoundContainer}>
       <img
-        src="/assets/images/404-cat.png"
+        src="/assets/images/404-cat.webp"
         alt="404 - Page not found"
         className={styles.notFoundImage}
       />

@@ -49,7 +49,7 @@ const Home = () => {
         </div>
         <div className={styles.heroImage}>
           <img
-            src="/assets/images/shopping-hero.png"
+            src="/assets/images/shopping-hero.webp"
             alt="Shopping Experience Image"
             className={styles.heroImageImg}
           />
@@ -66,7 +66,7 @@ const Home = () => {
             aria-label="View Beauty Products"
           >
             <img
-              src="/assets/images/beauty-thumb.png"
+              src="/assets/images/beauty-thumb.webp"
               alt="Beauty"
               className={styles.categoryCardImg}
             />
@@ -78,7 +78,7 @@ const Home = () => {
             aria-label="View Fragrances Products"
           >
             <img
-              src="/assets/images/fragrances-thumb.png"
+              src="/assets/images/fragrances-thumb.webp"
               alt="Fragrances"
               className={styles.categoryCardImg}
             />
@@ -90,7 +90,7 @@ const Home = () => {
             aria-label="View Furniture Products"
           >
             <img
-              src="/assets/images/furniture-thumb.png"
+              src="/assets/images/furniture-thumb.webp"
               alt="Furniture"
               className={styles.categoryCardImg}
             />
@@ -102,7 +102,7 @@ const Home = () => {
             aria-label="View Groceries Products"
           >
             <img
-              src="/assets/images/groceries-thumb.png"
+              src="/assets/images/groceries-thumb.webp"
               alt="Groceries"
               className={styles.categoryCardImg}
             />
