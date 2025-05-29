@@ -12,6 +12,7 @@ const getCartToken = () => {
   }
   return cartToken;
 };
+// Cart state management reducer
 const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_TO_CART": {
@@ -63,11 +64,13 @@ export const CartProvider = ({ children }) => {
   const cartKey = getCartToken();
   const [cart, dispatch] = useReducer(cartReducer, []);
 
+  // Load cart from localStorage on mount
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
     dispatch({ type: "UPDATE_CART", payload: storedCart });
   }, [cartKey]);
 
+  // Save cart to localStorage on changes
   useEffect(() => {
     localStorage.setItem(cartKey, JSON.stringify(cart));
   }, [cartKey, cart]);

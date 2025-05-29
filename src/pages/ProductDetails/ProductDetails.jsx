@@ -11,6 +11,7 @@ import { getCartContext } from "../../context/CartContext";
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  // Product details state
   const [product, setProduct] = useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,6 +25,7 @@ const ProductDetails = () => {
 
   const { dispatch, cart } = getCartContext();
 
+  // Add product to cart and show notification
   const handleAddToCart = () => {
     if (Object.keys(product).length > 0) {
       dispatch({ type: "ADD_TO_CART", payload: product });
@@ -50,6 +52,7 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
+    // Fetch single product from database
     const fetchProductDetails = async () => {
       try {
         setIsLoading(true);
@@ -98,6 +101,7 @@ const ProductDetails = () => {
 
   return (
     <div className={styles.wrapper}>
+      {/* Toast notifications */}
       <Toast
         title={toastContent.title}
         description={toastContent.description}
@@ -107,10 +111,11 @@ const ProductDetails = () => {
         duration={toastContent.type === "error" ? 7000 : 5000}
       />
       <div className={styles.productDetailsContainer}>
+        {/* Product image gallery */}
         <div className={styles.productImageContainer}>
           {product.images && product.images.length > 0 ? (
             <div className={styles.imageGallery}>
-              {/* Main Image */}
+              {/*----------------Main Image----------------*/}
               <div className={styles.mainImageContainer}>
                 <img
                   src={product.images[selectedImageIndex]}
@@ -119,7 +124,7 @@ const ProductDetails = () => {
                 />
               </div>
 
-              {/* Thumbnails (only if more than 1 image) */}
+              {/*----------------Thumbnails----------------*/}
               {product.images.length > 1 && (
                 <div className={styles.thumbnailsContainer}>
                   {product.images.map((image, index) => (
@@ -144,36 +149,44 @@ const ProductDetails = () => {
             </div>
           )}
         </div>
+        {/* Product information */}
         <div className={styles.productDescriptionContainer}>
           <h2 className={styles.productTitle}>{product.title}</h2>
+          {/*----------------Category----------------*/}
           <p className={styles.productCategory}>
             <strong className={styles.productLabel}>Category: </strong>
             {product.category}
           </p>
+          {/*----------------Stock----------------*/}
           <p className={styles.productStock}>
             <strong className={styles.productLabel}>Stock: </strong>
             {product.stock}
           </p>
+          {/*----------------Discount----------------*/}
           <p className={styles.productDiscount}>
             <strong className={styles.productLabel}>
               Discount Percentage:{" "}
             </strong>
             {product.discountPercentage}
           </p>
+          {/*----------------Rating----------------*/}
           <p className={styles.productRating}>
             <strong className={styles.productLabel}>Rating: </strong>
             {product.rating}
           </p>
+          {/*----------------Minimum Order----------------*/}
           <p className={styles.productMinOrder}>
             <strong className={styles.productLabel}>
               Minimum Order Quantity:{" "}
             </strong>
             {product.minimumOrderQuantity}
           </p>
+          {/*----------------Price----------------*/}
           <p className={styles.productPrice}>
             <strong className={styles.productLabel}>Price: </strong>
             {product.price}
           </p>
+          {/*----------------Description----------------*/}
           <p className={styles.productDescription}>
             <strong className={styles.productLabel}>Description: </strong>
             {product.description}

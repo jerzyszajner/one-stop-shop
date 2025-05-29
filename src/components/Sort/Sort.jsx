@@ -2,8 +2,10 @@ import { useState } from "react";
 import styles from "./Sort.module.css";
 
 const Sort = ({ products, onProductsSort }) => {
+  // Sort option state
   const [sortOption, setSortOption] = useState("");
 
+  // Handle sort selection change
   const handleSortChange = (event) => {
     if (!products || products.length === 0) return;
 
@@ -37,6 +39,7 @@ const Sort = ({ products, onProductsSort }) => {
 
   return (
     <>
+      {/* Sort dropdown */}
       <select
         name="sort"
         id="sort"

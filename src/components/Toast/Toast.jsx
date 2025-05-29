@@ -6,9 +6,10 @@ const Toast = ({
   description,
   isVisible,
   onHide,
-  duration = 5000,
+  duration = 2000,
   type = "info", // success, error, warning, info
 }) => {
+  // Auto-hide toast after duration
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
@@ -23,6 +24,7 @@ const Toast = ({
 
   return (
     <div className={`${styles.toast} ${styles[type]}`}>
+      {/* Toast content */}
       <h3 className={styles.toastTitle}>{title}</h3>
       <p className={styles.toastDescription}>{description}</p>
     </div>

@@ -1,8 +1,8 @@
+/* Toast notification styling */
 .toast {
     position: fixed;
     top: 90px;
     right: 20px;
-    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: var(--text-light);
     padding: 16px 24px;
@@ -15,6 +15,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Toast content */
 .toastTitle {
     margin: 0 0 8px 0;
     font-size: 16px;
@@ -28,6 +29,7 @@
     line-height: 1.4;
 }
 
+/* Toast type variations */
 .toast.success {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
@@ -44,6 +46,7 @@
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 }
 
+/* Toast slide-in animation */
 @keyframes slideIn {
     from {
         transform: translateX(100%);

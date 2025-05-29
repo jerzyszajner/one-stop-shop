@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { database } from "../../firebaseConfig";
 
 export const useFetchProducts = () => {
+  // Fetch state management
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Fetch all products from database
     const fetchProducts = async () => {
       try {
         const querySnapshot = await getDocs(collection(database, "products"));
-        console.log("querySnapshot", querySnapshot);
 
         const productsList = querySnapshot.docs.map((doc) => ({
           documentId: doc.id,

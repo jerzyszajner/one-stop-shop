@@ -5,12 +5,11 @@ import { router } from "./routes/routes.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 
+// Application entry point with context providers
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
   <AuthProvider>
     <CartProvider>
       <RouterProvider router={router} />
     </CartProvider>
   </AuthProvider>
-  // </StrictMode>,
 );

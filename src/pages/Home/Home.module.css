@@ -1,8 +1,9 @@
+/* Home page styling */
 .homePage {
     min-height: 100vh;
 }
 
-/* Hero Section */
+/* Hero section */
 .hero {
     display: flex;
     align-items: center;
@@ -18,6 +19,7 @@
     max-width: 500px;
 }
 
+/* Badge styling */
 .badge {
     background: rgba(255, 255, 255, 0.2);
     padding: var(--space-small) var(--space-medium);
@@ -29,6 +31,7 @@
     backdrop-filter: blur(10px);
 }
 
+/* Hero title and subtitle */
 .heroTitle {
     font-size: var(--xx-large-font-size);
     font-weight: bold;
@@ -43,6 +46,7 @@
     line-height: 1.5;
 }
 
+/* Hero buttons */
 .heroButtons {
     display: flex;
     gap: var(--space-medium);
@@ -87,6 +91,7 @@
     color: var(--primary-color);
 }
 
+/* Hero image */
 .heroImage {
     flex: 1;
     display: flex;
@@ -102,7 +107,7 @@
     border-radius: var(--border-radius-large);
 }
 
-/* Categories Section */
+/* Categories section */
 .categories {
     padding: var(--space-x-large) 5%;
     background: var(--primary-color-light);
@@ -123,6 +128,7 @@
     margin: 0 auto;
 }
 
+/* Category cards */
 .categoryCard {
     position: relative;
     border-radius: var(--border-radius-large);
@@ -157,7 +163,7 @@
     text-align: center;
 }
 
-/* Featured Products */
+/* Featured products section */
 .featured {
     padding: var(--space-x-large) 5%;
     background: #f8f9fa;
@@ -181,6 +187,7 @@
     opacity: 0.7;
 }
 
+/* Product grid */
 .productGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -201,6 +208,7 @@
     transform: translateY(-5px);
 }
 
+/* Product styling */
 .productImage {
     width: 100%;
     height: 200px;
@@ -229,7 +237,7 @@
     color: #666;
 }
 
-/* Features Section */
+/* Features section */
 .features {
     padding: var(--space-x-large) 5%;
     background: var(--secondary-color-light);
@@ -267,7 +275,7 @@
     font-size: var(--small-font-size);
 }
 
-/* Stats Section */
+/* Stats section */
 .stats {
     padding: var(--space-x-large) 5%;
     background: var(--primary-color);
@@ -294,7 +302,7 @@
     opacity: 0.9;
 }
 
-/* Responsive Design */
+/* Responsive design */
 @media screen and (max-width: 768px) {
     .hero {
         flex-direction: column;

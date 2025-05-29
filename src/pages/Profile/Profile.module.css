@@ -1,3 +1,4 @@
+/* Profile page styling */
 .profileWrapper {
   width: 100%;
   padding: var(--space-large) var(--space-x-large);
@@ -8,6 +9,7 @@
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 }
 
+/* Profile container */
 .profileContainer {
   width: 100%;
   max-width: 800px;
@@ -20,6 +22,7 @@
   backdrop-filter: blur(10px);
 }
 
+/* Profile image section */
 .profileImageContainer {
   flex: 0 0 350px;
   display: flex;
@@ -33,6 +36,7 @@
   margin-bottom: var(--space-large);
 }
 
+/* Profile image */
 .profileImage {
   width: 200px;
   height: 200px;
@@ -47,6 +51,7 @@
   transform: scale(1.05);
 }
 
+/* Welcome title */
 .welcomeTitle {
   font-size: var(--large-font-size);
   color: var(--primary-color);
@@ -54,6 +59,7 @@
   margin-bottom: var(--space-medium);
 }
 
+/* Profile details section */
 .profileDetailsContainer {
   flex: 1;
   display: flex;
@@ -70,6 +76,7 @@
   padding-bottom: var(--space-medium);
 }
 
+/* Details grid */
 .detailsGrid {
   display: grid;
   gap: var(--space-medium);
@@ -86,6 +93,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Profile labels and values */
 .profileLabel {
   font-size: var(--small-font-size);
   color: var(--secondary-color);
@@ -100,6 +108,7 @@
   font-weight: 500;
 }
 
+/* Status styling */
 .statusValue {
   display: flex;
   align-items: center;
@@ -116,7 +125,7 @@
   font-weight: 600;
 }
 
-/* Responsive Design */
+/* Responsive design */
 @media screen and (max-width: 768px) {
   .profileWrapper {
     padding: var(--space-medium);

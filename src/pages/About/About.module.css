@@ -1,8 +1,10 @@
+/* About page styling */
 .aboutPage {
     min-height: 100vh;
     background: var(--secondary-color-light);
 }
 
+/* Hero section */
 .hero {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: var(--text-light);
@@ -29,6 +31,7 @@
     line-height: 1.6;
 }
 
+/* Main content section */
 .content {
     max-width: 1200px;
     margin: 0 auto;
@@ -38,6 +41,7 @@
     gap: var(--space-x-large);
 }
 
+/* Story and mission sections */
 .story,
 .mission {
     text-align: center;
@@ -62,6 +66,7 @@
     opacity: 0.8;
 }
 
+/* Values section */
 .values {
     text-align: center;
 }
@@ -103,7 +108,7 @@
     line-height: 1.6;
 }
 
-/* Responsive Design */
+/* Responsive design */
 @media (max-width: 768px) {
     .title {
         font-size: var(--x-large-font-size);

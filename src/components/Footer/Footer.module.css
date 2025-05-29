@@ -1,9 +1,11 @@
+/* Footer component styling */
 .footer {
     background-color: var(--primary-color);
     padding: var(--space-medium);
     margin-top: auto;
 }
 
+/* Footer content container */
 .footerBottom {
     display: flex;
     justify-content: space-between;
@@ -13,10 +15,12 @@
     color: var(--text-light);
 }
 
+/* Payment methods display */
 .paymentMethods span {
     font-size: 1.5rem;
 }
 
+/* Responsive design */
 @media (max-width: 768px) {
     .footerBottom {
         flex-direction: column;

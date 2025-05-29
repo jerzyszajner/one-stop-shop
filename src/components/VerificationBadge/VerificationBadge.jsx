@@ -1,13 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
-  faExclamationCircle, // Zmiana na pomarańczową ikonę
+  faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./VerificationBadge.module.css";
 
 const VerificationBadge = ({ isVerified, className = "" }) => {
   return (
     <div className={`${styles.verificationBadge} ${className}`}>
+      {/* Email verification status indicator */}
       {isVerified ? (
         <FontAwesomeIcon
           icon={faCheckCircle}

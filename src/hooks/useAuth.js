@@ -6,9 +6,11 @@ import {
 import { auth } from "../../firebaseConfig";
 
 export const useAuth = () => {
+  // Authentication state
   const [user, setUser] = useState(null);
   const [signUpErrors, setSignUpErrors] = useState(null);
 
+  // Create new user account and send verification email
   const signUp = async (email, password) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(

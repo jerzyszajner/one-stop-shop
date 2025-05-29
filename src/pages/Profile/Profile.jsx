@@ -14,10 +14,12 @@ import {
 import { auth, database } from "../../../firebaseConfig";
 
 const Profile = () => {
+  // User profile state
   const [userData, setUserData] = useState(null);
   const { user } = getAuthContext();
 
   useEffect(() => {
+    // Fetch user profile data from database
     const fetchUserData = async () => {
       try {
         if (!user?.uid) return;
@@ -32,6 +34,7 @@ const Profile = () => {
       }
     };
 
+    // Fetch user's most recent order
     const fetchLastOrder = async () => {
       try {
         if (!user?.uid) return;
@@ -62,10 +65,11 @@ const Profile = () => {
   return (
     <main className={styles.profileWrapper}>
       <div className={styles.profileContainer}>
+        {/* Profile header section */}
         <section className={styles.profileImageContainer}>
           <div className={styles.imageWrapper}>
             <img
-              src={userData?.profilePicture || "/assets/icons/userAvatar.png"}
+              src={userData?.profilePicture || "/assets/icons/user-avatar.webp"}
               alt={`Profile picture of ${userData?.firstname || "User"}`}
               className={styles.profileImage}
             />
@@ -78,10 +82,12 @@ const Profile = () => {
           </h1>
         </section>
 
+        {/* Profile details section */}
         <section className={styles.profileDetailsContainer}>
           <h2 className={styles.profileTitle}>Profile Details</h2>
 
           <div className={styles.detailsGrid}>
+            {/*----------------First Name----------------*/}
             <div className={styles.detailItem}>
               <span className={styles.profileLabel}>First Name</span>
               <span className={styles.profileValue}>
@@ -89,6 +95,7 @@ const Profile = () => {
               </span>
             </div>
 
+            {/*----------------Last Name----------------*/}
             <div className={styles.detailItem}>
               <span className={styles.profileLabel}>Last Name</span>
               <span className={styles.profileValue}>
@@ -96,6 +103,7 @@ const Profile = () => {
               </span>
             </div>
 
+            {/*----------------Date of Birth----------------*/}
             <div className={styles.detailItem}>
               <span className={styles.profileLabel}>Date of Birth</span>
               <span className={styles.profileValue}>
@@ -103,6 +111,7 @@ const Profile = () => {
               </span>
             </div>
 
+            {/*----------------Email----------------*/}
             <div className={styles.detailItem}>
               <span className={styles.profileLabel}>Email</span>
               <span className={styles.profileValue}>
@@ -110,6 +119,7 @@ const Profile = () => {
               </span>
             </div>
 
+            {/*----------------Account Created----------------*/}
             <div className={styles.detailItem}>
               <span className={styles.profileLabel}>Account Created</span>
               <span className={styles.profileValue}>
@@ -119,6 +129,7 @@ const Profile = () => {
               </span>
             </div>
 
+            {/*----------------Last Sign In----------------*/}
             <div className={styles.detailItem}>
               <span className={styles.profileLabel}>Last Sign In</span>
               <span className={styles.profileValue}>
@@ -130,6 +141,7 @@ const Profile = () => {
               </span>
             </div>
 
+            {/*----------------Last Purchase----------------*/}
             <div className={styles.detailItem}>
               <span className={styles.profileLabel}>Last Purchase</span>
               <span className={styles.profileValue}>
@@ -139,6 +151,7 @@ const Profile = () => {
               </span>
             </div>
 
+            {/*----------------Email Status----------------*/}
             <div className={styles.detailItem}>
               <span className={styles.profileLabel}>Email Status</span>
               <span className={`${styles.profileValue} ${styles.statusValue}`}>

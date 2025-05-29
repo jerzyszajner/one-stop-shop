@@ -1,3 +1,4 @@
+/* Form wrapper */
 .formWrapper {
     width: 100%;
     min-height: 100vh;
@@ -11,6 +12,7 @@
     position: relative;
 }
 
+/* Sign up page styling */
 .signUpForm {
     width: 50%;
     max-width: 500px;
@@ -28,49 +30,9 @@
     gap: var(--space-small);
     padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
-
-    .imagePreviewContainer {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: #f9f9f9;
-        border: 1px solid #ccc;
-        padding: 8px;
-        overflow: hidden;
-    }
-
-    .imagePreview {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: var(--box-shadow-base);
-    }
-
-    .removeImageButton {
-        margin-top: 8px;
-        background-color: #ff4d4d;
-        color: var(--primary-color-light);
-        border: none;
-        border-radius: 4px;
-        padding: 6px 10px;
-        font-size: 14px;
-        cursor: pointer;
-        box-shadow: var(--box-shadow-base);
-    }
-
-    .removeImageButton:hover {
-        background-color: #e60000;
-    }
 }
 
+/* Form styling */
 .formGroupTitle {
     font-weight: bold;
 }
@@ -81,6 +43,7 @@
     padding: 0 var(--space-small);
 }
 
+/* Image preview container */
 .imagePreviewContainer {
     width: 100%;
     height: 100%;
@@ -122,6 +85,7 @@
     background-color: #e60000;
 }
 
+/* Create account button */
 .createAccountButton {
     height: 48px;
     background-color: var(--primary-color);
@@ -141,6 +105,7 @@
     color: var(--text-error);
 }
 
+/* Responsive design */
 @media screen and (max-width: 768px) {
     .formWrapper {
         padding: var(--space-medium);
@@ -159,12 +124,10 @@
         height: 50px;
         font-size: var(--base-font-size-large);
     }
-
 }
 
 @media screen and (max-width: 480px) {
     .signUpForm {
         padding: var(--space-small);
     }
-
 }

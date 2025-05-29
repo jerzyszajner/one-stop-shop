@@ -1,9 +1,11 @@
+/* Checkout page styling */
 .checkoutWrapper {
   width: 100%;
   min-height: 100vh;
   position: relative;
 }
 
+/* Main checkout container */
 .checkoutContainer {
   width: 100%;
   min-height: 100vh;
@@ -12,6 +14,7 @@
   padding: var(--space-x-large);
 }
 
+/* Purchase overview and payment sections */
 .purchaseOverviewContainer,
 .paymentContainer {
   flex: 1;
@@ -34,14 +37,17 @@
   padding: 0;
 }
 
+/* Cart item in checkout */
 .cartItem {
   display: flex;
   align-items: center;
   gap: var(--space-medium);
   padding: var(--space-medium);
+  border-bottom: 2px solid var(--secondary-color);
   box-shadow: var(--box-shadow-base);
 }
 
+/* Product image in checkout */
 .gameImage {
   max-width: 90px;
   height: auto;
@@ -49,6 +55,7 @@
   box-shadow: var(--box-shadow-base);
 }
 
+/* Game details section */
 .gameDetails {
   flex: 2;
   font-size: var(--basic-font-size);
@@ -58,12 +65,14 @@
   gap: var(--space-small);
 }
 
+/* Quantity display */
 .quantity {
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
+/* Remove button in checkout */
 .removeButton {
   max-width: 100px;
   background-color: var(--text-error);
@@ -81,35 +90,15 @@
   transform: scale(1.05);
 }
 
+/* Total amount in checkout */
 .totalAmount {
   padding: var(--space-medium);
-  font-size: var(--medium-font-size);
+  font-size: var(--large-font-size);
   font-weight: bold;
   box-shadow: var(--box-shadow-base);
 }
 
-/* .toCheckoutLink {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
-  max-width: 380px;
-  text-decoration: none;
-  height: 48px;
-  background-color: var(--secondary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: var(--border-radius-small);
-  transition: all 0.3s ease-in-out;
-  font-size: var(--base-font-size);
-  margin: 0 auto;
-}
-
-.toCheckoutLink:hover {
-  background-color: var(--primary-color);
-} */
-
-/* Payment details styles */
+/* Payment details section */
 .paymentContainer {
   width: 80%;
   height: 100%;
@@ -122,6 +111,7 @@
   color: var(--text-light);
 }
 
+/* Payment form */
 .paymentForm {
   display: flex;
   flex-direction: column;
@@ -141,7 +131,6 @@
   padding: var(--space-small);
   border-radius: var(--border-radius-small);
   border: 1px solid var(--border-color);
-
   color: var(--primary-color);
 }
 
@@ -149,6 +138,7 @@
   height: 32px;
 }
 
+/* Card details section */
 .cardDetails {
   display: flex;
   align-items: center;
@@ -159,6 +149,7 @@
   flex: 1;
 }
 
+/* Pay button */
 .payButton {
   display: flex;
   justify-content: center;
@@ -181,6 +172,7 @@
   background-color: var(--primary-color);
 }
 
+/* Expiry and CVV containers */
 .expiryContainer,
 .cvvContainer {
   display: flex;
@@ -193,10 +185,12 @@
   max-width: 60px;
 }
 
+/* Error message styling */
 .errorMessage {
   color: var(--text-error);
 }
 
+/* Checkout modal content */
 .checkoutModalContent {
   display: flex;
   flex-direction: column;
@@ -222,6 +216,7 @@
   background-color: var(--primary-color);
 }
 
+/* Responsive design */
 @media screen and (max-width: 1200px) {
   .checkoutContainer {
     padding: var(--space-medium);
@@ -237,7 +232,6 @@
     width: 100%;
     max-width: 100%;
   }
-
 }
 
 @media screen and (max-width: 868px) {
@@ -248,7 +242,6 @@
 
   .purchaseOverviewContainer .cartListContainer {
     width: 100%;
-
   }
 
   .purchaseOverviewContainer,
@@ -281,6 +274,4 @@
     padding: var(--space-small);
     border-bottom: 2px solid var(--secondary-color);
   }
-
-
 }

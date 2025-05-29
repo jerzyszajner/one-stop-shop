@@ -7,11 +7,13 @@ import Button from "../../components/Button/Button";
 import Toast from "../../components/Toast/Toast";
 
 const VerifyEmail = () => {
+  // Email verification state
   const [emailVerified, setEmailVerified] = useState(false);
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState(false);
   const [toastConfig, setToastConfig] = useState({});
 
+  // Check verification status periodically
   useEffect(() => {
     const chceckVerificationStatus = async () => {
       if (auth.currentUser) {
@@ -28,6 +30,7 @@ const VerifyEmail = () => {
     return () => clearInterval(interval);
   }, [navigate]);
 
+  // Resend verification email
   const handleResendVerificationEmail = async () => {
     if (auth.currentUser.emailVerified) {
       return;
@@ -45,7 +48,7 @@ const VerifyEmail = () => {
     } catch (error) {
       console.error("Error sending verification email:", error);
 
-      // Display error message in a toast
+      // Handle different error types
       let errorMessage =
         "Error re-sending verification email. Please try again later.";
 
@@ -68,6 +71,7 @@ const VerifyEmail = () => {
   };
   return (
     <div className={styles.verifyWrapper}>
+      {/* Verification status display */}
       {emailVerified ? (
         <h1>Email verified 🥳 Redirecting to the main page</h1>
       ) : (
@@ -89,7 +93,7 @@ const VerifyEmail = () => {
         </div>
       )}
 
-      {/* Show errors */}
+      {/* Toast notifications */}
       {showToast && (
         <Toast
           title={toastConfig.title}

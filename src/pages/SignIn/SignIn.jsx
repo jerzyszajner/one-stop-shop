@@ -13,6 +13,7 @@ import { auth } from "../../../firebaseConfig";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
+  // Sign in form state
   const [signInFormData, setSignInFormData] = useState({
     email: "",
     password: "",
@@ -20,11 +21,9 @@ const SignIn = () => {
   const [resetEmail, setResetEmail] = useState("");
   const [resetMessage, setResetMessage] = useState("");
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
-  // Destructuring sign in validation and errors
   const { validateSignIn, signInErrors } = useSignInValidation();
-  // For redirection
   const navigate = useNavigate();
-  // Retrive sign in form values
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSignInFormData((prevState) => ({
@@ -32,11 +31,11 @@ const SignIn = () => {
       [name]: value,
     }));
   };
-  // Sign users in
+
+  // Sign users in and redirect
   const handleSignIn = async (e) => {
     e.preventDefault();
 
-    // Check if the form is valid
     if (!validateSignIn(signInFormData)) {
       console.log("Form is not valid");
       setIsLoading(false);
@@ -54,6 +53,7 @@ const SignIn = () => {
       const user = userCredential.user;
       navigate("/products");
       console.log("User signed in successfully", user);
+      // Reset form
       setSignInFormData({
         email: "",
         password: "",
@@ -64,7 +64,8 @@ const SignIn = () => {
       setIsLoading(false);
     }
   };
-  // Reset password
+
+  // Send password reset email
   const handlePasswordReset = async (e) => {
     e.preventDefault();
 
@@ -89,8 +90,10 @@ const SignIn = () => {
     <div className={styles.formWrapper}>
       <form className={styles.signInForm} noValidate onSubmit={handleSignIn}>
         <h2>Sign In Form</h2>
+        {/*----------------Account Details----------------*/}
         <fieldset className={styles.formGroup}>
           <legend className={styles.formGroupTitle}>Account Details</legend>
+          {/*----------------Email----------------*/}
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -104,7 +107,7 @@ const SignIn = () => {
           {signInErrors && (
             <p className={styles.errorMessage}>{signInErrors.email}</p>
           )}
-          {/* ---------------------- */}
+          {/*----------------Password----------------*/}
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -119,7 +122,6 @@ const SignIn = () => {
             <p className={styles.errorMessage}>{signInErrors.password}</p>
           )}
         </fieldset>
-        {/* ---------------------- */}
         <p>
           Don't have an account? Create one <Link to="/sign-up">here</Link>
         </p>
@@ -141,7 +143,7 @@ const SignIn = () => {
           {isLoading ? "Signing in..." : "Sign In"}
         </Button>
       </form>
-      {/* ---------------------- */}
+      {/* Password reset modal */}
       {showForgotPasswordModal && (
         <Modal>
           <form className={styles.resetFormContainer}>
@@ -150,6 +152,7 @@ const SignIn = () => {
               an email with instructions to reset your password. Follow the link
               in the email to set a new password.
             </p>
+            {/*----------------Email----------------*/}
             <label htmlFor="email">Email:</label>
             <input
               type="email"

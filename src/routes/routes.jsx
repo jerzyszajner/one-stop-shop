@@ -19,20 +19,32 @@ import SignIn from "../pages/SignIn/SignIn";
 import SignUp from "../pages/SignUp/SignUp";
 import VerifyEmail from "../pages/VerifyEmail/VerifyEmail";
 
+// Application routes configuration
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      {/* Home page route */}
       <Route index element={<Home />} />
+
+      {/* Static pages */}
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
+
+      {/* Product routes */}
       <Route path="products" element={<ProductsList />} />
       <Route path="products/:id" element={<ProductDetails />} />
+
+      {/* Shopping routes */}
       <Route path="cart" element={<Cart />} />
       <Route path="checkout" element={<Checkout />} />
+
+      {/* User routes */}
       <Route path="profile" element={<Profile />} />
       <Route path="sign-in" element={<SignIn />} />
       <Route path="sign-up" element={<SignUp />} />
       <Route path="verify-email" element={<VerifyEmail />} />
+
+      {/* 404 fallback route */}
       <Route path="*" element={<NotFound />} />
     </Route>
   )

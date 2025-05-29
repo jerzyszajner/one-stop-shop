@@ -6,7 +6,7 @@ const Filter = ({ products, onProductsFilter }) => {
   const [filterOption, setFilterOption] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Effect to handle URL parameters
+  // Handle URL parameters and filter initialization
   useEffect(() => {
     const filterParam = searchParams.get("filter");
     if (filterParam && products && products.length > 0) {
@@ -20,12 +20,12 @@ const Filter = ({ products, onProductsFilter }) => {
     }
   }, [searchParams, products]);
 
+  // Apply selected filter to products
   const applyFilter = (filterValue) => {
     if (!products || products.length === 0) return;
 
-    // Filtering products based on the selected option
+    // Reset filter if no option selected
     if (filterValue === "") {
-      // If no filter option is selected, reset the filter and show all products
       onProductsFilter(products);
       return;
     }
@@ -33,33 +33,30 @@ const Filter = ({ products, onProductsFilter }) => {
     let filteredProducts = [...products];
 
     switch (filterValue) {
+      // Special filters
       case "onSale":
-        // Produkty z rabatem większym niż 10%
         filteredProducts = products.filter(
           (product) =>
             product.discountPercentage && product.discountPercentage >= 10
         );
         break;
-      // ...existing code... (rest of your cases remain the same)
       case "highRated":
-        // Produkty z oceną powyżej 4.0
         filteredProducts = products.filter(
           (product) => product.rating && product.rating >= 4.0
         );
         break;
       case "inStock":
-        // Produkty dostępne w magazynie
         filteredProducts = products.filter(
           (product) => product.availabilityStatus === "In Stock"
         );
         break;
       case "lowStock":
-        // Produkty z niskim stanem magazynowym
         filteredProducts = products.filter(
           (product) => product.availabilityStatus === "Low Stock"
         );
         break;
-      // Kategorie produktów
+
+      // Category filters
       case "beauty":
         filteredProducts = products.filter(
           (product) => product.category === "beauty"
@@ -80,7 +77,8 @@ const Filter = ({ products, onProductsFilter }) => {
           (product) => product.category === "groceries"
         );
         break;
-      // Filtry cenowe
+
+      // Price filters
       case "priceUnder10":
         filteredProducts = products.filter(
           (product) => product.price && product.price < 10
@@ -103,7 +101,8 @@ const Filter = ({ products, onProductsFilter }) => {
           (product) => product.price && product.price > 100
         );
         break;
-      // Filtry według tagów
+
+      // Tag filters
       case "perfumes":
         filteredProducts = products.filter(
           (product) => product.tags && product.tags.includes("perfumes")
@@ -124,7 +123,8 @@ const Filter = ({ products, onProductsFilter }) => {
           (product) => product.tags && product.tags.includes("meat")
         );
         break;
-      // Filtry według marki
+
+      // Brand filters
       case "branded":
         filteredProducts = products.filter(
           (product) => product.brand && product.brand !== ""
@@ -152,6 +152,7 @@ const Filter = ({ products, onProductsFilter }) => {
     onProductsFilter(filteredProducts);
   };
 
+  // Handle filter selection change
   const handleFilterChange = (event) => {
     const filterValue = event.target.value;
     setFilterOption(filterValue);

@@ -5,9 +5,11 @@ import { useFetchProducts } from "../../hooks/useFetchProducts";
 import Spinner from "../../components/Spinner/Spinner";
 
 const Home = () => {
+  // Fetch all products for top rated section
   const { products: allProducts, isLoading } = useFetchProducts();
   const [topRated, setTopRated] = useState([]);
 
+  // Calculate top rated products
   useEffect(() => {
     if (allProducts.length === 0) return;
     const sorted = allProducts
@@ -21,7 +23,7 @@ const Home = () => {
   }
   return (
     <div className={styles.homePage}>
-      {/* Hero Section */}
+      {/* Hero section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <span className={styles.badge}>Best Deals</span>
@@ -56,7 +58,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Categories */}
+      {/* Featured categories section */}
       <section className={styles.categories}>
         <h2 className={styles.sectionTitle}>Shop by Category</h2>
         <div className={styles.categoryGrid}>
@@ -111,7 +113,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* Trending products section */}
       <section className={styles.featured}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Trending Products</h2>
@@ -146,7 +148,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features section */}
       <section className={styles.features}>
         <div className={styles.featuresGrid}>
           <div className={styles.featureItem}>
@@ -172,7 +174,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Stats section */}
       <section className={styles.stats}>
         <div className={styles.statsGrid}>
           <div className={styles.statItem}>

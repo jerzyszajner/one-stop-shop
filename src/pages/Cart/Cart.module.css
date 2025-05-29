@@ -1,3 +1,4 @@
+/* Cart page styling */
 .cartContainer {
   min-height: 100vh;
   margin: auto;
@@ -9,6 +10,7 @@
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 }
 
+/* Cart list container */
 .cartListContainer {
   width: 100%;
   max-width: 800px;
@@ -26,6 +28,7 @@
   padding: 0;
 }
 
+/* Cart item styling */
 .cartItem {
   display: flex;
   align-items: center;
@@ -35,6 +38,7 @@
   box-shadow: var(--box-shadow-base);
 }
 
+/* Product image */
 .productImage {
   max-width: 90px;
   height: auto;
@@ -42,6 +46,7 @@
   box-shadow: var(--box-shadow-base);
 }
 
+/* Product details */
 .productDetails {
   flex: 2;
   font-size: var(--medium-font-size);
@@ -51,12 +56,14 @@
   gap: var(--space-small);
 }
 
+/* Quantity section */
 .quantity {
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
+/* Remove button */
 .removeButton {
   max-width: 100px;
   background-color: var(--text-error);
@@ -74,6 +81,7 @@
   transform: scale(1.05);
 }
 
+/* Total amount display */
 .totalAmount {
   padding: var(--space-medium);
   font-size: var(--large-font-size);
@@ -81,6 +89,7 @@
   box-shadow: var(--box-shadow-base);
 }
 
+/* Checkout link */
 .toCheckoutLink {
   display: flex;
   justify-content: center;
@@ -104,6 +113,7 @@
   background-color: var(--primary-color);
 }
 
+/* Modal content styling */
 .redirectLinksContainer {
   display: flex;
   justify-content: center;
@@ -156,11 +166,13 @@
   line-height: 1.5;
 }
 
+/* Empty cart message */
 .emptyCard {
   font-size: var(--medium-font-size);
   color: var(--text-light);
 }
 
+/* Responsive design */
 @media screen and (max-width: 480px) {
   .cartContainer {
     padding: var(--space-small);

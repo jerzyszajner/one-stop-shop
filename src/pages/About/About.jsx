@@ -3,6 +3,7 @@ import styles from "./About.module.css";
 const About = () => {
   return (
     <div className={styles.aboutPage}>
+      {/* Hero section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 className={styles.title}>About One Stop Shop</h1>
@@ -13,7 +14,9 @@ const About = () => {
         </div>
       </section>
 
+      {/* Main content section */}
       <section className={styles.content}>
+        {/*----------------Our Story----------------*/}
         <div className={styles.story}>
           <h2 className={styles.storyTitle}>Our Story</h2>
           <p className={styles.storyText}>
@@ -23,6 +26,7 @@ const About = () => {
           </p>
         </div>
 
+        {/*----------------Our Values----------------*/}
         <div className={styles.values}>
           <h2 className={styles.valuesTitle}>Our Values</h2>
           <div className={styles.valuesGrid}>
@@ -51,6 +55,7 @@ const About = () => {
           </div>
         </div>
 
+        {/*----------------Our Mission----------------*/}
         <div className={styles.mission}>
           <h2 className={styles.missionTitle}>Our Mission</h2>
           <p className={styles.missionText}>

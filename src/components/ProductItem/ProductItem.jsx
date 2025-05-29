@@ -5,12 +5,15 @@ import { getCartContext } from "../../context/CartContext";
 
 const ProductItem = ({ product }) => {
   const { dispatch } = getCartContext();
-  // Function to handle adding the product to the cart
+
+  // Add product to cart
   const handleAddToCart = () => {
     dispatch({ type: "ADD_TO_CART", payload: product });
   };
+
   return (
     <div className={styles.productCard}>
+      {/* Product image */}
       <div className={styles.productContainer}>
         <img
           src={product.thumbnail}
@@ -18,24 +21,31 @@ const ProductItem = ({ product }) => {
           className={styles.productImage}
         />
       </div>
-      {/* ----------------------- */}
+
+      {/*----------------Product Title----------------*/}
       <h2 className={styles.productTitle}>{product.title}</h2>
+
+      {/*----------------Product Brand----------------*/}
       <p className={styles.productBrand}>
         <b>Product Brand</b> {product.brand}
       </p>
-      {/* ----------------------- */}
+
+      {/*----------------Rating----------------*/}
       <p className={styles.productRating}>
         <b>Rating:</b> {product.rating}
       </p>
-      {/* ----------------------- */}
+
+      {/*----------------Price----------------*/}
       <p className={styles.productPrice}>
         <b>Price:</b> {product.price}
       </p>
-      {/* ----------------------- */}
+
+      {/*----------------Discount----------------*/}
       <p className={styles.discountPercentage}>
         <b>Discount Percentage:</b> {product.discountPercentage}
       </p>
-      {/* ----------------------- */}
+
+      {/* Product actions */}
       <Link
         to={`/products/${product.documentId}`}
         className={styles.productLink}

@@ -1,8 +1,10 @@
+/* Custom font import */
 @font-face {
     font-family: Lato-Regular;
     src: url("/public/assets/fonts/Lato-Regular.ttf");
 }
 
+/* Global reset and base styles */
 * {
     margin: 0;
     padding: 0;
@@ -17,6 +19,7 @@ input {
     font-size: var(--base-font-size);
 }
 
+/* CSS Custom Properties (Variables) */
 :root {
     /* Colors */
     --primary-color: #191e29;
@@ -38,7 +41,7 @@ input {
     --border-light: rgba(255, 255, 255, 0.1);
     --overlay-bg: rgba(0, 0, 0, 0.5);
 
-    /* Fonts */
+    /* Typography */
     --base-font-size: 1rem;
     --small-font-size: 0.875rem;
     --medium-font-size: 1.5rem;

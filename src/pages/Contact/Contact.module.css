@@ -1,0 +1,154 @@
+/* Contact page styling */
+.contactForm {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: var(--space-x-large);
+  position: relative;
+}
+
+/* Contact form container */
+.contactFormContainer {
+  width: 40%;
+  height: 75%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);
+  padding: var(--space-medium) var(--space-large);
+  border-radius: var(--border-radius-medium);
+  background-color: var(--glass-bg-medium);
+  backdrop-filter: blur(4px);
+  color: var(--text-light);
+}
+
+.formTitle {
+  font-weight: bold;
+  font-size: var(--medium-font-size);
+}
+
+/* Name and contact sections */
+.nameSection,
+.contactSection {
+  display: flex;
+  gap: var(--space-medium);
+}
+
+.nameSection div,
+.contactSection div {
+  flex-basis: 50%;
+}
+
+/* Input group styling */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.inputGroup p {
+  color: crimson;
+}
+
+/* Form inputs */
+.inputElement {
+  width: 100%;
+  height: 2rem;
+  padding: 0 0.25rem;
+}
+
+.textareaElement {
+  width: 100%;
+  padding: 0.5rem;
+  resize: none;
+}
+
+/* Submit button */
+.submitButton {
+  height: 48px;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border-radius: var(--border-radius-small);
+  border: none;
+  transition: all 0.3s ease-in-out;
+  font-size: var(--base-font-size);
+  box-shadow: var(--box-shadow-base);
+}
+
+.submitButton:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Message error and count */
+.messageErrorAndCount {
+  display: block;
+  width: 100%;
+}
+
+/* Close modal button */
+.closeModalButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  max-width: 380px;
+  text-decoration: none;
+  height: 32px;
+  background-color: var(--secondary-color);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--border-radius-small);
+  transition: all 0.3s ease-in-out;
+  font-size: var(--base-font-size);
+  margin: 0 auto;
+}
+
+.closeModalButton:hover {
+  background-color: var(--primary-color);
+}
+
+/* Contact modal content */
+.contactModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);
+}
+
+/* Responsive design */
+@media screen and (max-width: 1200px) {
+  .contactFormContainer {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contactForm {
+    padding: var(--space-medium);
+  }
+
+  .contactFormContainer {
+    width: 95%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .contactForm {
+    padding: var(--space-small);
+  }
+
+  .contactFormContainer {
+    width: 100%;
+  }
+
+  .nameSection,
+  .contactSection {
+    flex-direction: column;
+    gap: var(--space-small);
+  }
+}

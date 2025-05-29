@@ -1,4 +1,4 @@
-// Function to upload an image to Cloudinary
+// Upload images to Cloudinary service
 export const useImageUpload = () => {
   const cloudinaryKey = import.meta.env.VITE_CLOUDINARY_NAME;
   if (!cloudinaryKey) {
@@ -7,6 +7,8 @@ export const useImageUpload = () => {
     );
     return;
   }
+
+  // Upload file to Cloudinary and return URL
   const uploadImage = async (file) => {
     try {
       const formData = new FormData();

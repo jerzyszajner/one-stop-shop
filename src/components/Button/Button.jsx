@@ -9,6 +9,7 @@ const Button = ({
   type,
 }) => {
   return (
+    // Reusable button component with customizable props
     <button
       className={`${styles.button} ${className}`}
       disabled={disabled}

@@ -1,3 +1,4 @@
+/* Modal backdrop overlay */
 .modalBackdrop {
   position: fixed;
   top: 0;
@@ -11,6 +12,7 @@
   z-index: 999;
 }
 
+/* Modal content container */
 .modalContainer {
   min-width: 360px;
   max-width: 600px;
@@ -18,10 +20,10 @@
   padding: var(--space-large);
   display: flex;
   flex-direction: column;
-
   border-radius: var(--border-radius-medium);
 }
 
+/* Close button styling */
 .modalContent .closeButton {
   background-color: var(--secondary-color);
   color: white;
@@ -29,9 +31,6 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.modalContent .closeButton {
   display: block;
   margin-top: var(--space-medium);
   justify-self: flex-end;
@@ -42,6 +41,7 @@
   opacity: 0.9;
 }
 
+/* Responsive design */
 @media screen and (max-width: 768px) {
   .modalContainer {
     padding: var(--space-medium);

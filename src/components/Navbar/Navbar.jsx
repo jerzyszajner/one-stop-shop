@@ -15,16 +15,19 @@ import { auth } from "../../../firebaseConfig";
 import { useMemo, useState, useEffect } from "react";
 
 const Navbar = () => {
+  // Navigation state
   const { cart } = getCartContext();
   const { user } = getAuthContext();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Calculate total cart items
   const cartItemsCount = useMemo(
     () => cart.reduce((count, item) => count + item.quantity, 0),
     [cart]
   );
 
+  // Handle user sign out
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -34,9 +37,11 @@ const Navbar = () => {
     }
   };
 
+  // Menu toggle functions
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
+  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
     return () => {
