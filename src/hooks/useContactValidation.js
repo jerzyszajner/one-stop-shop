@@ -4,6 +4,8 @@ const useContactValidation = () => {
   // Validation state and patterns
   const [contactErrors, setContactErrors] = useState({});
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^[0-9]{8}$/; // Exactly 8 digits
+  const orderNumberRegex = /^[A-Z0-9]{6,12}$/; // 6-12 characters, alphanumeric uppercase
 
   // Validate all contact form fields
   const validateContactForm = (values) => {
@@ -24,8 +26,17 @@ const useContactValidation = () => {
       newErrors.email = "Please enter a valid email address";
     }
     // Phone number validation
-    if (values.phoneNumber && values.phoneNumber.trim().length !== 8) {
-      newErrors.phoneNumber = "Phone number must be 8 digits";
+    if (!values.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (!phoneRegex.test(values.phoneNumber.trim())) {
+      newErrors.phoneNumber = "Phone number must be exactly 8 digits";
+    }
+    // Order number validation (optional field)
+    if (values.orderNumber && values.orderNumber.trim()) {
+      if (!orderNumberRegex.test(values.orderNumber.trim().toUpperCase())) {
+        newErrors.orderNumber =
+          "Order number must be 6-12 characters (letters and numbers)";
+      }
     }
     // Subject validation
     if (!values.subject.trim()) {

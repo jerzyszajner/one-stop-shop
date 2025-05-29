@@ -1,12 +1,49 @@
-# React + Vite
+# Final Project: One Stop Shop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Resources
 
-Currently, two official plugins are available:
+### Netlify Deployment
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[Live Project on Netlify](https://one-stop-shop-react.netlify.app/)
 
-## Expanding the ESLint configuration
+### GitHub Repository
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+[GitHub Repository Link](https://github.com/jerzyszajner/one-stop-shop.git)
+
+## Technologies
+
+- **React 19**
+- **Vite**
+- **React Router DOM**
+- **Firebase:** Authentication and database
+- **Cloudinary:** Profile image storage
+- **LocalStorage:** Cart item persistence
+- **Responsive Design:** Optimized for desktop and mobile, tested on iPhone 13 Pro Max
+
+## Features
+
+## Brief Description
+
+## Challenges
+
+## Testing
+
+- **Browsers:** Google Chrome and Safari.
+- **Devices:** iPhone 13 Pro Max.
+- **Methods:** Manual testing and debugging using browser developer tools.
+
+## Credits
+
+- **Inspiration:** Inspired by the school’s **Game Stor App** project - Kristinia Fagskole.
+- **API:** https://dummyjson.com/ - Free Fake REST API for Placeholder JSON Data
+- **GPT:** Generate images an icons.
+
+## Documentation
+
+- Project documentation is found in the [project-documentation.pdf](project-documentation.pdf)
+
+## Contact Information
+
+- **Name:** Jerzy Szajner
+- **Email:** [jerzy.szajner@gmail.com](mailto:jerzy.szajner@gmail.com)
+- **LinkedIn:** [Jerzy Szajner on LinkedIn](https://www.linkedin.com/in/jerzyszajner/)
