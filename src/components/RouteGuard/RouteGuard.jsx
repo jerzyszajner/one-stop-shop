@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { getAuthContext } from "../../context/AuthContext"; // Dostosuj ścieżkę do swojego kontekstu
+import { getAuthContext } from "../../context/AuthContext";
 import Spinner from "../Spinner/Spinner";
 
 const RouteGuard = ({ children }) => {
