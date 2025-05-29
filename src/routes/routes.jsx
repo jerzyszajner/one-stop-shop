@@ -18,31 +18,47 @@ import Profile from "../pages/Profile/Profile";
 import SignIn from "../pages/SignIn/SignIn";
 import SignUp from "../pages/SignUp/SignUp";
 import VerifyEmail from "../pages/VerifyEmail/VerifyEmail";
+import RouteGuard from "../components/RouteGuard/RouteGuard";
 
 // Application routes configuration
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      {/* Home page route */}
+      {/* Public routes */}
       <Route index element={<Home />} />
-
-      {/* Static pages */}
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
-
-      {/* Product routes */}
       <Route path="products" element={<ProductsList />} />
       <Route path="products/:id" element={<ProductDetails />} />
-
-      {/* Shopping routes */}
       <Route path="cart" element={<Cart />} />
-      <Route path="checkout" element={<Checkout />} />
-
-      {/* User routes */}
-      <Route path="profile" element={<Profile />} />
       <Route path="sign-in" element={<SignIn />} />
       <Route path="sign-up" element={<SignUp />} />
-      <Route path="verify-email" element={<VerifyEmail />} />
+
+      {/* Protected routes */}
+      <Route
+        path="profile"
+        element={
+          <RouteGuard>
+            <Profile />
+          </RouteGuard>
+        }
+      />
+      <Route
+        path="checkout"
+        element={
+          <RouteGuard>
+            <Checkout />
+          </RouteGuard>
+        }
+      />
+      <Route
+        path="verify-email"
+        element={
+          <RouteGuard>
+            <VerifyEmail />
+          </RouteGuard>
+        }
+      />
 
       {/* 404 fallback route */}
       <Route path="*" element={<NotFound />} />
