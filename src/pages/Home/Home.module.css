@@ -6,12 +6,20 @@
 /* Hero section */
 .hero {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     min-height: 80vh;
     padding: var(--space-x-large) 5%;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: var(--text-light);
+}
+
+.heroContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+    gap: var(--space-large);
 }
 
 .heroContent {
@@ -97,11 +105,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: var(--space-large);
+    max-width: 600px;
 }
 
 .heroImageImg {
-    max-width: 700px;
+    max-width: 100%;
     width: 100%;
     height: auto;
     border-radius: var(--border-radius-large);
@@ -136,13 +144,12 @@
     transition: transform 0.3s ease;
     text-decoration: none;
     color: var(--text-light);
-    height: 150px;
     background: var(--card-color);
     box-shadow: var(--box-shadow-base);
 }
 
 .categoryCard:hover {
-    transform: translateY(-5px);
+    transform: translateY(-2px);
 }
 
 .categoryCardImg {
@@ -310,9 +317,18 @@
         padding: var(--space-large) 5%;
     }
 
+    .heroContainer {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-medium);
+    }
+
+    .heroContent {
+        max-width: 100%;
+    }
+
     .heroImage {
-        margin-left: 0;
-        margin-top: var(--space-large);
+        padding: var(--space-medium) 0 0;
     }
 
     .heroTitle {
@@ -321,12 +337,15 @@
 
     .heroButtons {
         justify-content: center;
+        flex-direction: column;
+        align-items: center;
     }
 
     .ctaButton,
     .secondaryButton {
-        padding: var(--space-small) var(--space-medium);
+        padding: var(--space-medium) var(--space-large);
         width: 100%;
+        max-width: 300px;
         text-align: center;
     }
 
@@ -347,15 +366,60 @@
     .statsGrid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .statItem .featured {
+        max-width: 400px;
+        margin: 0 auto;
+    }
 }
 
 @media screen and (max-width: 480px) {
 
-    .categoryGrid,
+    .heroTitle {
+        font-size: var(--x-large-font-size);
+    }
+
+    .heroSubtitle {
+        font-size: var(--base-font-size);
+    }
+
+    .sectionTitle {
+        font-size: var(--medium-font-size);
+    }
+
+    .categories {
+        padding: var(--space-large) 5%;
+    }
+
+    /* .categoryGrid,
     .featuresGrid,
     .statsGrid {
         grid-template-columns: 1fr;
+    } */
+
+    .featured {
+        padding: var(--space-large) 5%;
     }
+
+    .features {
+        padding: var(--space-large) 5%;
+    }
+
+    .featureItem {
+        padding: var(--space-medium);
+    }
+
+    .ctaButton,
+    .secondaryButton {
+        width: 100%;
+        max-width: none;
+    }
+
+
+    .statItemTitle {
+        font-size: var(--medium-font-size);
+    }
+
 
     .heroButtons {
         flex-direction: column;

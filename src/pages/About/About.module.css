@@ -35,7 +35,7 @@
 .content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: var(--space-x-large) var(--space-medium);
+    padding: var(--space-large) var(--space-x-large);
     display: flex;
     flex-direction: column;
     gap: var(--space-x-large);

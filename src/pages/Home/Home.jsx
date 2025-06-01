@@ -25,36 +25,38 @@ const Home = () => {
     <div className={styles.homePage}>
       {/* Hero section */}
       <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <span className={styles.badge}>Best Deals</span>
-          <h1 className={styles.heroTitle}>One Stop Shop</h1>
-          <p className={styles.heroSubtitle}>
-            From beauty and fragrances to furniture and groceries - discover
-            thousands of products at unbeatable prices
-          </p>
-          <div className={styles.heroButtons}>
-            <Link
-              to="/products"
-              className={styles.ctaButton}
-              aria-label="Shop Now"
-            >
-              Shop Now
-            </Link>
-            <Link
-              to="/products?filter=onSale"
-              className={styles.secondaryButton}
-              aria-label="View Sale Deals"
-            >
-              View Deals
-            </Link>
+        <div className={styles.heroContainer}>
+          <div className={styles.heroContent}>
+            <span className={styles.badge}>Best Deals</span>
+            <h1 className={styles.heroTitle}>One Stop Shop</h1>
+            <p className={styles.heroSubtitle}>
+              From beauty and fragrances to furniture and groceries - discover
+              thousands of products at unbeatable prices
+            </p>
+            <div className={styles.heroButtons}>
+              <Link
+                to="/products"
+                className={styles.ctaButton}
+                aria-label="Shop Now"
+              >
+                Shop Now
+              </Link>
+              <Link
+                to="/products?filter=onSale"
+                className={styles.secondaryButton}
+                aria-label="View Sale Deals"
+              >
+                View Deals
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className={styles.heroImage}>
-          <img
-            src="/assets/images/shopping-hero.webp"
-            alt="Shopping Experience Image"
-            className={styles.heroImageImg}
-          />
+          <div className={styles.heroImage}>
+            <img
+              src="/assets/images/shopping-hero.webp"
+              alt="Shopping Experience Image"
+              className={styles.heroImageImg}
+            />
+          </div>
         </div>
       </section>
 

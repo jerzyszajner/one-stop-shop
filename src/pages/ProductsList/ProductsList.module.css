@@ -20,7 +20,10 @@
 /* Products grid container */
 .productsContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  max-width: 1300px;
+  margin: 0 auto;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 16px;
   padding: var(--space-large) var(--space-x-large);
   background-color: var(--secondary-color-light);
