@@ -113,7 +113,7 @@ const SignIn = () => {
             type="password"
             id="password"
             name="password"
-            placeholder="Enter your password address"
+            placeholder="Enter your password (8+ characters)"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signInFormData.password}
