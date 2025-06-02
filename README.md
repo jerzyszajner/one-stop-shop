@@ -1,5 +1,7 @@
 # Final Project: One Stop Shop
 
+![Home Page](assets/images/homepage-readme.webp)
+
 ## Resources
 
 ### Netlify Deployment
@@ -97,7 +99,7 @@ One Stop Shop is an e-commerce application where users can:
 
 - **Inspiration**: School's Game Store App project – Kristinia Fagskole
 - **API**: [DummyJSON](https://dummyjson.com/) – Free Fake REST API for placeholder JSON data
-- **GPT**: Generate images and icons
+- **GPT/AI**: Generate images, icons and som text.
 
 ## Project Documentation
 
