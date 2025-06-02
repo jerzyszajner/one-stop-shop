@@ -1,6 +1,6 @@
 # Final Project: One Stop Shop
 
-![Home Page](assets/images/homepage-readme.webp)
+![Home Page Screenshot](docs/home-page-screenshot.webp)
 
 ## Resources
 
@@ -103,11 +103,11 @@ One Stop Shop is an e-commerce application where users can:
 
 ## Project Documentation
 
-- [Project Documentation](project-documentation.pdf)
+- [Project Documentation](docs/project-documentation.pdf)
 
 ## Figma Mockup
 
-- [Figma Mockup](one-stop-shop.fig)
+- [Figma Mockup](docs/one-stop-shop.fig)
 
 ## License
 
