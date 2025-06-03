@@ -99,7 +99,7 @@ One Stop Shop is an e-commerce application where users can:
 
 - **Inspiration**: School's Game Store App project – Kristinia Fagskole
 - **API**: [DummyJSON](https://dummyjson.com/) – Free Fake REST API for placeholder JSON data
-- **GPT/AI**: Generate images, icons and som text.
+- **GPT/AI**: Generate images, icons and some text. Assist with Firebase error validation implementation.
 
 ## Project Documentation
 
