@@ -31,7 +31,7 @@ const ProductsList = () => {
     return cart.reduce((total, item) => total + item.quantity, 0);
   });
 
-  // Show toast notification - helper function jak w SignIn/SignUp
+  // Show toast notification
   const showToast = (title, description, type = "error") => {
     setToast({
       isVisible: true,
@@ -71,7 +71,7 @@ const ProductsList = () => {
       0
     );
 
-    // Only show toast if cart actually increased (not on initial load)
+    // Show notification only if an item was added to the cart
     if (currentLength > lastCartLength) {
       const lastAddedItem = cart[cart.length - 1];
       if (lastAddedItem) {
