@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+// Custom hook for contact form validation
 const usePaymentValidation = () => {
   // Validation state and patterns
   const [paymentErrors, setPaymentErrors] = useState({});

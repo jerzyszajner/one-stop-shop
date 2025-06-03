@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+// Custom hook for contact form validation
 const useSignInValidation = () => {
   // Validation state and patterns
   const [signInErrors, setSignInErrors] = useState({});

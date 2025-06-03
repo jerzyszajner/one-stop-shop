@@ -5,17 +5,40 @@ import { auth } from "../../../firebaseConfig";
 import { sendEmailVerification } from "firebase/auth";
 import Button from "../../components/Button/Button";
 import Toast from "../../components/Toast/Toast";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 
 const VerifyEmail = () => {
   // Email verification state
   const [emailVerified, setEmailVerified] = useState(false);
   const navigate = useNavigate();
-  const [showToast, setShowToast] = useState(false);
-  const [toastConfig, setToastConfig] = useState({});
+  const { getErrorMessage } = useFirebaseValidation();
+
+  // Toast state for notifications
+  const [toast, setToast] = useState({
+    isVisible: false,
+    title: "",
+    description: "",
+    type: "error",
+  });
+
+  // Show toast notification
+  const showToast = (title, description, type = "error") => {
+    setToast({
+      isVisible: true,
+      title,
+      description,
+      type,
+    });
+  };
+
+  // Hide toast notification
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   // Check verification status periodically
   useEffect(() => {
-    const chceckVerificationStatus = async () => {
+    const checkVerificationStatus = async () => {
       if (auth.currentUser) {
         await auth.currentUser.reload();
         setEmailVerified(auth.currentUser.emailVerified);
@@ -26,7 +49,7 @@ const VerifyEmail = () => {
       }
     };
 
-    const interval = setInterval(chceckVerificationStatus, 5000);
+    const interval = setInterval(checkVerificationStatus, 5000);
     return () => clearInterval(interval);
   }, [navigate]);
 
@@ -39,34 +62,15 @@ const VerifyEmail = () => {
     try {
       await sendEmailVerification(auth.currentUser);
 
-      setToastConfig({
-        type: "success",
-        title: "Email sent!",
-        description: "A new verification email has been sent to your inbox.",
-      });
-      setShowToast(true);
+      showToast(
+        "Email sent!",
+        "A new verification email has been sent to your inbox.",
+        "success"
+      );
     } catch (error) {
       console.error("Error sending verification email:", error);
 
-      // Handle different error types
-      let errorMessage =
-        "Error re-sending verification email. Please try again later.";
-
-      if (error.code === "auth/too-many-requests") {
-        errorMessage =
-          "Too many requests. Please wait a few minutes before trying again.";
-      } else if (error.code === "auth/user-not-found") {
-        errorMessage = "User not found. Please sign up again.";
-      } else if (error.code === "auth/network-request-failed") {
-        errorMessage = "Network error. Please check your internet connection.";
-      }
-
-      setToastConfig({
-        type: "error",
-        title: "Error",
-        description: errorMessage,
-      });
-      setShowToast(true);
+      showToast("Error", getErrorMessage(error), "error");
     }
   };
   return (
@@ -94,15 +98,14 @@ const VerifyEmail = () => {
       )}
 
       {/* Toast notifications */}
-      {showToast && (
-        <Toast
-          title={toastConfig.title}
-          description={toastConfig.description}
-          type={toastConfig.type}
-          isVisible={showToast}
-          onHide={() => setShowToast(false)}
-        />
-      )}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+        duration={3000}
+      />
     </div>
   );
 };

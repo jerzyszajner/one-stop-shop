@@ -1,8 +1,10 @@
 import styles from "./SignUp.module.css";
 import Button from "../../components/Button/Button";
 import Spinner from "../../components/Spinner/Spinner";
+import Toast from "../../components/Toast/Toast";
 import { useRef, useState } from "react";
 import { useSignUpValidation } from "../../hooks/useSignUpValidation";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -28,14 +30,40 @@ const SignUp = () => {
   // Validate function from the custom hook
   const { errors, validate } = useSignUpValidation();
 
+  // Firebase validation hook for error handling
+  const { getErrorMessage } = useFirebaseValidation();
+
   // Sign up function from the custom hook
-  const { user, signUp, signUpErrors } = useAuth();
+  const { signUp } = useAuth();
 
   // Redirect users after successful sign up
   const navigate = useNavigate();
 
   // Image upload function from the custom hook
   const { uploadImage } = useImageUpload();
+
+  // Toast state for notifications
+  const [toast, setToast] = useState({
+    isVisible: false,
+    title: "",
+    description: "",
+    type: "error",
+  });
+
+  // Show toast notification
+  const showToast = (title, description, type = "error") => {
+    setToast({
+      isVisible: true,
+      title,
+      description,
+      type,
+    });
+  };
+
+  // Hide toast notification
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   // Function to handle file input change
   const handleInputChange = (e) => {
@@ -80,9 +108,9 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate(signUpFormData)) {
-      console.log("Form is invalid");
       return;
     }
+
     setIsLoading(true);
 
     try {
@@ -91,7 +119,6 @@ const SignUp = () => {
         signUpFormData.password
       );
       const user = userCredential.user;
-      console.log("User created successfully:", user);
 
       const uploadedImage = signUpFormData.profilePicture
         ? await uploadImage(signUpFormData.profilePicture)
@@ -107,8 +134,13 @@ const SignUp = () => {
         profilePicture: uploadedImage,
         createdAt: serverTimestamp(),
       });
-      navigate("/verify-email");
-      console.log("User added to the Firestore database");
+
+      // Success toast
+      showToast(
+        "Account Created!",
+        "Please check your email for verification.",
+        "success"
+      );
 
       // Reset the form data
       setSignUpFormData({
@@ -126,8 +158,16 @@ const SignUp = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = null;
       }
+
+      // Delay navigation to show success toast
+      setTimeout(() => {
+        navigate("/verify-email");
+      }, 2000);
     } catch (error) {
       console.log(error.message);
+
+      // Show Firebase error in toast
+      showToast("Registration Failed", getErrorMessage(error), "error");
     } finally {
       setIsLoading(false);
     }
@@ -196,6 +236,7 @@ const SignUp = () => {
                 className={styles.imagePreview}
               />
               <button
+                type="button"
                 className={styles.removeImageButton}
                 onClick={handleRemoveImage}
               >
@@ -258,6 +299,16 @@ const SignUp = () => {
           {isLoading ? "Creating account..." : "Create account"}
         </Button>
       </form>
+
+      {/* Toast notification */}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+        duration={3000}
+      />
 
       {/* Spinner overlay */}
       {isLoading && <Spinner />}

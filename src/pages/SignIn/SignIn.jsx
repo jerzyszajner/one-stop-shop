@@ -4,7 +4,9 @@ import styles from "./SignIn.module.css";
 import Button from "../../components/Button/Button";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
+import Toast from "../../components/Toast/Toast";
 import useSignInValidation from "../../hooks/useSignInValidation";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -21,8 +23,34 @@ const SignIn = () => {
   const [resetEmail, setResetEmail] = useState("");
   const [resetMessage, setResetMessage] = useState("");
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+
+  // Validation hooks
   const { validateSignIn, signInErrors } = useSignInValidation();
+  const { getErrorMessage } = useFirebaseValidation();
   const navigate = useNavigate();
+
+  // Toast state for notifications
+  const [toast, setToast] = useState({
+    isVisible: false,
+    title: "",
+    description: "",
+    type: "error",
+  });
+
+  // Show toast notification
+  const showToast = (title, description, type = "error") => {
+    setToast({
+      isVisible: true,
+      title,
+      description,
+      type,
+    });
+  };
+
+  // Hide toast notification
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +65,6 @@ const SignIn = () => {
     e.preventDefault();
 
     if (!validateSignIn(signInFormData)) {
-      console.log("Form is not valid");
       setIsLoading(false);
       return;
     }
@@ -51,15 +78,26 @@ const SignIn = () => {
         signInFormData.password
       );
       const user = userCredential.user;
-      navigate("/products");
+
+      // Success toast
+      showToast("Welcome Back!", "You have successfully signed in.", "success");
+
       console.log("User signed in successfully", user);
+
       // Reset form
       setSignInFormData({
         email: "",
         password: "",
       });
+
+      // Delay navigation to show success toast
+      setTimeout(() => {
+        navigate("/products");
+      }, 2000);
     } catch (error) {
       console.log(error.message);
+      // Show Firebase error in toast
+      showToast("Sign In Failed", getErrorMessage(error), "error");
     } finally {
       setIsLoading(false);
     }
@@ -82,8 +120,18 @@ const SignIn = () => {
       console.log("Password reset email sent");
       setResetMessage("Password reset email sent. Please check your inbox.");
       setResetEmail("");
+
+      // Success toast for password reset
+      showToast(
+        "Reset Email Sent",
+        "Please check your inbox for password reset instructions.",
+        "success"
+      );
     } catch (error) {
       console.log(error.message);
+
+      // Error toast for password reset
+      showToast("Reset Failed", getErrorMessage(error), "error");
     }
   };
   return (
@@ -188,6 +236,16 @@ const SignIn = () => {
           </form>
         </Modal>
       )}
+
+      {/* Toast notification */}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+        duration={3000}
+      />
 
       {/* Spinner overlay */}
       {isLoading && <Spinner />}

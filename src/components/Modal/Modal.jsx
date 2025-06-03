@@ -1,5 +1,6 @@
 import styles from "./Modal.module.css";
 import Button from "../Button/Button";
+
 const Modal = ({ title, children, containerClassName }) => {
   return (
     <div className={styles.modalBackdrop}>

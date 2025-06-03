@@ -7,34 +7,54 @@ import { doc, getDoc } from "firebase/firestore";
 import { database } from "../../../firebaseConfig";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCartContext } from "../../context/CartContext";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { getErrorMessage } = useFirebaseValidation();
+
   // Product details state
   const [product, setProduct] = useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showToast, setShowToast] = useState(false);
-  const [toastContent, setToastContent] = useState({
+
+  // Toast state for notifications
+  const [toast, setToast] = useState({
+    isVisible: false,
     title: "",
     description: "",
-    type: "info",
+    type: "error",
   });
 
   const { dispatch, cart } = getCartContext();
+
+  // Show toast notification
+  const showToast = (title, description, type = "error") => {
+    setToast({
+      isVisible: true,
+      title,
+      description,
+      type,
+    });
+  };
+
+  // Hide toast notification
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   // Add product to cart and show notification
   const handleAddToCart = () => {
     if (Object.keys(product).length > 0) {
       dispatch({ type: "ADD_TO_CART", payload: product });
-      setToastContent({
-        title: "✅ Added to Cart",
-        description: `${product.title} has been added to your cart!`,
-        type: "success",
-      });
-      setShowToast(true);
+
+      showToast(
+        "✅ Added to Cart",
+        `${product.title} has been added to your cart!`,
+        "success"
+      );
 
       // Update last quantity in localStorage
       setTimeout(() => {
@@ -72,7 +92,7 @@ const ProductDetails = () => {
         }
       } catch (error) {
         console.error("Error fetching product:", error);
-        setError("Failed to load product details. Please try again later.");
+        setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -86,14 +106,9 @@ const ProductDetails = () => {
   // Handle errors with Toast
   useEffect(() => {
     if (error) {
-      setToastContent({
-        title: "❌ Product Error",
-        description: error,
-        type: "error",
-      });
-      setShowToast(true);
+      showToast("❌ Product Error", getErrorMessage(error), "error");
     }
-  }, [error]);
+  }, [error, getErrorMessage]);
 
   if (isLoading) {
     return <Spinner />;
@@ -101,15 +116,6 @@ const ProductDetails = () => {
 
   return (
     <div className={styles.wrapper}>
-      {/* Toast notifications */}
-      <Toast
-        title={toastContent.title}
-        description={toastContent.description}
-        isVisible={showToast}
-        onHide={() => setShowToast(false)}
-        type={toastContent.type}
-        duration={toastContent.type === "error" ? 7000 : 5000}
-      />
       <div className={styles.productDetailsContainer}>
         {/* Product image gallery */}
         <div className={styles.productImageContainer}>
@@ -196,6 +202,15 @@ const ProductDetails = () => {
           </Button>
         </div>
       </div>
+      {/* Toast notifications */}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+        duration={3000}
+      />
     </div>
   );
 };

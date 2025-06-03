@@ -4,8 +4,8 @@ import { auth } from "../../firebaseConfig";
 
 export const AuthContext = createContext();
 
+// AuthProvider component to manage authentication state
 export const AuthProvider = ({ children }) => {
-  // Authentication state
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 

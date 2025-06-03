@@ -1,4 +1,4 @@
-// Upload images to Cloudinary service
+// Custom hook to handle image uploads to Cloudinary
 export const useImageUpload = () => {
   const cloudinaryKey = import.meta.env.VITE_CLOUDINARY_NAME;
   if (!cloudinaryKey) {

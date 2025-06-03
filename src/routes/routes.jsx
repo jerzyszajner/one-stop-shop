@@ -3,8 +3,6 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-
-// Import pages
 import App from "../App";
 import About from "../pages/About/About";
 import Cart from "../pages/Cart/Cart";

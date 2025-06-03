@@ -1,7 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { database } from "../../firebaseConfig";
-
+// Custom hook for fetching products from Firestore
 export const useFetchProducts = () => {
   // Fetch state management
   const [products, setProducts] = useState([]);
@@ -21,7 +21,7 @@ export const useFetchProducts = () => {
         setProducts(productsList);
       } catch (error) {
         console.error("Error fetching products:", error);
-        setError("Failed to fetch products. Please try again later.");
+        setError(error);
       } finally {
         setIsLoading(false);
       }

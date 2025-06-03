@@ -8,6 +8,7 @@ import styles from "./ProductsList.module.css";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
 import Spinner from "../../components/Spinner/Spinner";
 import { getCartContext } from "../../context/CartContext";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 
 const ProductsList = () => {
   // Products and cart state
@@ -16,53 +17,39 @@ const ProductsList = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const [searchParams] = useSearchParams();
-  const [showToast, setShowToast] = useState(false);
-  const [toastContent, setToastContent] = useState({
+  const { getErrorMessage } = useFirebaseValidation();
+
+  const [toast, setToast] = useState({
+    isVisible: false,
     title: "",
     description: "",
-    type: "info",
+    type: "error",
   });
 
-  // Simple cart monitoring without localStorage complications
-  const [lastCartLength, setLastCartLength] = useState(0);
+  // Track last cart length to show add-to-cart notifications
+  const [lastCartLength, setLastCartLength] = useState(() => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  });
+
+  // Show toast notification - helper function jak w SignIn/SignUp
+  const showToast = (title, description, type = "error") => {
+    setToast({
+      isVisible: true,
+      title,
+      description,
+      type,
+    });
+  };
+
+  // Hide toast notification
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   // Handle filter URL parameters and toast messages
   useEffect(() => {
     if (originalProducts.length === 0) return;
     const filterParam = searchParams.get("filter");
-
-    // Handle toast notifications for filters
-    if (filterParam) {
-      const toastMessages = {
-        onSale: {
-          title: "🔥 Special Deals",
-          description: "Products with amazing discounts - Limited time offers!",
-          type: "success",
-        },
-        highRated: {
-          title: "⭐ Top Rated Products",
-          description:
-            "Discover our highest-rated products, loved by customers!",
-          type: "info",
-        },
-        lowStock: {
-          title: "⚠️ Low Stock Alert",
-          description: "Hurry! These products are running out fast!",
-          type: "warning",
-        },
-        inStock: {
-          title: "✅ In Stock Now",
-          description:
-            "Browse products that are currently available for purchase!",
-          type: "success",
-        },
-      };
-
-      if (toastMessages[filterParam]) {
-        setToastContent(toastMessages[filterParam]);
-        setShowToast(true);
-      }
-    }
 
     if (!filterParam) {
       setFilteredProducts(originalProducts);
@@ -73,14 +60,9 @@ const ProductsList = () => {
   // Handle fetch errors
   useEffect(() => {
     if (error) {
-      setToastContent({
-        title: "❌ Error Fetching Products from Database",
-        description: error,
-        type: "error",
-      });
-      setShowToast(true);
+      showToast("❌ Error Fetching Products", getErrorMessage(error), "error");
     }
-  }, [error]);
+  }, [error, getErrorMessage]);
 
   // Monitor cart changes for add-to-cart notifications
   useEffect(() => {
@@ -90,15 +72,14 @@ const ProductsList = () => {
     );
 
     // Only show toast if cart actually increased (not on initial load)
-    if (currentLength > lastCartLength && lastCartLength > 0) {
+    if (currentLength > lastCartLength) {
       const lastAddedItem = cart[cart.length - 1];
       if (lastAddedItem) {
-        setToastContent({
-          title: "✅ Added to Cart",
-          description: `${lastAddedItem.title} has been added to your cart!`,
-          type: "success",
-        });
-        setShowToast(true);
+        showToast(
+          "✅ Added to Cart",
+          `${lastAddedItem.title} has been added to your cart!`,
+          "success"
+        );
       }
     }
 
@@ -122,15 +103,6 @@ const ProductsList = () => {
 
   return (
     <div className={styles.productsWrapper}>
-      {/* Toast notifications */}
-      <Toast
-        title={toastContent.title}
-        description={toastContent.description}
-        isVisible={showToast}
-        onHide={() => setShowToast(false)}
-        type={toastContent.type}
-      />
-
       {/* Sort and Filter controls */}
       <div className={styles.sortFilterContainer}>
         <Sort
@@ -153,6 +125,16 @@ const ProductsList = () => {
               <ProductItem key={product.id} product={product} />
             ))}
       </ul>
+
+      {/* Toast notifications */}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+        duration={3000}
+      />
     </div>
   );
 };
