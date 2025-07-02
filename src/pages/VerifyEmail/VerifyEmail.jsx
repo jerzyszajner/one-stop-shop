@@ -44,7 +44,7 @@ const VerifyEmail = () => {
         setEmailVerified(auth.currentUser.emailVerified);
 
         if (auth.currentUser.emailVerified) {
-          navigate("/products");
+          navigate("/");
         }
       }
     };

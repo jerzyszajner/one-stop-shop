@@ -18,6 +18,40 @@ export const useSignUpValidation = () => {
     if (!values.lastname.trim()) {
       newErrors.lastname = "Last name is required";
     }
+    // Date of birth validation
+    if (!values.dateOfBirth.trim()) {
+      newErrors.dateOfBirth = "Date of birth is required";
+    } else {
+      const today = new Date();
+      const birthDate = new Date(values.dateOfBirth);
+      today.setHours(0, 0, 0, 0); // Ignore time for comparison
+
+      if (birthDate > today) {
+        newErrors.dateOfBirth = "Date of birth cannot be in the future";
+      } else {
+        const minAge = 18;
+        const requiredBirthDate = new Date(
+          today.getFullYear() - minAge,
+          today.getMonth(),
+          today.getDate()
+        );
+
+        if (birthDate > requiredBirthDate) {
+          newErrors.dateOfBirth = `You must be at least ${minAge} years old to register.`;
+        }
+
+        const maxAge = 120;
+        const oldestBirthDate = new Date(
+          today.getFullYear() - maxAge,
+          today.getMonth(),
+          today.getDate()
+        );
+
+        if (birthDate < oldestBirthDate) {
+          newErrors.dateOfBirth = "Please provide a valid date of birth.";
+        }
+      }
+    }
     // Email validation
     if (!values.email.trim()) {
       newErrors.email = "Email is required";

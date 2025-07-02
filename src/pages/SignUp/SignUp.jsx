@@ -217,6 +217,9 @@ const SignUp = () => {
             onChange={handleInputChange}
             value={signUpFormData.dateOfBirth}
           />
+          {errors && (
+            <p className={styles.errorMessage}>{errors.dateOfBirth}</p>
+          )}
           {/*-------------------Profile Picture-------------------------*/}
           <label htmlFor="profilePicture">Profile Picture</label>
           <input
@@ -235,13 +238,14 @@ const SignUp = () => {
                 alt="User's profile picture preview"
                 className={styles.imagePreview}
               />
-              <button
+              <Button
                 type="button"
                 className={styles.removeImageButton}
                 onClick={handleRemoveImage}
+                ariaLabel="Remove image"
               >
                 Remove image
-              </button>
+              </Button>
             </div>
           )}
         </fieldset>
@@ -295,9 +299,18 @@ const SignUp = () => {
           )}
         </fieldset>
         {/*-----------------------End of Confirmation---------------------*/}
-        <Button className={styles.createAccountButton} disabled={isLoading}>
-          {isLoading ? "Creating account..." : "Create account"}
-        </Button>
+        <div className={styles.buttonsContainer}>
+          <Button className={styles.createAccountButton} disabled={isLoading}>
+            {isLoading ? "Creating account..." : "Create account"}
+          </Button>
+          <Button
+            type="button"
+            className={styles.cancelButton}
+            onClick={() => navigate("/sign-in")}
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
 
       {/* Toast notification */}
