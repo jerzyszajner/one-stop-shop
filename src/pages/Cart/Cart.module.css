@@ -107,20 +107,13 @@
 /* Responsive design */
 @media screen and (max-width: 480px) {
   .cartContainer {
-    padding: var(--space-small);
+    padding: 0;
+    border-radius: none;
   }
 
-  .cartItem {
-    flex-direction: column;
-  }
-
-  .productImage {
-    max-width: 100%;
-  }
-
-  .productDetails {
-    font-size: var(--small-font-size);
-    align-items: center;
+  .productTitle {
+    font-size: var(--base-font-size);
+    font-weight: bold;
   }
 
   .totalAmount {
