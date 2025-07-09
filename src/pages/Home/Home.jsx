@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import { useEffect, useState } from "react";
 import styles from "./Home.module.css";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
 import Spinner from "../../components/Spinner/Spinner";
 
 const Home = () => {
-  // Fetch all products for top rated section
   const { products: allProducts, isLoading } = useFetchProducts();
   const [topRated, setTopRated] = useState([]);
 
-  // Calculate top rated products
   useEffect(() => {
     if (allProducts.length === 0) return;
     const sorted = allProducts
@@ -21,9 +20,9 @@ const Home = () => {
   if (isLoading) {
     return <Spinner />;
   }
+
   return (
     <div className={styles.homePage}>
-      {/* Hero section */}
       <section className={styles.hero}>
         <div className={styles.heroContainer}>
           <div className={styles.heroContent}>
@@ -34,41 +33,28 @@ const Home = () => {
               thousands of products at unbeatable prices
             </p>
             <div className={styles.heroButtons}>
-              <Link
-                to="/products"
-                className={styles.ctaButton}
-                aria-label="Shop Now"
-              >
+              <ButtonLink to="/products" variant="secondary">
                 Shop Now
-              </Link>
-              <Link
-                to="/products?filter=onSale"
-                className={styles.secondaryButton}
-                aria-label="View Sale Deals"
-              >
+              </ButtonLink>
+              <ButtonLink to="/products?filter=onSale" variant="tertiary">
                 View Deals
-              </Link>
+              </ButtonLink>
             </div>
           </div>
           <div className={styles.heroImage}>
             <img
               src="/assets/images/shopping-hero.webp"
-              alt="Shopping Experience Image"
+              alt="Shopping Experience"
               className={styles.heroImageImg}
             />
           </div>
         </div>
       </section>
 
-      {/* Featured categories section */}
       <section className={styles.categories}>
         <h2 className={styles.sectionTitle}>Shop by Category</h2>
         <div className={styles.categoryGrid}>
-          <Link
-            to="/products?filter=beauty"
-            className={styles.categoryCard}
-            aria-label="View Beauty Products"
-          >
+          <Link to="/products?filter=beauty" className={styles.categoryCard}>
             <img
               src="/assets/images/beauty-thumb.webp"
               alt="Beauty"
@@ -79,7 +65,6 @@ const Home = () => {
           <Link
             to="/products?filter=fragrances"
             className={styles.categoryCard}
-            aria-label="View Fragrances Products"
           >
             <img
               src="/assets/images/fragrances-thumb.webp"
@@ -88,11 +73,7 @@ const Home = () => {
             />
             <h3 className={styles.categoryCardTitle}>Fragrances</h3>
           </Link>
-          <Link
-            to="/products?filter=furniture"
-            className={styles.categoryCard}
-            aria-label="View Furniture Products"
-          >
+          <Link to="/products?filter=furniture" className={styles.categoryCard}>
             <img
               src="/assets/images/furniture-thumb.webp"
               alt="Furniture"
@@ -100,11 +81,7 @@ const Home = () => {
             />
             <h3 className={styles.categoryCardTitle}>Furniture</h3>
           </Link>
-          <Link
-            to="/products?filter=groceries"
-            className={styles.categoryCard}
-            aria-label="View Groceries Products"
-          >
+          <Link to="/products?filter=groceries" className={styles.categoryCard}>
             <img
               src="/assets/images/groceries-thumb.webp"
               alt="Groceries"
@@ -115,25 +92,17 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Trending products section */}
       <section className={styles.featured}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Trending Products</h2>
-          <Link
-            to="/products"
-            className={styles.viewAll}
-            aria-label="View All Products"
-          >
+          <Link to="/products" className={styles.viewAll}>
             View All
           </Link>
         </div>
         <div className={styles.productGrid}>
           {topRated.map((prod) => (
             <div key={prod.id} className={styles.productCard}>
-              <Link
-                to={`/products/${prod.documentId}`}
-                aria-label="View Top Rated Product"
-              >
+              <Link to={`/products/${prod.documentId}`}>
                 <img
                   src={prod.thumbnail || prod.images?.[0]}
                   alt={prod.title}
@@ -150,7 +119,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features section */}
       <section className={styles.features}>
         <div className={styles.featuresGrid}>
           <div className={styles.featureItem}>
@@ -176,7 +144,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats section */}
       <section className={styles.stats}>
         <div className={styles.statsGrid}>
           <div className={styles.statItem}>

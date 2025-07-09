@@ -197,7 +197,7 @@ const ProductDetails = () => {
             <strong className={styles.productLabel}>Description: </strong>
             {product.description}
           </p>
-          <Button className={styles.addToCartBtn} onClick={handleAddToCart}>
+          <Button onClick={handleAddToCart} variant="primary">
             Add to cart
           </Button>
         </div>

@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background: var(--background-gradient-light);
 }
 
 /* Verification container */
@@ -13,10 +13,9 @@
   flex-direction: column;
   gap: var(--space-medium);
   text-align: center;
-  padding: var(--space-large);
+  padding: var(--space-medium);
   background: var(--primary-color-light);
   border-radius: var(--border-radius-large);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   width: 100%;
 }
@@ -33,16 +32,24 @@
   margin-bottom: var(--space-medium);
 }
 
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  width: 100%;
+  height: 90px;
+}
+
 /* Resend button */
 .resendButton {
-  background: var(--primary-color);
+  height: 40px;
+  background-color: var(--primary-color);
   color: var(--text-light);
+  border-radius: var(--border-radius-small);
   border: none;
-  padding: var(--space-medium) var(--space-large);
-  font-size: var(--base-font-size);
-  border-radius: var(--border-radius-medium);
-  cursor: pointer;
   transition: all 0.3s ease-in-out;
+  font-size: var(--base-font-size);
+  box-shadow: var(--box-shadow-base);
 }
 
 .resendButton:hover {
@@ -60,6 +67,7 @@
   color: var(--text-error);
   font-size: var(--base-font-size);
   margin-top: var(--space-small);
+
 }
 
 /* Responsive design */

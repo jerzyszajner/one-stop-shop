@@ -1,10 +1,90 @@
 /* Button component styles */
 .button {
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
 .button:disabled {
     cursor: not-allowed;
     opacity: 0.6;
     pointer-events: none;
+}
+
+/*** Primary button ***/
+.primary {
+    height: 40px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-radius: var(--border-radius-small);
+    border: none;
+    font-size: var(--base-font-size);
+}
+
+.primary:hover {
+    background-color: var(--secondary-color);
+}
+
+/*** Link button ***/
+.link {
+    background-color: transparent;
+    color: var(--link-color);
+    border: none;
+    font-size: var(--base-font-size);
+    border-bottom: 2px solid var(--link-color);
+}
+
+.link:hover {
+    color: var(--link-color-hover);
+    border-bottom: 2px solid var(--text-light);
+}
+
+/*** Remove button ***/
+.remove {
+    color: var(--text-light);
+    background-color: var(--remove-button-color);
+    padding: var(--space-small);
+    border: none;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--remove-button-color);
+}
+
+.remove:hover {
+    background-color: var(--remove-button-color-hover);
+}
+
+/*** Toggle menu button ***/
+.toggleMenu {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--glass-bg-light);
+    color: var(--text-light);
+    border: none;
+}
+
+.toggleMenu:hover {
+    background: var(--glass-bg-medium);
+}
+
+/*** Sign out button ***/
+.signOutBtn {
+    background: var(--link-color);
+    color: var(--text-light);
+    padding: var(--space-small) var(--space-medium);
+    border-radius: var(--border-radius-medium);
+    border: none;
+}
+
+.signOutBtn:hover {
+    background: var(--active-link-color);
+}
+
+@media screen and (max-width: 768px) {
+    .toggleMenu {
+        display: flex;
+    }
 }

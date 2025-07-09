@@ -1,13 +1,13 @@
 /* Sign in page styling */
 .formWrapper {
   width: 100%;
-  min-height: 100vh;
-  max-height: auto;
+  height: 100%;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  padding: var(--space-x-large);
+  background: var(--background-gradient-light);
+  padding: var(--space-large);
   color: var(--primary-color);
   position: relative;
 }
@@ -19,8 +19,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-medium);
-  padding: var(--space-large);
-  background-color: var(--primary-color-light);
+  padding: var(--space-medium);
+  background-color: var(--secondary-color-light);
   border-radius: var(--border-radius-medium);
 }
 
@@ -28,7 +28,7 @@
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-small);
+  gap: var(--space-x-small);
   padding: var(--space-medium);
   border-radius: var(--border-radius-medium);
 }
@@ -37,41 +37,33 @@
   font-weight: bold;
 }
 
-/* Form inputs */
-.formInput {
+.createAccountLink {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 2px solid var(--link-color);
+  transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+}
+
+.createAccountLink:hover {
+  color: var(--link-color-hover);
+  border-bottom: 2px solid var(--text-light);
+}
+
+/* Buttons container */
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
   width: 100%;
-  height: 32px;
-  padding: 0 var(--space-small);
-}
-
-/* Sign in button */
-.signInButton {
-  height: 48px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border-radius: var(--border-radius-small);
-  border: none;
-  transition: all 0.3s ease-in-out;
-  font-size: var(--base-font-size);
-  box-shadow: var(--box-shadow-base);
-}
-
-.signInButton:hover {
-  background-color: var(--secondary-color);
+  height: 90px;
 }
 
 /* Error message styling */
 .errorMessage {
   color: var(--text-error);
-}
-
-/* Forgot password button */
-.forgotPasswordButton {
-  background-color: transparent;
-  border: none;
-  font-size: var(--base-font-size);
-  text-decoration: underline;
-  color: inherit;
+  height: 10px;
+  text-align: center;
+  font-size: var(--small-font-size);
 }
 
 /* Password reset form */
@@ -82,27 +74,20 @@
   color: var(--primary-color);
 }
 
-.resetFormContainer p {
-  line-height: 1.5;
-}
-
-.resetInput {
-  height: 32px;
-  padding: 0 var(--space-small);
+.resetFormDescription {
+  line-height: 1.6;
+  font-size: var(--base-font-size);
+  font-weight: bold;
+  margin-bottom: var(--space-small);
 }
 
 /* Reset buttons container */
 .resetButtonsContainer {
   display: flex;
-  justify-content: center;
-  gap: var(--space-medium);
-}
-
-.resetPasswordButton,
-.closeButton {
-  flex: 1;
-  height: 32px;
-  color: var(--primary-color);
+  flex-direction: column;
+  gap: var(--space-small);
+  width: 100%;
+  height: 90px;
 }
 
 /* Responsive design */

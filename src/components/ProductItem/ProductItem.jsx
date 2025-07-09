@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import ButtonLink from "../ButtonLink/ButtonLink";
 import styles from "./ProductItem.module.css";
 import Button from "../Button/Button";
 import { getCartContext } from "../../context/CartContext";
@@ -44,17 +44,19 @@ const ProductItem = ({ product }) => {
       <p className={styles.discountPercentage}>
         <b>Discount Percentage:</b> {product.discountPercentage}
       </p>
-
-      {/* Product actions */}
-      <Link
-        to={`/products/${product.documentId}`}
-        className={styles.productLink}
-      >
-        Details
-      </Link>
-      <Button className={styles.addToCartBtn} onClick={handleAddToCart}>
-        Add to cart
-      </Button>
+      <div className={styles.buttonsContainer}>
+        {/* Product actions */}
+        <ButtonLink
+          to={`/products/${product.documentId}`}
+          variant="detailsBtn"
+          // className={styles.productLink}
+        >
+          Details
+        </ButtonLink>
+        <Button onClick={handleAddToCart} variant="primary">
+          Add to cart
+        </Button>
+      </div>
     </div>
   );
 };

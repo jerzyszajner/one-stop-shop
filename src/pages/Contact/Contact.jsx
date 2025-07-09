@@ -6,6 +6,7 @@ import { database } from "../../../firebaseConfig";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 
 const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +72,11 @@ const Contact = () => {
       setIsLoading(false);
     }
   };
+
+  const handleCloseModal = () => {
+    setShowContactModal(false);
+  };
+
   return (
     <>
       <form className={styles.contactForm} onSubmit={handleSubmit} noValidate>
@@ -84,12 +90,15 @@ const Contact = () => {
               <input
                 type="text"
                 name="firstName"
+                id="firstName"
                 placeholder="Enter your first name"
                 className={styles.inputElement}
                 onChange={handleChange}
                 value={userData.firstName}
               />
-              <p>{contactErrors.firstName}</p>
+              {contactErrors && (
+                <p className={styles.errorMessage}>{contactErrors.firstName}</p>
+              )}
             </div>
 
             {/*----------------Last Name----------------*/}
@@ -98,12 +107,15 @@ const Contact = () => {
               <input
                 type="text"
                 name="lastName"
+                id="lastName"
                 placeholder="Enter your last name"
                 className={styles.inputElement}
                 onChange={handleChange}
                 value={userData.lastName}
               />
-              <p>{contactErrors.lastName}</p>
+              {contactErrors && (
+                <p className={styles.errorMessage}>{contactErrors.lastName}</p>
+              )}
             </div>
           </section>
           {/* Contact info section */}
@@ -114,12 +126,15 @@ const Contact = () => {
               <input
                 type="email"
                 name="email"
+                id="email"
                 placeholder="Enter your email address"
                 className={styles.inputElement}
                 onChange={handleChange}
                 value={userData.email}
               />
-              <p>{contactErrors.email}</p>
+              {contactErrors && (
+                <p className={styles.errorMessage}>{contactErrors.email}</p>
+              )}
             </div>
 
             {/*----------------Phone Number----------------*/}
@@ -128,12 +143,17 @@ const Contact = () => {
               <input
                 type="tel"
                 name="phoneNumber"
+                id="phoneNumber"
                 placeholder="Enter your phone number (8 digits)"
                 className={styles.inputElement}
                 onChange={handleChange}
                 value={userData.phoneNumber}
               />
-              <p>{contactErrors.phoneNumber}</p>
+              {contactErrors && (
+                <p className={styles.errorMessage}>
+                  {contactErrors.phoneNumber}
+                </p>
+              )}
             </div>
           </section>
           {/*----------------Order Number----------------*/}
@@ -142,12 +162,15 @@ const Contact = () => {
             <input
               type="text"
               name="orderNumber"
+              id="orderNumber"
               placeholder="Enter order number in case your inquiry is about an order"
               className={styles.inputElement}
               onChange={handleChange}
               value={userData.orderNumber}
             />
-            <p>{contactErrors.orderNumber}</p>
+            {contactErrors && (
+              <p className={styles.errorMessage}>{contactErrors.orderNumber}</p>
+            )}
           </div>
           {/*----------------Subject----------------*/}
           <div className={styles.inputGroup}>
@@ -155,13 +178,16 @@ const Contact = () => {
             <input
               type="text"
               name="subject"
+              id="subject"
               placeholder="Enter your message subject (max 20 characters)"
               className={styles.inputElement}
               onChange={handleChange}
               value={userData.subject}
               maxLength={20}
             />
-            <p>{contactErrors.subject}</p>
+            {contactErrors && (
+              <p className={styles.errorMessage}>{contactErrors.subject}</p>
+            )}
           </div>
 
           {/*----------------Message----------------*/}
@@ -169,24 +195,37 @@ const Contact = () => {
             <label htmlFor="message">Message</label>
             <textarea
               name="message"
-              placeholder="Enter your message (max 300 characters)"
-              cols="30"
-              rows="10"
-              maxLength={300}
+              id="message"
+              placeholder="Enter your message (max 200 characters)"
+              rows="3"
+              maxLength={200}
               className={styles.textareaElement}
               onChange={handleChange}
               value={userData.message}
             ></textarea>
             <div className={styles.messageErrorAndCount}>
-              Typed characters:
-              <span>{userData.message ? userData.message.length : 0}</span>
-              /300
-              <p>{contactErrors.message}</p>
+              <div className={styles.messageCountSection}>
+                Typed characters:
+                <span className={styles.messageCount}>
+                  {userData.message ? userData.message.length : 0}
+                </span>
+                /<span className={styles.messageCount}>200</span>
+              </div>
+              {contactErrors && (
+                <div className={styles.errorMessage}>
+                  {contactErrors.message}
+                </div>
+              )}
             </div>
           </div>
-          <Button className={styles.submitButton} disabled={isLoading}>
-            {isLoading ? "Sending..." : "Send Message"}
-          </Button>
+          <div className={styles.buttonsContainer}>
+            <Button variant="primary" disabled={isLoading}>
+              {isLoading ? "Sending..." : "Send Message"}
+            </Button>
+            <ButtonLink to="/" variant="primary">
+              Cancel
+            </ButtonLink>
+          </div>
         </div>
         {/* Spinner overlay */}
         {isLoading && <Spinner />}
@@ -203,12 +242,9 @@ const Contact = () => {
             <p>
               We appreciate your patience and look forward to assisting you.
             </p>
-            <Button
-              className={styles.closeModalButton}
-              onClick={() => setShowContactModal(false)}
-            >
+            <ButtonLink to="/" onClick={handleCloseModal} variant="primary">
               Close
-            </Button>
+            </ButtonLink>
           </div>
         </Modal>
       )}

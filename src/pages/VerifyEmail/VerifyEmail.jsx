@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import styles from "./VerifyEmail.module.css";
-import { useNavigate } from "react-router-dom";
 import { auth } from "../../../firebaseConfig";
 import { sendEmailVerification } from "firebase/auth";
 import Button from "../../components/Button/Button";
 import Toast from "../../components/Toast/Toast";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import { useNavigate, useLocation } from "react-router-dom";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 
 const VerifyEmail = () => {
   // Email verification state
   const [emailVerified, setEmailVerified] = useState(false);
-  const navigate = useNavigate();
   const { getErrorMessage } = useFirebaseValidation();
+
+  // Navigation
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Toast state for notifications
   const [toast, setToast] = useState({
@@ -31,6 +35,10 @@ const VerifyEmail = () => {
     });
   };
 
+  const handleCancel = () => {
+    navigate("/");
+  };
+
   // Hide toast notification
   const hideToast = () => {
     setToast((prev) => ({ ...prev, isVisible: false }));
@@ -41,17 +49,26 @@ const VerifyEmail = () => {
     const checkVerificationStatus = async () => {
       if (auth.currentUser) {
         await auth.currentUser.reload();
-        setEmailVerified(auth.currentUser.emailVerified);
+        const isVerified = auth.currentUser.emailVerified;
+        setEmailVerified(isVerified);
 
-        if (auth.currentUser.emailVerified) {
-          navigate("/");
+        if (isVerified) {
+          const from = location.state?.from;
+
+          if (from === "cart") {
+            navigate("/checkout");
+          } else if (from === "profile") {
+            navigate("/profile");
+          } else {
+            navigate("/");
+          }
         }
       }
     };
 
     const interval = setInterval(checkVerificationStatus, 5000);
     return () => clearInterval(interval);
-  }, [navigate]);
+  }, [navigate, location.state]);
 
   // Resend verification email
   const handleResendVerificationEmail = async () => {
@@ -81,19 +98,25 @@ const VerifyEmail = () => {
       ) : (
         <div className={styles.verificationContainer}>
           <h2>
-            Check your inbox and verify your email. After verifying your email
-            you will be automatically redirected to the main page.
+            You are not verified. Check your inbox and verify your email. After
+            verifying your email you will be automatically redirected to the
+            main page.
           </h2>
           <p>
             If you haven't received a verification email, click on the link
             below to request another verification email.
           </p>
-          <Button
-            className={styles.resendButton}
-            onClick={handleResendVerificationEmail}
-          >
-            Resend verification email
-          </Button>
+          <div className={styles.buttonsContainer}>
+            <Button
+              className={styles.resendButton}
+              onClick={handleResendVerificationEmail}
+            >
+              Resend verification email
+            </Button>
+            <ButtonLink to="/" onClick={handleCancel} variant="primary">
+              Cancel
+            </ButtonLink>
+          </div>
         </div>
       )}
 

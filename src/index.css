@@ -11,12 +11,24 @@
     box-sizing: border-box;
 }
 
+/* Full height setup for flex layout */
+html,
+body,
+#root {
+    height: 100%;
+}
+
 button {
     cursor: pointer;
 }
 
-input {
+input,
+select {
     font-size: var(--base-font-size);
+    height: 34px;
+    padding: 0 var(--space-small);
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--border-radius-small);
 }
 
 body {
@@ -30,13 +42,23 @@ body {
     --primary-color: #191e29;
     --secondary-color: #2d3748;
     --primary-color-light: #ffffff;
-    --secondary-color-light: #f7fafc;
+    --secondary-color-light: #fafafa;
     --active-link-color: #3b82f6;
+    --link-color: #0066cc;
+    --link-color-hover: #03a909;
     --cart-badge-color: orangered;
+    --remove-button-color: #e60000;
+    --remove-button-color-hover: #ff4d4d;
     --card-color: #ffffff;
     --text-light: #ffffff;
+    --text-dark: #000000;
     --text-error: #e53e3e;
+    --text-success: #10b981;
+    --text-warning: #f59e0b;
+    --background-color-info: #faebd7;
     --box-shadow-base: 0 5px 15px rgba(0, 0, 0, 0.5);
+    --background-gradient-light: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color-light) 100%);
+    --background-gradient-dark: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 
     /* Glass/Overlay Effects */
     --glass-bg-light: rgba(255, 255, 255, 0.1);
@@ -56,6 +78,7 @@ body {
     --xx-large-font-size: 4rem;
 
     /* Spacing */
+    --space-x-small: 0.25rem;
     --space-small: 0.5rem;
     --space-medium: 1rem;
     --space-large: 2rem;

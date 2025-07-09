@@ -12,6 +12,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { auth, database } from "../../../firebaseConfig";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   // User profile state
@@ -80,6 +81,22 @@ const Profile = () => {
           <h1 className={styles.welcomeTitle}>
             Welcome, {userData?.firstname || "User"}!
           </h1>
+          {/* Unverified email notification */}
+          {!auth?.currentUser?.emailVerified && (
+            <div className={styles.notificationContainer}>
+              <p className={styles.notificationText}>
+                You haven't verified your email yet. Check your inbox or click{" "}
+                <Link
+                  className={styles.resendLink}
+                  to="/verify-email"
+                  state={{ from: "profile" }}
+                >
+                  Verify Email
+                </Link>{" "}
+                to get a new link.
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Profile details section */}

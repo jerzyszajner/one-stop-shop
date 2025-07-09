@@ -1,23 +1,26 @@
 import styles from "./Cart.module.css";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAuthContext } from "../../context/AuthContext";
 import { getCartContext } from "../../context/CartContext";
-import { useMemo, useState } from "react";
-import Modal from "../../components/Modal/Modal";
+import { useMemo } from "react";
 import Button from "../../components/Button/Button";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import Counter from "../../components/Counter/Counter";
 
 const Cart = () => {
   const { cart, dispatch } = getCartContext();
   const { user } = getAuthContext();
-  const [showRedirectModal, setShowRedirectModal] = useState(false);
   const navigate = useNavigate();
 
   const handleCheckout = () => {
     if (user) {
-      navigate("/checkout");
+      if (user.emailVerified) {
+        navigate("/checkout");
+      } else {
+        navigate("/verify-email", { state: { from: "cart" } });
+      }
     } else {
-      setShowRedirectModal(true);
+      navigate("/sign-in", { state: { from: "cart" } });
     }
   };
 
@@ -45,18 +48,21 @@ const Cart = () => {
                   className={styles.productImage}
                 />
                 <div className={styles.productDetails}>
-                  <h3>{item.title}</h3>
-                  <p>Price: ${item.price}</p>
-                  <p>Total: ${(item.price * item.quantity).toFixed(2)}</p>
-                  <Button
-                    onClick={() => handleRemove(item.id)}
-                    className={styles.removeButton}
-                  >
-                    Remove{" "}
-                  </Button>
+                  <h3 className={styles.productTitle}>{item.title}</h3>
+                  <p className={styles.productPrice}>Price: ${item.price}</p>
+                  <p className={styles.productTotal}>
+                    Total: ${(item.price * item.quantity).toFixed(2)}
+                  </p>
                 </div>
                 <div className={styles.quantity}>
                   <Counter className={styles.itemCount} item={item} />
+                  <Button
+                    onClick={() => handleRemove(item.id)}
+                    aria-label="Remove item from cart"
+                    variant="remove"
+                  >
+                    Remove
+                  </Button>
                 </div>
               </li>
             ))}
@@ -64,36 +70,14 @@ const Cart = () => {
           <div className={styles.totalContainer}>
             <p className={styles.totalAmount}>Total: {`$${totalPrice}`}</p>
           </div>
-          <Button className={styles.toCheckoutLink} onClick={handleCheckout}>
-            To Checkout
-          </Button>
-          {showRedirectModal && (
-            <Modal>
-              <div className={styles.redirectModalContent}>
-                <p>
-                  In order to complete your purchase you need to sign in. If you
-                  already have an account please click on the "Go to sign-in
-                  page". Otherwise, click on "Go to sign-up" to create a an
-                  account. Once signed in, you'll be automatically redirected to
-                  checkout.
-                </p>
-                <div className={styles.redirectLinksContainer}>
-                  <Link to="/sign-in" className={styles.redirectLink}>
-                    Go to sign-in page
-                  </Link>
-                  <Link to="/sign-up" className={styles.redirectLink}>
-                    Go to sign-up page
-                  </Link>
-                </div>
-                <Button
-                  onClick={() => setShowRedirectModal(false)}
-                  className={styles.closeModalButton}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </Modal>
-          )}
+          <div className={styles.buttonsContainer}>
+            <Button onClick={handleCheckout} variant="primary">
+              To Checkout
+            </Button>
+            <ButtonLink to="/products" variant="primary">
+              Cancel
+            </ButtonLink>
+          </div>
         </div>
       )}
     </div>

@@ -1,10 +1,8 @@
 /* Email verification badge styling */
 .verificationBadge {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 40px;
-    height: 40px;
+    bottom: 20px;
+    right: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,28 +10,25 @@
 
 /* Verified status icon */
 .verifiedIcon {
-    color: #10b981 !important;
-    font-size: var(--x-large-font-size);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    color: var(--text-success);
+    font-size: var(--large-font-size);
 }
 
 /* Unverified status icon */
 .unverifiedIcon {
-    color: #f59e0b !important;
-    font-size: var(--x-large-font-size);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    color: var(--text-warning);
+    font-size: var(--large-font-size);
 }
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
     .verificationBadge {
-        right: -5px;
-        width: 35px;
-        height: 35px;
+        right: 20px;
+        bottom: 20px;
     }
 
     .verifiedIcon,
     .unverifiedIcon {
-        font-size: var(--large-font-size);
+        font-size: var(--medium-font-size);
     }
 }

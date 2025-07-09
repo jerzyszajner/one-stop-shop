@@ -1,17 +1,19 @@
 /* Checkout page styling */
 .checkoutWrapper {
   width: 100%;
-  min-height: 100vh;
+  flex: 1;
   position: relative;
+  background: var(--background-gradient-light);
 }
 
 /* Main checkout container */
 .checkoutContainer {
   width: 100%;
-  min-height: 100vh;
+  max-width: 1100px;
+  height: auto;
   display: flex;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  padding: var(--space-x-large);
+  padding: var(--space-large);
+  margin: 0 auto;
 }
 
 /* Purchase overview and payment sections */
@@ -21,20 +23,17 @@
 }
 
 .purchaseOverviewContainer .cartListContainer {
-  width: 80%;
-  max-width: 800px;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(100px);
-  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  background: var(--secondary-color-light);
+  border-radius: var(--border-radius-medium);
   padding: var(--space-medium);
-  box-shadow: var(--box-shadow-base);
-  color: var(--text-light);
+  color: var(--text-dark);
 }
 
 .cartList {
   width: 100%;
   list-style: none;
-  padding: 0;
 }
 
 /* Cart item in checkout */
@@ -42,24 +41,23 @@
   display: flex;
   align-items: center;
   gap: var(--space-medium);
-  padding: var(--space-medium);
-  border-bottom: 2px solid var(--secondary-color);
-  box-shadow: var(--box-shadow-base);
+  padding: var(--space-small) 0;
+  border-bottom: 1px solid var(--secondary-color);
 }
 
 /* Product image in checkout */
-.gameImage {
+.productImage {
   max-width: 90px;
   height: auto;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow-base);
+  border-radius: var(--border-radius-medium);
+  border: 1px solid var(--secondary-color);
 }
 
-/* Game details section */
-.gameDetails {
-  flex: 2;
+/* Product details section */
+.productDetails {
+  flex: 1;
   font-size: var(--basic-font-size);
-  color: var(--text-light);
+  color: var(--text-dark);
   display: flex;
   flex-direction: column;
   gap: var(--space-small);
@@ -67,48 +65,28 @@
 
 /* Quantity display */
 .quantity {
-  flex: 1;
   display: flex;
+  gap: var(--space-small);
+  flex-direction: column;
   justify-content: center;
-}
-
-/* Remove button in checkout */
-.removeButton {
-  max-width: 100px;
-  background-color: var(--text-error);
-  color: var(--text-light);
-  padding: var(--space-small);
-  box-shadow: var(--box-shadow-base);
-  border: none;
-  border-radius: var(--border-radius-small);
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.removeButton:hover {
-  opacity: 0.9;
-  transform: scale(1.05);
 }
 
 /* Total amount in checkout */
 .totalAmount {
   padding: var(--space-medium);
-  font-size: var(--large-font-size);
+  font-size: var(--medium-font-size);
   font-weight: bold;
-  box-shadow: var(--box-shadow-base);
 }
 
 /* Payment details section */
 .paymentContainer {
-  width: 80%;
-  height: 100%;
-  max-width: 600px;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(100px);
-  border-radius: 12px;
+  width: 100%;
+  height: auto;
+  max-width: 500px;
+  background: var(--secondary-color-light);
+  border-radius: var(--border-radius-medium);
   padding: var(--space-medium);
-  box-shadow: var(--box-shadow-base);
-  color: var(--text-light);
+  color: var(--text-dark);
 }
 
 /* Payment form */
@@ -116,78 +94,72 @@
   display: flex;
   flex-direction: column;
   height: fit-content;
-  gap: var(--space-medium);
+  gap: var(--space-small);
 }
 
-.paymentForm label {
+.formTitle {
+  font-size: var(--medium-font-size);
+  color: var(--text-dark);
+}
+
+.label {
   font-size: var(--basic-font-size);
-  font-weight: bold;
-  color: var(--text-light);
-}
-
-.paymentForm input {
-  width: 100%;
-  height: 32px;
-  padding: var(--space-small);
-  border-radius: var(--border-radius-small);
-  border: 1px solid var(--border-color);
-  color: var(--primary-color);
-}
-
-.paymentSelect {
-  height: 32px;
+  color: var(--text-dark);
 }
 
 /* Card details section */
 .cardDetails {
   display: flex;
   align-items: center;
-  gap: var(--space-small);
-}
-
-.cardDetails input {
-  flex: 1;
-}
-
-/* Pay button */
-.payButton {
-  display: flex;
   justify-content: center;
-  align-items: center;
-  width: 50%;
-  max-width: 380px;
-  text-decoration: none;
-  height: 48px;
-  background-color: var(--secondary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: var(--border-radius-small);
-  transition: all 0.3s ease-in-out;
-  font-size: var(--base-font-size);
-  margin: 0 auto;
-  box-shadow: var(--box-shadow-base);
-}
-
-.payButton:hover {
-  background-color: var(--primary-color);
+  gap: var(--space-small);
 }
 
 /* Expiry and CVV containers */
-.expiryContainer,
+.expiryMonth,
+.expiryYear,
 .cvvContainer {
   display: flex;
-  flex: 1;
+  flex-direction: column;
+  gap: var(--space-small);
+}
+
+.expiryLabel,
+.cvvLabel {
+  text-align: center;
+  font-size: var(--small-font-size);
+  color: var(--text-dark);
+  font-weight: normal;
+}
+
+.expiryInputs {
+  display: flex;
   align-items: center;
   gap: var(--space-small);
 }
 
-.expiryContainer input {
-  max-width: 60px;
+.expiryInput,
+.cvvInput {
+  width: 100%;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  width: 100%;
+  height: 90px;
 }
 
 /* Error message styling */
 .errorMessage {
   color: var(--text-error);
+  height: 10px;
+  text-align: center;
+  margin-bottom: var(--space-small);
+  font-size: var(--small-font-size);
 }
 
 /* Checkout modal content */
@@ -197,74 +169,62 @@
   gap: var(--space-medium);
 }
 
-.closeCheckoutModal {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  height: 48px;
-  background-color: var(--secondary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: var(--border-radius-small);
-  transition: all 0.3s ease-in-out;
-  font-size: var(--base-font-size);
-}
-
-.closeCheckoutModal:hover {
-  background-color: var(--primary-color);
-}
-
 /* Responsive design */
 @media screen and (max-width: 1200px) {
   .checkoutContainer {
     padding: var(--space-medium);
+    gap: var(--space-small);
   }
 
-  .purchaseOverviewContainer .cartListContainer {
+  .cartListContainer {
     width: 100%;
-    padding: var(--space-small);
   }
 
   .purchaseOverviewContainer,
   .paymentContainer {
     width: 100%;
-    max-width: 100%;
   }
 }
 
 @media screen and (max-width: 868px) {
   .checkoutContainer {
     flex-direction: column;
-    align-items: center;
+
   }
 
-  .purchaseOverviewContainer .cartListContainer {
+  .cartListContainer {
     width: 100%;
+    margin: 0 auto;
   }
 
   .purchaseOverviewContainer,
   .paymentContainer {
     width: 100%;
-    max-width: 100%;
+    margin: 0 auto;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .checkoutContainer {
-    padding: var(--space-small);
+  .productImage {
+    max-width: 80px;
   }
 
-  .purchaseOverviewContainer .cartListContainer {
-    width: 100%;
+  .checkoutContainer {
     padding: var(--space-small);
+    flex-direction: column;
+    gap: var(--space-x-small);
+  }
+
+  .cartListContainer {
+    width: 100%;
+    padding: var(--space-x-small);
   }
 
   .purchaseOverviewContainer,
   .paymentContainer {
     width: 100%;
     max-width: 100%;
+    margin-bottom: var(--space-small);
   }
 
   .cartItem {
@@ -272,6 +232,5 @@
     align-items: center;
     gap: var(--space-small);
     padding: var(--space-small);
-    border-bottom: 2px solid var(--secondary-color);
   }
 }

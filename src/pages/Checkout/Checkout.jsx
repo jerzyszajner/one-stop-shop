@@ -6,11 +6,11 @@ import { database } from "../../../firebaseConfig";
 import { useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import Counter from "../../components/Counter/Counter";
 import Modal from "../../components/Modal/Modal";
 import Button from "../../components/Button/Button";
 import Spinner from "../../components/Spinner/Spinner";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 
 const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +29,6 @@ const Checkout = () => {
   const { cart, dispatch } = getCartContext();
   const { user } = getAuthContext();
   const { paymentErrors, validatePaymentForm } = usePaymentValidation();
-  const navigate = useNavigate();
 
   const handleRemove = (id) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: id });
@@ -95,6 +94,11 @@ const Checkout = () => {
       setIsLoading(false);
     }
   };
+
+  const handleCloseModal = () => {
+    setShowCheckoutModal(false);
+  };
+
   return (
     <div className={styles.checkoutWrapper}>
       <div className={styles.checkoutContainer}>
@@ -110,21 +114,21 @@ const Checkout = () => {
                     <img
                       src={item.thumbnail}
                       alt={item.title}
-                      className={styles.gameImage}
+                      className={styles.productImage}
                     />
-                    <div className={styles.gameDetails}>
+                    <div className={styles.productDetails}>
                       <h3>{item.title}</h3>
                       <p>Price: ${item.price}</p>
                       <p>Total: ${item.price * item.quantity}</p>
-                      <Button
-                        onClick={() => handleRemove(item.id)}
-                        className={styles.removeButton}
-                      >
-                        Remove{" "}
-                      </Button>
                     </div>
                     <div className={styles.quantity}>
                       <Counter className={styles.itemCount} item={item} />
+                      <Button
+                        onClick={() => handleRemove(item.id)}
+                        variant="remove"
+                      >
+                        Remove
+                      </Button>
                     </div>
                   </li>
                 ))}
@@ -185,7 +189,7 @@ const Checkout = () => {
               name="cardNumber"
               className={styles.input}
               maxLength="16"
-              placeholder="1234 5678 9012 3456"
+              placeholder="💳 1234 5678 9012 3456"
               onChange={handleChange}
               value={paymentValues.cardNumber}
             />
@@ -194,40 +198,67 @@ const Checkout = () => {
             )}
             <div className={styles.cardDetails}>
               {/*----------------Card Expiry----------------*/}
-              <label htmlFor="expiry" className={styles.label}>
-                Expiry Date
-              </label>
-              <div className={styles.expiryContainer}>
+
+              <div className={styles.expiryMonth}>
+                <label
+                  htmlFor="expiryMonth"
+                  className={`${styles.label} ${styles.expiryLabel}`}
+                >
+                  Expiry Month
+                </label>
                 <input
                   type="text"
                   name="expiryMonth"
+                  id="expiryMonth"
                   placeholder="MM"
                   className={styles.expiryInput}
                   onChange={handleChange}
                   value={paymentValues.expiryMonth}
                 />
+                {paymentErrors && (
+                  <p className={styles.errorMessage}>
+                    {paymentErrors.expiryMonth}
+                  </p>
+                )}
+              </div>
+              <div className={styles.expiryYear}>
+                <label
+                  htmlFor="expiryYear"
+                  className={`${styles.label} ${styles.expiryLabel}`}
+                >
+                  Expiry Year
+                </label>
                 <input
                   type="text"
                   name="expiryYear"
+                  id="expiryYear"
                   placeholder="YYYY"
                   className={styles.expiryInput}
                   onChange={handleChange}
                   value={paymentValues.expiryYear}
                 />
+                {paymentErrors && (
+                  <p className={styles.errorMessage}>
+                    {paymentErrors.expiryYear}
+                  </p>
+                )}
               </div>
 
               <div className={styles.cvvContainer}>
                 {/*----------------CVV----------------*/}
-                <label htmlFor="cvv" className={styles.label}>
+                <label
+                  htmlFor="cvv"
+                  className={`${styles.label} ${styles.cvvLabel}`}
+                >
                   CVV
                 </label>
                 <input
                   type="text"
                   id="cvv"
                   name="cvv"
-                  className={styles.input}
+                  className={styles.cvvInput}
                   maxLength="3"
-                  placeholder="123"
+                  placeholder="123 💳"
                   onChange={handleChange}
                   value={paymentValues.cvv}
                 />
@@ -236,17 +267,6 @@ const Checkout = () => {
                 )}
               </div>
             </div>
-            {paymentErrors && (
-              <div>
-                <span className={styles.errorMessage}>
-                  {paymentErrors.expiryMonth}
-                </span>
-                &nbsp;
-                <span className={styles.errorMessage}>
-                  {paymentErrors.expiryYear}
-                </span>
-              </div>
-            )}
             {/*----------------Billing Address----------------*/}
             <label htmlFor="billingAddress" className={styles.label}>
               Billing Address
@@ -265,13 +285,14 @@ const Checkout = () => {
                 {paymentErrors.billingAddress}
               </p>
             )}
-            <button
-              type="submit"
-              className={styles.payButton}
-              disabled={isLoading}
-            >
-              {isLoading ? "Processing..." : "Complete Purchase"}
-            </button>
+            <div className={styles.buttonsContainer}>
+              <Button type="submit" disabled={isLoading} variant="primary">
+                {isLoading ? "Processing..." : "Complete Purchase"}
+              </Button>
+              <ButtonLink to="/products" variant="primary">
+                Cancel
+              </ButtonLink>
+            </div>
           </form>
         </div>
         {/* Success modal */}
@@ -284,15 +305,13 @@ const Checkout = () => {
                 sent to your email.
               </p>
               <p>Check your inbox for details on your order.</p>
-              <Button
-                onClick={() => {
-                  setShowCheckoutModal(false);
-                  navigate("/products");
-                }}
-                className={styles.closeCheckoutModal}
+              <ButtonLink
+                to="/products"
+                onClick={handleCloseModal}
+                variant="primary"
               >
                 Close
-              </Button>
+              </ButtonLink>
             </div>
           </Modal>
         )}

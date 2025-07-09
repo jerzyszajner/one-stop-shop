@@ -7,9 +7,10 @@ import { useSignUpValidation } from "../../hooks/useSignUpValidation";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { database } from "../../../firebaseConfig";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 
 const SignUp = () => {
   // Declare state to manage form data
@@ -38,6 +39,7 @@ const SignUp = () => {
 
   // Redirect users after successful sign up
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Image upload function from the custom hook
   const { uploadImage } = useImageUpload();
@@ -161,8 +163,8 @@ const SignUp = () => {
 
       // Delay navigation to show success toast
       setTimeout(() => {
-        navigate("/verify-email");
-      }, 2000);
+        navigate("/verify-email", { state: location.state });
+      }, 1000);
     } catch (error) {
       console.log(error.message);
 
@@ -172,6 +174,7 @@ const SignUp = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className={styles.formWrapper}>
       <form className={styles.signUpForm} onSubmit={handleSubmit} noValidate>
@@ -226,8 +229,8 @@ const SignUp = () => {
             type="file"
             id="profilePicture"
             name="profilePicture"
-            accept=".jpg, .jpeg, .png"
-            className={styles.formInput}
+            accept=".jpg, .jpeg, .png, .webp"
+            className={`${styles.formInput} ${styles.fileInput}`}
             onChange={handleImageChange}
             ref={fileInputRef}
           />
@@ -300,16 +303,16 @@ const SignUp = () => {
         </fieldset>
         {/*-----------------------End of Confirmation---------------------*/}
         <div className={styles.buttonsContainer}>
-          <Button className={styles.createAccountButton} disabled={isLoading}>
+          <Button
+            className={styles.createAccountButton}
+            disabled={isLoading}
+            ariaLabel="Create account"
+          >
             {isLoading ? "Creating account..." : "Create account"}
           </Button>
-          <Button
-            type="button"
-            className={styles.cancelButton}
-            onClick={() => navigate("/sign-in")}
-          >
+          <ButtonLink to="/sign-in" variant="primary">
             Cancel
-          </Button>
+          </ButtonLink>
         </div>
       </form>
 

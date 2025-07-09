@@ -5,15 +5,15 @@ import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
-    <>
+    <div className={styles.appContainer}>
       <header className={styles.header}>
         <Navbar />
       </header>
-      <main>
+      <main className={styles.main}>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

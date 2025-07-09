@@ -6,16 +6,19 @@ const Button = ({
   className,
   disabled = false,
   ariaLabel,
+  variant = "",
   type,
+  ...props
 }) => {
   return (
     // Reusable button component with customizable props
     <button
-      className={`${styles.button} ${className}`}
+      className={`${styles.button} ${styles[variant]} ${className}`}
       disabled={disabled}
       onClick={onClick}
       aria-label={ariaLabel}
       type={type}
+      {...props}
     >
       {children}
     </button>

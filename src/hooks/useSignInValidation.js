@@ -1,8 +1,9 @@
 import { useState } from "react";
-// Custom hook for contact form validation
+// Custom hook for sign in validation
 const useSignInValidation = () => {
   // Validation state and patterns
   const [signInErrors, setSignInErrors] = useState({});
+  // Email validation pattern
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // Validate sign in form fields

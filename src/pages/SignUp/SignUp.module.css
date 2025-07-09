@@ -1,33 +1,33 @@
 /* Form wrapper */
 .formWrapper {
     width: 100%;
-    min-height: 100vh;
-    max-height: auto;
+    height: 100%;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    padding: var(--space-x-large);
+    background: var(--background-gradient-light);
+    padding: var(--space-large);
     color: var(--primary-color);
     position: relative;
 }
 
 /* Sign up page styling */
 .signUpForm {
-    width: 50%;
+    width: 100%;
     max-width: 500px;
     display: flex;
     flex-direction: column;
-    gap: var(--space-medium);
-    padding: var(--space-large);
-    background-color: var(--primary-color-light);
+    gap: var(--space-small);
+    padding: var(--space-medium);
+    background-color: var(--secondary-color-light);
     border-radius: var(--border-radius-medium);
 }
 
 .formGroup {
     display: flex;
     flex-direction: column;
-    gap: var(--space-small);
+    gap: var(--space-x-small);
     padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
 }
@@ -39,8 +39,11 @@
 
 .formInput {
     width: 100%;
-    height: 32px;
     padding: 0 var(--space-small);
+}
+
+.fileInput {
+    border: none;
 }
 
 /* Image preview container */
@@ -58,8 +61,8 @@
 }
 
 .imagePreview {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 50%;
     overflow: hidden;
@@ -71,18 +74,18 @@
 
 .removeImageButton {
     margin-top: var(--space-small);
-    background-color: #ff4d4d;
+    background-color: var(--remove-button-color);
     color: var(--primary-color-light);
     border: none;
     border-radius: var(--border-radius-small);
-    padding: var(--space-small) var(--space-medium);
+    padding: var(--space-small);
     font-size: var(--base-font-size);
     box-shadow: var(--box-shadow-base);
     transition: background-color 0.3s ease-in-out;
 }
 
 .removeImageButton:hover {
-    background-color: #e60000;
+    background-color: var(--remove-button-color-hover);
 }
 
 .buttonsContainer {
@@ -94,7 +97,6 @@
 }
 
 /* Create account button */
-.cancelButton,
 .createAccountButton {
     height: 40px;
     background-color: var(--primary-color);
@@ -103,10 +105,9 @@
     border: none;
     transition: all 0.3s ease-in-out;
     font-size: var(--base-font-size);
-    box-shadow: var(--box-shadow-base);
 }
 
-.cancelButton:hover,
+
 .createAccountButton:hover {
     background-color: var(--secondary-color);
 }
@@ -115,6 +116,7 @@
     color: var(--text-error);
     height: 10px;
     text-align: center;
+    font-size: var(--small-font-size);
 }
 
 /* Responsive design */

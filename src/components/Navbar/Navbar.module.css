@@ -29,7 +29,7 @@
 .logo img {
   width: 60px;
   height: auto;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease-in-out;
 }
 
 .logo:hover img {
@@ -76,25 +76,7 @@
   gap: var(--space-medium);
 }
 
-/* Profile button */
-.profileBtn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--glass-bg-light);
-  color: var(--text-light);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.profileBtn:hover {
-  background: var(--glass-bg-medium);
-  transform: translateY(-1px);
-}
-
+/* Profile button Avatar */
 .avatar {
   width: 100%;
   height: 100%;
@@ -102,47 +84,7 @@
   object-fit: cover;
 }
 
-/* Sign in/out buttons */
-.signInBtn,
-.signOutBtn {
-  background: var(--active-link-color);
-  color: var(--text-light);
-  padding: var(--space-small) var(--space-medium);
-  border-radius: var(--border-radius-medium);
-  text-decoration: none;
-  border: none;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.signInBtn:hover,
-.signOutBtn:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-}
-
-/* Cart button */
-.cartBtn {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--glass-bg-light);
-  color: var(--text-light);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.cartBtn:hover {
-  background: var(--glass-bg-medium);
-  transform: translateY(-1px);
-}
-
-/* Cart badge */
+/* Cart button badge */
 .cartBadge {
   position: absolute;
   top: -5px;
@@ -157,23 +99,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Mobile menu toggle */
-.menuToggle {
-  display: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--glass-bg-light);
-  border: none;
-  color: var(--text-light);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.menuToggle:hover {
-  background: var(--glass-bg-medium);
 }
 
 /* Mobile navigation overlay */
@@ -346,25 +271,7 @@
   gap: var(--space-medium);
 }
 
-/* Profile button */
-.profileBtn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--glass-bg-light);
-  color: var(--text-light);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.profileBtn:hover {
-  background: var(--glass-bg-medium);
-  transform: translateY(-1px);
-}
-
+/* Profile button Avatar */
 .avatar {
   width: 100%;
   height: 100%;
@@ -372,47 +279,7 @@
   object-fit: cover;
 }
 
-/* Sign in/out buttons */
-.signInBtn,
-.signOutBtn {
-  background: var(--active-link-color);
-  color: var(--text-light);
-  padding: var(--space-small) var(--space-medium);
-  border-radius: var(--border-radius-medium);
-  text-decoration: none;
-  border: none;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.signInBtn:hover,
-.signOutBtn:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-}
-
-/* Cart button */
-.cartBtn {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--glass-bg-light);
-  color: var(--text-light);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.cartBtn:hover {
-  background: var(--glass-bg-medium);
-  transform: translateY(-1px);
-}
-
-/* Cart badge */
+/* Cart button badge */
 .cartBadge {
   position: absolute;
   top: -5px;
@@ -427,23 +294,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Mobile menu toggle */
-.menuToggle {
-  display: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--glass-bg-light);
-  border: none;
-  color: var(--text-light);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.menuToggle:hover {
-  background: var(--glass-bg-medium);
 }
 
 /* Mobile navigation overlay */
@@ -517,19 +367,9 @@
     display: none;
   }
 
-  .menuToggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .hamburgerIcon {
     width: 25px;
     height: 25px;
-  }
-
-  .userSection {
-    gap: var(--space-small);
   }
 
   .signOutBtn {

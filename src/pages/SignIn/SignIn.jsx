@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import styles from "./SignIn.module.css";
 import Button from "../../components/Button/Button";
@@ -6,12 +6,14 @@ import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
 import useSignInValidation from "../../hooks/useSignInValidation";
+import useResetPasswordValidation from "../../hooks/useResetPasswordValidation";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,14 +22,18 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const [resetEmail, setResetEmail] = useState("");
-  const [resetMessage, setResetMessage] = useState("");
+  const [resetFormData, setResetFormData] = useState({ email: "" });
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
   // Validation hooks
   const { validateSignIn, signInErrors } = useSignInValidation();
+  const { validateResetEmail, resetPasswordErrors } =
+    useResetPasswordValidation();
   const { getErrorMessage } = useFirebaseValidation();
+
+  // Navigation
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Toast state for notifications
   const [toast, setToast] = useState({
@@ -60,6 +66,14 @@ const SignIn = () => {
     }));
   };
 
+  const handleResetInputChange = (e) => {
+    const { name, value } = e.target;
+    setResetFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   // Sign users in and redirect
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -70,6 +84,7 @@ const SignIn = () => {
     }
 
     setIsLoading(true);
+    setShowForgotPasswordModal(false); // Hide modal during login
 
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -82,8 +97,6 @@ const SignIn = () => {
       // Success toast
       showToast("Welcome Back!", "You have successfully signed in.", "success");
 
-      console.log("User signed in successfully", user);
-
       // Reset form
       setSignInFormData({
         email: "",
@@ -92,10 +105,19 @@ const SignIn = () => {
 
       // Delay navigation to show success toast
       setTimeout(() => {
-        navigate("/products");
-      }, 2000);
+        const from = location.state?.from;
+
+        if (from === "cart" && user.emailVerified) {
+          navigate("/checkout");
+        } else if (from === "profile" && user.emailVerified) {
+          navigate("/profile");
+        } else if (!user.emailVerified) {
+          navigate("/verify-email", { state: { from } });
+        } else {
+          navigate("/");
+        }
+      }, 1000);
     } catch (error) {
-      console.log(error.message);
       // Show Firebase error in toast
       showToast("Sign In Failed", getErrorMessage(error), "error");
     } finally {
@@ -107,19 +129,13 @@ const SignIn = () => {
   const handlePasswordReset = async (e) => {
     e.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!resetEmail.trim()) {
-      setResetMessage("Email address is required to reset password");
-      return;
-    } else if (!emailRegex.test(resetEmail.trim())) {
-      setResetMessage("Please enter a valid email address");
+    if (!validateResetEmail(resetFormData.email)) {
       return;
     }
+
     try {
-      await sendPasswordResetEmail(auth, resetEmail);
-      console.log("Password reset email sent");
-      setResetMessage("Password reset email sent. Please check your inbox.");
-      setResetEmail("");
+      await sendPasswordResetEmail(auth, resetFormData.email);
+      setResetFormData({ email: "" });
 
       // Success toast for password reset
       showToast(
@@ -128,12 +144,20 @@ const SignIn = () => {
         "success"
       );
     } catch (error) {
-      console.log(error.message);
-
       // Error toast for password reset
       showToast("Reset Failed", getErrorMessage(error), "error");
     }
   };
+
+  const handleOpenResetPasswordModal = () => {
+    setShowForgotPasswordModal(true);
+  };
+
+  const handleCloseResetPasswordModal = () => {
+    setShowForgotPasswordModal(false);
+    setResetFormData({ email: "" });
+  };
+
   return (
     <div className={styles.formWrapper}>
       <form className={styles.signInForm} noValidate onSubmit={handleSignIn}>
@@ -171,68 +195,93 @@ const SignIn = () => {
           )}
         </fieldset>
         <p>
-          Don't have an account? Create one <Link to="/sign-up">here</Link>
+          Don't have an account? Create one{" "}
+          <Link
+            className={styles.createAccountLink}
+            to="/sign-up"
+            state={location.state}
+            aria-label="Create account"
+          >
+            here
+          </Link>
         </p>
         <p>
           Forgot your password? Reset it{" "}
           <Button
-            type="button"
-            className={styles.forgotPasswordButton}
-            onClick={() => setShowForgotPasswordModal(true)}
+            onClick={handleOpenResetPasswordModal}
+            aria-label="Go to reset password form"
+            variant="link"
           >
             here
           </Button>
         </p>
-        <Button
-          type="submit"
-          className={styles.signInButton}
-          disabled={isLoading}
-        >
-          {isLoading ? "Signing in..." : "Sign In"}
-        </Button>
+        <div className={styles.buttonsContainer}>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isLoading}
+            ariaLabel="Sign in"
+          >
+            {isLoading ? "Signing in..." : "Sign In"}
+          </Button>
+          <ButtonLink to="/" variant="primary">
+            Cancel
+          </ButtonLink>
+        </div>
       </form>
       {/* Password reset modal */}
-      {showForgotPasswordModal && (
+      {showForgotPasswordModal && !isLoading && (
         <Modal>
           <form className={styles.resetFormContainer}>
-            <p>
-              Please enter your email address and press "reset". You will recive
-              an email with instructions to reset your password. Follow the link
-              in the email to set a new password.
-            </p>
-            {/*----------------Email----------------*/}
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="resetEmail"
-              name="resetEmail"
-              placeholder="Enter your email address"
-              className={styles.formInput}
-              onChange={(e) => setResetEmail(e.target.value)}
-              value={resetEmail}
-            />
+            <h2>Reset Password Form</h2>
+            <fieldset className={styles.formGroup}>
+              <legend className={styles.formGroupTitle}>
+                Reset Information
+              </legend>
+
+              <p className={styles.resetFormDescription}>
+                Please enter your email address and press "Reset password". You
+                will receive an email with instructions to reset your password.
+                Follow the link in the email to set a new password. After reset
+                close this window.
+              </p>
+              <p className={styles.resetFormDescription}>
+                If you don't receive an email, please check your spam folder.
+              </p>
+              {/*----------------Email----------------*/}
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="resetEmail"
+                name="email"
+                placeholder="Enter your email address"
+                className={styles.formInput}
+                onChange={handleResetInputChange}
+                value={resetFormData.email}
+              />
+              {resetPasswordErrors && (
+                <p className={styles.errorMessage}>
+                  {resetPasswordErrors.email}
+                </p>
+              )}
+            </fieldset>
             <div className={styles.resetButtonsContainer}>
               <Button
-                className={styles.resetPasswordButton}
                 onClick={handlePasswordReset}
+                ariaLabel="Reset password"
+                variant="primary"
               >
                 Reset password
               </Button>
               <Button
-                className={styles.closeButton}
-                onClick={() => {
-                  setShowForgotPasswordModal(false);
-                  setResetMessage("");
-                  setResetEmail("");
-                }}
+                onClick={handleCloseResetPasswordModal}
+                variant="primary"
                 type="button"
+                ariaLabel="Close"
               >
                 Close
               </Button>
             </div>
-            {resetMessage && (
-              <p className={styles.errorMessage}>{resetMessage}</p>
-            )}
           </form>
         </Modal>
       )}

@@ -1,22 +1,20 @@
 /* Quantity counter component styling */
 .counterCard {
   min-width: 120px;
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+  border: 1px solid var(--secondary-color);
   border-radius: var(--border-radius-medium);
   display: flex;
   align-items: center;
-  gap: var(--space-small);
+  gap: var(--space-x-small);
   justify-content: space-between;
-  padding: var(--space-small);
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: var(--space-x-small);
 }
 
 /* Increase and decrease buttons */
 .increaseButton,
 .decreaseButton {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--border-radius-small);
   border: none;
   background-color: var(--secondary-color);

@@ -1,30 +1,29 @@
 /* Contact page styling */
 .contactForm {
-  width: 100vw;
-  min-height: 100vh;
   display: flex;
+  width: 100%;
+  flex: 1;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background: var(--background-gradient-light);
   background-size: cover;
   background-repeat: no-repeat;
-  padding: var(--space-x-large);
+  padding: var(--space-large);
   position: relative;
 }
 
 /* Contact form container */
 .contactFormContainer {
-  width: 40%;
-  height: 75%;
+  width: 100%;
+  height: auto;
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-medium);
-  padding: var(--space-medium) var(--space-large);
+  gap: var(--space-x-small);
+  padding: var(--space-medium);
   border-radius: var(--border-radius-medium);
-  background-color: var(--glass-bg-medium);
-  backdrop-filter: blur(4px);
-  color: var(--text-light);
+  background-color: var(--secondary-color-light);
+  color: var(--text-dark);
 }
 
 .formTitle {
@@ -48,69 +47,55 @@
 .inputGroup {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.25rem;
+  gap: var(--space-small);
 }
 
-.inputGroup p {
-  color: crimson;
+/* Error message styling */
+.errorMessage {
+  color: var(--text-error);
+  height: 10px;
+  text-align: center;
+  margin-bottom: var(--space-x-small);
+  font-size: var(--small-font-size);
 }
 
 /* Form inputs */
 .inputElement {
   width: 100%;
-  height: 2rem;
-  padding: 0 0.25rem;
 }
 
 .textareaElement {
   width: 100%;
-  padding: 0.5rem;
+  padding: var(--space-small);
   resize: none;
-}
-
-/* Submit button */
-.submitButton {
-  height: 48px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border-radius: var(--border-radius-small);
-  border: none;
-  transition: all 0.3s ease-in-out;
   font-size: var(--base-font-size);
-  box-shadow: var(--box-shadow-base);
 }
 
-.submitButton:hover {
-  background-color: var(--secondary-color);
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  width: 100%;
+  height: 90px;
+  margin-top: var(--space-small);
 }
 
 /* Message error and count */
 .messageErrorAndCount {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
-/* Close modal button */
-.closeModalButton {
+.messageCountSection {
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 50%;
-  max-width: 380px;
-  text-decoration: none;
-  height: 32px;
-  background-color: var(--secondary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: var(--border-radius-small);
-  transition: all 0.3s ease-in-out;
-  font-size: var(--base-font-size);
-  margin: 0 auto;
+  gap: var(--space-x-small);
 }
 
-.closeModalButton:hover {
-  background-color: var(--primary-color);
+.messageCount {
+  font-size: var(--small-font-size);
 }
 
 /* Contact modal content */
@@ -144,6 +129,7 @@
 
   .contactFormContainer {
     width: 100%;
+    padding: var(--space-medium);
   }
 
   .nameSection,

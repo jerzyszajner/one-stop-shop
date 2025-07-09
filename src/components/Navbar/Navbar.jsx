@@ -13,6 +13,8 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 import { useMemo, useState, useEffect } from "react";
+import ButtonLink from "../ButtonLink/ButtonLink";
+import Toast from "../Toast/Toast";
 
 const Navbar = () => {
   // Navigation state
@@ -20,6 +22,7 @@ const Navbar = () => {
   const { user } = getAuthContext();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   // Calculate total cart items
   const cartItemsCount = useMemo(
@@ -34,6 +37,7 @@ const Navbar = () => {
       navigate("/");
     } catch (error) {
       console.error("Sign out error:", error.message);
+      setShowToast(true);
     }
   };
 
@@ -57,7 +61,7 @@ const Navbar = () => {
           to="/"
           className={styles.logo}
           onClick={closeMenu}
-          aria-label="Home"
+          aria-label="Go to home page"
         >
           <img src="/assets/icons/nav-logo.webp" alt="One Stop Shop" />
         </Link>
@@ -69,7 +73,6 @@ const Navbar = () => {
             className={({ isActive }) =>
               `${styles.navLink} ${isActive ? styles.activeLink : ""}`
             }
-            aria-label="Home"
           >
             Home
           </NavLink>
@@ -78,7 +81,6 @@ const Navbar = () => {
             className={({ isActive }) =>
               `${styles.navLink} ${isActive ? styles.activeLink : ""}`
             }
-            aria-label="Products"
           >
             Products
           </NavLink>
@@ -87,7 +89,6 @@ const Navbar = () => {
             className={({ isActive }) =>
               `${styles.navLink} ${isActive ? styles.activeLink : ""}`
             }
-            aria-label="About"
           >
             About
           </NavLink>
@@ -96,7 +97,6 @@ const Navbar = () => {
             className={({ isActive }) =>
               `${styles.navLink} ${isActive ? styles.activeLink : ""}`
             }
-            aria-label="Contact"
           >
             Contact
           </NavLink>
@@ -107,49 +107,41 @@ const Navbar = () => {
           {/* Auth Button */}
           {user ? (
             <div className={styles.userSection}>
-              <Link to="/profile" className={styles.profileBtn}>
+              <ButtonLink to="/profile" aria-label="Profile" variant="circle">
                 {user.imageUrl ? (
                   <img
                     src={user.imageUrl}
                     alt="Profile"
                     className={styles.avatar}
-                    aria-label="Profile"
+                    aria-label="Go to profile page"
                   />
                 ) : (
                   <FontAwesomeIcon icon={faUser} />
                 )}
-              </Link>
-              <Button
-                onClick={handleSignOut}
-                className={styles.signOutBtn}
-                aria-label="Sign out"
-              >
+              </ButtonLink>
+              <Button onClick={handleSignOut} variant="signOutBtn">
                 Sign out
               </Button>
             </div>
           ) : (
-            <Link
-              to="/sign-in"
-              className={styles.signInBtn}
-              aria-label="Sign in"
-            >
+            <ButtonLink to="/sign-in" variant="signInBtn">
               Sign in
-            </Link>
+            </ButtonLink>
           )}
 
           {/* Cart */}
-          <Link to="/cart" className={styles.cartBtn} aria-label="Cart">
+          <ButtonLink to="/cart" aria-label="Go to cart page" variant="circle">
             <FontAwesomeIcon icon={faCartPlus} />
             {cartItemsCount > 0 && (
               <span className={styles.cartBadge}>{cartItemsCount}</span>
             )}
-          </Link>
+          </ButtonLink>
 
           {/* Mobile Menu Toggle */}
           <Button
             onClick={toggleMenu}
-            className={styles.menuToggle}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            variant="toggleMenu"
           >
             <FontAwesomeIcon
               icon={isMenuOpen ? faTimes : faBars}
@@ -170,7 +162,6 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
               }
-              aria-label="Home"
             >
               Home
             </NavLink>
@@ -180,7 +171,6 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
               }
-              aria-label="Products"
             >
               Products
             </NavLink>
@@ -190,7 +180,6 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
               }
-              aria-label="About"
             >
               About
             </NavLink>
@@ -200,13 +189,14 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
               }
-              aria-label="Contact"
             >
               Contact
             </NavLink>
           </div>
         </>
       )}
+
+      {showToast && <Toast message="Sign out failed" type="error" />}
     </nav>
   );
 };

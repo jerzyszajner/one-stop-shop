@@ -15,30 +15,12 @@
 /* Modal content container */
 .modalContainer {
   min-width: 360px;
-  max-width: 600px;
+  max-width: 540px;
   background-color: var(--primary-color-light);
-  padding: var(--space-large);
+  padding: var(--space-medium);
   display: flex;
   flex-direction: column;
   border-radius: var(--border-radius-medium);
-}
-
-/* Close button styling */
-.modalContent .closeButton {
-  background-color: var(--secondary-color);
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  display: block;
-  margin-top: var(--space-medium);
-  justify-self: flex-end;
-  font-size: var(--base-font-size);
-}
-
-.modalContent .closeButton:hover {
-  opacity: 0.9;
 }
 
 /* Responsive design */
@@ -46,9 +28,5 @@
   .modalContainer {
     padding: var(--space-medium);
     width: 92%;
-  }
-
-  .modalBackdrop {
-    align-items: flex-end;
   }
 }
