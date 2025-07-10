@@ -108,10 +108,12 @@ const ProductsList = () => {
         <Sort
           products={filteredProducts}
           onProductsSort={handleSortedProducts}
+          className={styles.sort}
         />
         <Filter
           products={originalProducts}
           onProductsFilter={handleFilteredProducts}
+          className={styles.filter}
         />
       </div>
 

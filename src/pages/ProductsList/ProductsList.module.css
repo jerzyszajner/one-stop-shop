@@ -10,7 +10,7 @@
 .sortFilterContainer {
   width: 100%;
   height: auto;
-  padding: var(--space-medium) var(--space-x-large);
+  padding: var(--space-large);
   background-color: var(--secondary-color);
   display: flex;
   justify-content: center;
@@ -24,7 +24,7 @@
   margin: 0 auto;
   width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
+  gap: var(--space-medium);
   padding: var(--space-large) var(--space-x-large);
   background-color: var(--secondary-color-light);
   justify-content: center;
@@ -34,5 +34,24 @@
 @media screen and (max-width: 768px) {
   .productsContainer {
     padding: var(--space-medium) var(--space-small);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .productsContainer {
+    padding: var(--space-small);
+    gap: var(--space-small);
+  }
+
+  .sortFilterContainer {
+    padding: var(--space-small);
+    gap: var(--space-small);
+    flex-direction: column;
+  }
+
+  .sort,
+  .filter {
+    width: 100%;
   }
 }

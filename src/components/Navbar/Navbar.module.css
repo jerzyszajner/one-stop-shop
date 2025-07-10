@@ -1,11 +1,14 @@
 /* Main navigation styling */
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  background: var(--primary-color);
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: rgba(25, 30, 41, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-light);
-  z-index: 1000;
+  z-index: 1001;
 }
 
 /* Navigation container */
@@ -30,6 +33,7 @@
   width: 60px;
   height: auto;
   transition: transform 0.3s ease-in-out;
+  border-radius: var(--border-radius-circle);
 }
 
 .logo:hover img {
@@ -176,195 +180,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .hamburgerIcon {
-    width: 25px;
-    height: 25px;
-  }
-
-  .userSection {
-    gap: var(--space-small);
-  }
-
-  .signOutBtn {
-    padding: var(--space-small);
-    font-size: 0.875rem;
-  }
-}
-
-/* Main navigation styling */
-.navbar {
-  position: sticky;
-  top: 0;
-  background: var(--primary-color);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-light);
-  z-index: 1000;
-}
-
-/* Navigation container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--space-medium) var(--space-large);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-large);
-}
-
-/* Logo styling */
-.logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.logo img {
-  width: 60px;
-  height: auto;
-  transition: transform 0.2s ease;
-}
-
-.logo:hover img {
-  transform: scale(1.05);
-}
-
-/* Desktop navigation */
-.desktopNav {
-  display: flex;
-  gap: var(--space-large);
-}
-
-.navLink {
-  color: var(--text-light);
-  text-decoration: none;
-  font-weight: 500;
-  padding: var(--space-small) var(--space-medium);
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.navLink:hover {
-  color: var(--active-link-color);
-  background: var(--glass-bg-hover);
-}
-
-.activeLink {
-  color: var(--active-link-color);
-  background: var(--active-link-bg);
-}
-
-/* Navigation actions */
-.actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-medium);
-}
-
-/* User section */
-.userSection {
-  display: flex;
-  align-items: center;
-  gap: var(--space-medium);
-}
-
-/* Profile button Avatar */
-.avatar {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-/* Cart button badge */
-.cartBadge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: var(--cart-badge-color);
-  color: var(--text-light);
-  font-size: 0.75rem;
-  font-weight: bold;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Mobile navigation overlay */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--overlay-bg);
-  z-index: 998;
-  backdrop-filter: blur(2px);
-}
-
-/* Mobile navigation menu */
-.mobileNav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 280px;
-  height: 100vh;
-  background: var(--primary-color);
-  padding: var(--space-large);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-medium);
-  z-index: 999;
-  transform: translateX(0);
-  animation: slideInFromLeft 0.3s ease;
-  border-right: 1px solid var(--border-light);
-}
-
-/* Mobile menu animation */
-@keyframes slideInFromLeft {
-  from {
-    transform: translateX(-100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
-
-/* Mobile navigation links */
-.mobileNavLink {
-  color: var(--text-light);
-  text-decoration: none;
-  padding: var(--space-medium);
-  border-radius: var(--border-radius-medium);
-  transition: all 0.2s ease;
-  font-weight: 500;
-  width: 100%;
-  text-align: center;
-}
-
-.mobileNavLink:hover,
-.mobileNavLink.activeLink {
-  background: var(--active-link-bg);
-  color: var(--active-link-color);
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .container {
-    padding: var(--space-medium);
-  }
-
-  .desktopNav {
-    display: none;
   }
 
   .hamburgerIcon {
