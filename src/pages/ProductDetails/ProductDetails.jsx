@@ -8,6 +8,7 @@ import { database } from "../../../firebaseConfig";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCartContext } from "../../context/CartContext";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -197,9 +198,14 @@ const ProductDetails = () => {
             <strong className={styles.productLabel}>Description: </strong>
             {product.description}
           </p>
-          <Button onClick={handleAddToCart} variant="primary">
-            Add to cart
-          </Button>
+          <div className={styles.buttonsContainer}>
+            <Button onClick={handleAddToCart} variant="primary">
+              Add to cart
+            </Button>
+            <ButtonLink to="/products" variant="primary">
+              Back to products
+            </ButtonLink>
+          </div>
         </div>
       </div>
       {/* Toast notifications */}
