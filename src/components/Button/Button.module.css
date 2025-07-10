@@ -72,7 +72,7 @@
 
 /*** Sign out button ***/
 .signOutBtn {
-    background: var(--link-color);
+    background: var(--sign-out-button-color);
     color: var(--text-light);
     padding: var(--space-small) var(--space-medium);
     border-radius: var(--border-radius-medium);
@@ -80,7 +80,7 @@
 }
 
 .signOutBtn:hover {
-    background: var(--active-link-color);
+    background: var(--sign-out-button-color-hover);
 }
 
 @media screen and (max-width: 768px) {

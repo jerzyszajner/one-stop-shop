@@ -57,10 +57,12 @@ body {
     --secondary-color-light: #fafafa;
     --active-link-color: #3b82f6;
     --link-color: #0066cc;
-    --link-color-hover: #03a909;
-    --cart-badge-color: orangered;
-    --remove-button-color: #e60000;
-    --remove-button-color-hover: #ff4d4d;
+    --link-color-hover: #3b82f6;
+    --sign-out-button-color: #0066cc;
+    --sign-out-button-color-hover: #4a90e2;
+    --cart-badge-color: #c53030;
+    --remove-button-color: #c53030;
+    --remove-button-color-hover: #e53e3e;
     --card-color: #ffffff;
     --text-light: #ffffff;
     --text-dark: #000000;

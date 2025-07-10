@@ -2,6 +2,8 @@
 .checkoutWrapper {
   width: 100%;
   flex: 1;
+  display: flex;
+  flex-direction: column;
   position: relative;
   background: var(--background-gradient-light);
 }
@@ -9,11 +11,14 @@
 /* Main checkout container */
 .checkoutContainer {
   width: 100%;
+  flex: 1;
   max-width: 1100px;
   height: auto;
   display: flex;
+  align-items: center;
   padding: var(--space-large);
   margin: 0 auto;
+  gap: var(--space-small);
 }
 
 /* Purchase overview and payment sections */
@@ -22,13 +27,34 @@
   flex: 1;
 }
 
-.purchaseOverviewContainer .cartListContainer {
+/* Cart list container - simplified class */
+.cartListContainer {
   width: 100%;
-  max-width: 500px;
-  background: var(--secondary-color-light);
   border-radius: var(--border-radius-medium);
   padding: var(--space-medium);
-  color: var(--text-dark);
+  color: var(--text-light);
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  height: 630px;
+}
+
+/* Webkit scrollbar styling to preserve border-radius */
+.cartListContainer::-webkit-scrollbar {
+  width: var(--space-small);
+}
+
+.cartListContainer::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: var(--border-radius-medium);
+}
+
+.cartListContainer::-webkit-scrollbar-thumb {
+  background: var(--secondary-color);
+  border-radius: var(--border-radius-medium);
+}
+
+.cartListContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
 }
 
 .cartList {
@@ -49,15 +75,13 @@
 .productImage {
   max-width: 90px;
   height: auto;
-  border-radius: var(--border-radius-medium);
-  border: 1px solid var(--secondary-color);
 }
 
 /* Product details section */
 .productDetails {
   flex: 1;
   font-size: var(--basic-font-size);
-  color: var(--text-dark);
+  color: var(--text-light);
   display: flex;
   flex-direction: column;
   gap: var(--space-small);
@@ -76,6 +100,8 @@
   padding: var(--space-medium);
   font-size: var(--medium-font-size);
   font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid var(--secondary-color);
 }
 
 /* Payment details section */
@@ -188,8 +214,7 @@
 
 @media screen and (max-width: 868px) {
   .checkoutContainer {
-    flex-direction: column;
-
+    flex-direction: row;
   }
 
   .cartListContainer {
@@ -232,5 +257,10 @@
     align-items: center;
     gap: var(--space-small);
     padding: var(--space-small);
+  }
+
+  .cartListContainer {
+    overflow-y: hidden;
+    height: 100%;
   }
 }

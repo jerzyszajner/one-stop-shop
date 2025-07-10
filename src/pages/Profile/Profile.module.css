@@ -190,10 +190,6 @@
     height: 120px;
   }
 
-  .detailsGrid {
-    gap: var(--space-medium);
-  }
-
   .detailItem {
     padding: var(--space-small);
   }
