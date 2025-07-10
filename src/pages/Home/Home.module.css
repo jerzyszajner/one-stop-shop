@@ -9,7 +9,7 @@
 .hero {
     display: flex;
     justify-content: center;
-    min-height: 50vh;
+    min-height: 45vh;
     padding: var(--space-large) 5%;
     background: var(--background-gradient-dark);
     color: var(--text-light);
@@ -80,14 +80,13 @@
 
 /* Categories section */
 .categories {
-    padding: var(--space-large) 5%;
     background: var(--primary-color-light);
 }
 
 .sectionTitle {
     font-size: var(--large-font-size);
     text-align: center;
-    margin-bottom: var(--space-large);
+    margin: var(--space-x-large) 0;
     color: var(--text-dark);
 }
 
@@ -109,7 +108,7 @@
     color: var(--text-light);
     background: var(--card-color);
     box-shadow: var(--box-shadow-base);
-    height: 180px;
+    height: auto;
 }
 
 .categoryCard:hover {
@@ -118,8 +117,8 @@
 
 .categoryCardImg {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
 }
 
 .categoryCardTitle {
@@ -127,16 +126,37 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    background: linear-gradient(transparent, rgba(0, 0, 0, 1));
     padding: var(--space-large) var(--space-medium) var(--space-medium);
     font-size: var(--base-font-size);
     font-weight: bold;
     text-align: center;
 }
 
+.productOverlay {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: right;
+}
+
+/* Product overlay text styles */
+.productOverlayPrice {
+    font-size: var(--base-font-size);
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.productOverlayRating {
+    font-size: var(--base-font-size);
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
 /* Featured products section */
 .featured {
-    padding: var(--space-large) 5%;
     background: var(--secondary-color-light);
 }
 
@@ -144,19 +164,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: var(--space-large);
-}
-
-.viewAll {
-    color: var(--text-dark);
-    text-decoration: none;
-    font-weight: bold;
-    transition: opacity 0.3s ease;
-    margin-top: var(--space-small);
-}
-
-.viewAll:hover {
-    opacity: 0.7;
 }
 
 /* Product grid */
@@ -197,21 +204,9 @@
     color: var(--text-dark);
 }
 
-.price {
-    font-size: var(--medium-font-size);
-    font-weight: bold;
-    color: var(--text-dark);
-    margin-bottom: var(--space-small);
-}
-
-.rating {
-    font-size: var(--small-font-size);
-    color: var(--text-dark);
-}
-
 /* Features section */
 .features {
-    padding: var(--space-large) 5%;
+    padding: 0 var(--space-x-large) var(--space-x-large);
     background: var(--primary-color-light);
 }
 
@@ -305,19 +300,40 @@
         align-items: center;
     }
 
-    .categories,
-    .featured,
-    .features,
-    .stats {
-        padding: var(--space-medium) 5%;
-    }
-
     .categoryGrid {
         grid-template-columns: repeat(2, 1fr);
+        padding: 0 var(--space-medium);
+    }
+
+    .sectionTitle {
+        margin: var(--space-large) 0;
     }
 
     .productGrid {
         grid-template-columns: 1fr;
+    }
+
+    .featuresGrid {
+        padding: 0 var(--space-medium);
+    }
+
+    .features {
+        padding: 0 0 var(--space-large);
+    }
+
+    .featureItemTitle {
+        font-size: var(--base-font-size);
+        font-weight: bold;
+        margin-bottom: var(--space-x-small);
+    }
+
+    .featureIcon {
+        font-size: var(--medium-font-size);
+        margin-bottom: var(--space-x-small);
+    }
+
+    .featureItemText {
+        font-size: var(--x-small-font-size);
     }
 
     .featuresGrid,
@@ -335,27 +351,37 @@
         font-size: var(--medium-font-size);
     }
 
-    .categories,
-    .featured,
-    .features,
-    .stats {
-        padding: var(--space-small) 5%;
+    .heroButtons {
+        flex-direction: column;
     }
 
-    .categoryGrid {
-        grid-template-columns: 1fr;
+    .categoryCardTitle {
+        padding: var(--space-small);
     }
 
-    .featuresGrid,
-    .statsGrid {
-        grid-template-columns: 1fr;
+    .productOverlay {
+        top: 5px;
+        right: 5px;
+    }
+
+    /* Product overlay text styles */
+    .productOverlayPrice {
+        font-size: var(--small-font-size);
+    }
+
+    .productOverlayRating {
+        font-size: var(--small-font-size);
     }
 
     .featureItem {
         padding: var(--space-medium);
     }
 
-    .heroButtons {
-        flex-direction: column;
+    .statItemTitle {
+        font-size: var(--base-font-size);
+    }
+
+    .statItemText {
+        font-size: var(--small-font-size);
     }
 }

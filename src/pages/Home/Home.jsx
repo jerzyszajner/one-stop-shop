@@ -14,7 +14,7 @@ const Home = () => {
     const sorted = allProducts
       .slice()
       .sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    setTopRated(sorted.slice(0, 3));
+    setTopRated(sorted.slice(0, 4));
   }, [allProducts]);
 
   if (isLoading) {
@@ -95,31 +95,37 @@ const Home = () => {
       <section className={styles.featured}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Trending Products</h2>
-          <Link to="/products" className={styles.viewAll}>
-            View All
-          </Link>
         </div>
-        <div className={styles.productGrid}>
+        <div className={styles.categoryGrid}>
           {topRated.map((prod) => (
-            <div key={prod.id} className={styles.productCard}>
-              <Link to={`/products/${prod.documentId}`}>
-                <img
-                  src={prod.thumbnail || prod.images?.[0]}
-                  alt={prod.title}
-                  className={styles.productImage}
-                />
-              </Link>
-              <div className={styles.productInfo}>
-                <h3 className={styles.productName}>{prod.title}</h3>
-                <p className={styles.price}>${prod.price.toFixed(2)}</p>
-                <span className={styles.rating}>⭐ {prod.rating}</span>
+            <Link
+              key={prod.id}
+              to={`/products/${prod.documentId}`}
+              className={styles.categoryCard}
+            >
+              <img
+                src={prod.thumbnail || prod.images?.[0]}
+                alt={prod.title}
+                className={styles.categoryCardImg}
+              />
+              <div className={styles.productOverlay}>
+                <span className={styles.productOverlayPrice}>
+                  💲{prod.price.toFixed(2)}
+                </span>
+                <span className={styles.productOverlayRating}>
+                  ⭐ {prod.rating}
+                </span>
               </div>
-            </div>
+              <h3 className={styles.categoryCardTitle}>{prod.title}</h3>
+            </Link>
           ))}
         </div>
       </section>
 
       <section className={styles.features}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Our Features</h2>
+        </div>
         <div className={styles.featuresGrid}>
           <div className={styles.featureItem}>
             <div className={styles.featureIcon}>🚚</div>
