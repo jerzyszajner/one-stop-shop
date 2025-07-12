@@ -16,6 +16,7 @@ import Profile from "../pages/Profile/Profile";
 import SignIn from "../pages/SignIn/SignIn";
 import SignUp from "../pages/SignUp/SignUp";
 import VerifyEmail from "../pages/VerifyEmail/VerifyEmail";
+import OrderConfirmation from "../pages/OrderConfirmation/OrderConfirmation";
 import RouteGuard from "../components/RouteGuard/RouteGuard";
 
 // Application routes configuration
@@ -46,6 +47,14 @@ export const router = createBrowserRouter(
         element={
           <RouteGuard>
             <Checkout />
+          </RouteGuard>
+        }
+      />
+      <Route
+        path="order-confirmation/:orderNumber"
+        element={
+          <RouteGuard>
+            <OrderConfirmation />
           </RouteGuard>
         }
       />

@@ -12,6 +12,7 @@
 /* Cart list container */
 .cartListContainer {
   max-width: 600px;
+  width: 100%;
   height: 80vh;
   overflow-y: auto;
   scroll-behavior: smooth;

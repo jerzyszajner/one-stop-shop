@@ -24,6 +24,20 @@
     background-color: var(--secondary-color);
 }
 
+/*** Print button ***/
+.print {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-radius: var(--border-radius-small);
+    border: none;
+    font-size: var(--base-font-size);
+    padding: var(--space-x-small) var(--space-small);
+}
+
+.print:hover {
+    background-color: var(--secondary-color);
+}
+
 /*** Link button ***/
 .link {
     background-color: transparent;

@@ -13,6 +13,7 @@
 /*** Primary button ***/
 .primary {
     height: 40px;
+    width: 100%;
     background-color: var(--primary-color);
     color: var(--text-light);
 }

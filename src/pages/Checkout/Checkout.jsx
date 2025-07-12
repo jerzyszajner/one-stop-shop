@@ -6,8 +6,8 @@ import { database } from "../../../firebaseConfig";
 import { useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import Counter from "../../components/Counter/Counter";
-import Modal from "../../components/Modal/Modal";
 import Button from "../../components/Button/Button";
 import Spinner from "../../components/Spinner/Spinner";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
@@ -25,10 +25,10 @@ const Checkout = () => {
     billingAddress: "",
   });
 
-  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const { cart, dispatch } = getCartContext();
   const { user } = getAuthContext();
   const { paymentErrors, validatePaymentForm } = usePaymentValidation();
+  const navigate = useNavigate();
 
   const handleRemove = (id) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: id });
@@ -76,8 +76,11 @@ const Checkout = () => {
         orderData
       );
       dispatch({ type: "CLEAR_CART" });
-      setShowCheckoutModal(true);
       console.log("Order has been registered successfully:", orderData);
+
+      // Redirect to order confirmation page
+      navigate(`/order-confirmation/${orderData.orderNumber}`);
+
       // Reset form
       setPaymentValues({
         cardName: "",
@@ -93,10 +96,6 @@ const Checkout = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleCloseModal = () => {
-    setShowCheckoutModal(false);
   };
 
   return (
@@ -295,26 +294,6 @@ const Checkout = () => {
             </div>
           </form>
         </div>
-        {/* Success modal */}
-        {showCheckoutModal && (
-          <Modal>
-            <div className={styles.checkoutModalContent}>
-              <h2>Order Confirmed ✅</h2>
-              <p>
-                Thank you for your purchase! A confirmation receipt has been
-                sent to your email.
-              </p>
-              <p>Check your inbox for details on your order.</p>
-              <ButtonLink
-                to="/products"
-                onClick={handleCloseModal}
-                variant="primary"
-              >
-                Close
-              </ButtonLink>
-            </div>
-          </Modal>
-        )}
       </div>
       {isLoading && <Spinner />}
     </div>
