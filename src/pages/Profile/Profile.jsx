@@ -12,7 +12,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { auth, database } from "../../../firebaseConfig";
-import { Link } from "react-router-dom";
+import Link from "../../components/Link/Link";
 
 const Profile = () => {
   // User profile state
@@ -87,7 +87,7 @@ const Profile = () => {
               <p className={styles.notificationText}>
                 You haven't verified your email yet. Check your inbox or click{" "}
                 <Link
-                  className={styles.resendLink}
+                  variant="primary"
                   to="/verify-email"
                   state={{ from: "profile" }}
                 >

@@ -37,18 +37,6 @@
   font-weight: bold;
 }
 
-.createAccountLink {
-  color: var(--link-color);
-  text-decoration: none;
-  border-bottom: 2px solid var(--link-color);
-  transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
-}
-
-.createAccountLink:hover {
-  color: var(--link-color-hover);
-  border-bottom: 2px solid var(--text-light);
-}
-
 /* Buttons container */
 .buttonsContainer {
   display: flex;

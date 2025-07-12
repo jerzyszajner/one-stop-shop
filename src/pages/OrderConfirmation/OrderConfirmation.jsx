@@ -6,7 +6,7 @@ import useOrderDetails from "../../hooks/useOrderDetails";
 import Spinner from "../../components/Spinner/Spinner";
 import Button from "../../components/Button/Button";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import { Link } from "react-router-dom";
+import Link from "../../components/Link/Link";
 import { doc, getDoc } from "firebase/firestore";
 import { database } from "../../../firebaseConfig";
 const OrderConfirmation = () => {
@@ -208,14 +208,14 @@ const OrderConfirmation = () => {
             </li>
             <li className={styles.nextStepsItem}>
               🚚 You can track your shipment in{" "}
-              <Link to="/profile" className={styles.myOrdersLink}>
+              <Link to="/profile" variant="primary">
                 My Orders
               </Link>{" "}
               section
             </li>
             <li className={styles.nextStepsItem}>
               ❓ Have questions?{" "}
-              <Link to="/contact" className={styles.contactLink}>
+              <Link to="/contact" variant="primary">
                 Contact us!
               </Link>
             </li>

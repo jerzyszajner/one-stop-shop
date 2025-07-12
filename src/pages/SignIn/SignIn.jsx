@@ -1,10 +1,11 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import styles from "./SignIn.module.css";
 import Button from "../../components/Button/Button";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
+import Link from "../../components/Link/Link";
 import useSignInValidation from "../../hooks/useSignInValidation";
 import useResetPasswordValidation from "../../hooks/useResetPasswordValidation";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
@@ -197,10 +198,10 @@ const SignIn = () => {
         <p>
           Don't have an account? Create one{" "}
           <Link
-            className={styles.createAccountLink}
             to="/sign-up"
             state={location.state}
             aria-label="Create account"
+            variant="primary"
           >
             here
           </Link>
