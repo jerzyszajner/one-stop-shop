@@ -71,6 +71,10 @@ body {
     --text-warning: #f59e0b;
     --background-color-info: #faebd7;
     --box-shadow-base: 0 5px 15px rgba(0, 0, 0, 0.5);
+    --border-glow-default: 0 0 0 2px rgba(255, 255, 255, 0.15);
+    --border-glow-subtle: 0 0 0 1px rgba(255, 255, 255, 0.1);
+    --border-glow-medium: 0 0 0 1px rgba(255, 255, 255, 0.4);
+    --border-glow-primary: 0 0 0 1px #8b5cf6;
     --background-gradient-light: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color-light) 100%);
     --background-gradient-dark: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 
