@@ -40,10 +40,11 @@
 .formInput {
     width: 100%;
     padding: 0 var(--space-small);
+    color: var(--text-dark);
 }
 
 .fileInput {
-    border: none;
+    display: none;
 }
 
 /* Image preview container */
@@ -54,9 +55,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    padding: 8px;
+    gap: var(--space-small);
+    background-color: var(--primary-color-light);
+    border: 1px solid var(--primary-color);
+    padding: var(--space-small);
+    border-radius: var(--border-radius-small);
     overflow: hidden;
 }
 
@@ -72,44 +75,12 @@
     box-shadow: var(--box-shadow-base);
 }
 
-.removeImageButton {
-    margin-top: var(--space-small);
-    background-color: var(--remove-button-color);
-    color: var(--primary-color-light);
-    border: none;
-    border-radius: var(--border-radius-small);
-    padding: var(--space-small);
-    font-size: var(--base-font-size);
-    box-shadow: var(--box-shadow-base);
-    transition: background-color 0.3s ease-in-out;
-}
-
-.removeImageButton:hover {
-    background-color: var(--remove-button-color-hover);
-}
-
 .buttonsContainer {
     display: flex;
     flex-direction: column;
     gap: var(--space-small);
     width: 100%;
     height: 90px;
-}
-
-/* Create account button */
-.createAccountButton {
-    height: 40px;
-    background-color: var(--primary-color);
-    color: var(--text-light);
-    border-radius: var(--border-radius-small);
-    border: none;
-    transition: all 0.3s ease-in-out;
-    font-size: var(--base-font-size);
-}
-
-
-.createAccountButton:hover {
-    background-color: var(--secondary-color);
 }
 
 .errorMessage {
@@ -132,11 +103,6 @@
 
     .formInput {
         height: 40px;
-    }
-
-    .createAccountButton {
-        height: 50px;
-        font-size: var(--base-font-size-large);
     }
 }
 

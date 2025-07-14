@@ -56,7 +56,7 @@
 .remove {
     color: var(--text-light);
     background-color: var(--remove-button-color);
-    padding: var(--space-small);
+    padding: var(--space-small) var(--space-medium);
     border: none;
     border-radius: var(--border-radius-small);
     border: 1px solid var(--remove-button-color);
@@ -64,6 +64,19 @@
 
 .remove:hover {
     background-color: var(--remove-button-color-hover);
+}
+
+/*** Choose file button ***/
+.chooseFile {
+    padding: var(--space-small) var(--space-medium);
+    align-self: flex-start;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--primary-color);
+    color: var(--text-dark);
+}
+
+.chooseFile:hover {
+    background-color: var(--button-hover-bg);
 }
 
 /*** Toggle menu button ***/

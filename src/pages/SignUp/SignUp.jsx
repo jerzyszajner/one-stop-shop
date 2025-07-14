@@ -23,6 +23,10 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
     previewUrl: "",
+    street: "",
+    city: "",
+    zipCode: "",
+    country: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -106,6 +110,11 @@ const SignUp = () => {
     fileInputRef.current.value = null; // Clear the file input
   };
 
+  // Function to handle file input click
+  const handleFileInputClick = () => {
+    fileInputRef.current?.click();
+  };
+
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -133,6 +142,10 @@ const SignUp = () => {
         lastname: signUpFormData.lastname,
         email: user.email,
         dateOfBirth: signUpFormData.dateOfBirth || "",
+        street: signUpFormData.street,
+        city: signUpFormData.city,
+        zipCode: signUpFormData.zipCode,
+        country: signUpFormData.country,
         profilePicture: uploadedImage,
         createdAt: serverTimestamp(),
       });
@@ -154,6 +167,10 @@ const SignUp = () => {
         password: "",
         confirmPassword: "",
         previewUrl: "",
+        street: "",
+        city: "",
+        zipCode: "",
+        country: "",
       });
       // Reset the file input
       // Check if the ref exists before resetting
@@ -234,6 +251,13 @@ const SignUp = () => {
             onChange={handleImageChange}
             ref={fileInputRef}
           />
+          <Button
+            variant="chooseFile"
+            type="button"
+            onClick={handleFileInputClick}
+          >
+            {signUpFormData.profilePicture ? "Change Image" : "Choose File"}
+          </Button>
           {signUpFormData.previewUrl && (
             <div className={styles.imagePreviewContainer}>
               <img
@@ -245,12 +269,72 @@ const SignUp = () => {
                 type="button"
                 className={styles.removeImageButton}
                 onClick={handleRemoveImage}
-                ariaLabel="Remove image"
+                variant="remove"
               >
-                Remove image
+                Remove Image
               </Button>
             </div>
           )}
+        </fieldset>
+        {/*----------------Address Information----------------*/}
+        <fieldset className={styles.formGroup}>
+          <legend className={styles.formGroupTitle}>Address Information</legend>
+          {/*----------------Street-------------------------*/}
+          <label htmlFor="street">Street</label>
+          <input
+            type="text"
+            id="street"
+            name="street"
+            placeholder="Enter your street name e.g., Storgata 1"
+            maxLength={50}
+            className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.street}
+          />
+          {errors && <p className={styles.errorMessage}>{errors.street}</p>}
+
+          {/*----------------City-------------------------*/}
+          <label htmlFor="city">City</label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            placeholder="Enter your city"
+            maxLength={50}
+            className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.city}
+          />
+          {errors && <p className={styles.errorMessage}>{errors.city}</p>}
+
+          {/*----------------Zip Code-------------------------*/}
+          <label htmlFor="zipCode">Zip Code</label>
+          <input
+            type="text"
+            id="zipCode"
+            name="zipCode"
+            placeholder="Enter your zip code e.g., 0123"
+            maxLength={4}
+            inputMode="numeric"
+            pattern="[0-9]{4}"
+            className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.zipCode}
+          />
+          {errors && <p className={styles.errorMessage}>{errors.zipCode}</p>}
+          {/*----------------Country-------------------------*/}
+          <label htmlFor="country">Country</label>
+          <select
+            id="country"
+            name="country"
+            className={styles.formInput}
+            onChange={handleInputChange}
+            value={signUpFormData.country}
+          >
+            <option value="">Select your country</option>
+            <option value="Norway">Norway</option>
+          </select>
+          {errors && <p className={styles.errorMessage}>{errors.country}</p>}
         </fieldset>
         {/*------------------------Additional Information--------------------*/}
         <fieldset className={styles.formGroup}>
@@ -304,7 +388,7 @@ const SignUp = () => {
         {/*-----------------------End of Confirmation---------------------*/}
         <div className={styles.buttonsContainer}>
           <Button
-            className={styles.createAccountButton}
+            variant="primary"
             disabled={isLoading}
             ariaLabel="Create account"
           >

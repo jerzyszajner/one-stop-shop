@@ -5,6 +5,9 @@ export const useSignUpValidation = () => {
   const [errors, setErrors] = useState({});
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}$/;
+  const cityRegex = /^[a-zA-ZæøåÆØÅ\s]+$/;
+  const streetRegex = /^[a-zA-ZæøåÆØÅ\s]+\s\d+[a-zA-ZæøåÆØÅ]*$/;
+  const zipCodeRegex = /^\d{4}$/;
 
   // Validate all sign up form fields
   const validate = (values) => {
@@ -51,6 +54,31 @@ export const useSignUpValidation = () => {
           newErrors.dateOfBirth = "Please provide a valid date of birth.";
         }
       }
+    }
+    // Street validation
+    if (!values.street.trim()) {
+      newErrors.street = "Street is required";
+    } else if (!streetRegex.test(values.street.trim())) {
+      newErrors.street =
+        "Street must contain street name and house number (e.g., Storgata 1)";
+    }
+    // City validation
+    if (!values.city.trim()) {
+      newErrors.city = "City is required";
+    } else if (values.city.trim().length < 2) {
+      newErrors.city = "City must be at least 2 characters long";
+    } else if (!cityRegex.test(values.city.trim())) {
+      newErrors.city = "City can only contain letters and spaces";
+    }
+    // Zip code validation
+    if (!values.zipCode.trim()) {
+      newErrors.zipCode = "Zip code is required";
+    } else if (!zipCodeRegex.test(values.zipCode.trim())) {
+      newErrors.zipCode = "Zip code must be exactly 4 digits (e.g., 0123)";
+    }
+    // Country validation
+    if (!values.country.trim()) {
+      newErrors.country = "Country is required";
     }
     // Email validation
     if (!values.email.trim()) {

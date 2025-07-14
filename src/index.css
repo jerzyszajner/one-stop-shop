@@ -58,6 +58,7 @@ body {
     --active-link-color: #3b82f6;
     --link-color: #0066cc;
     --link-color-hover: #3b82f6;
+    --button-hover-bg: #dadada;
     --sign-out-button-color: #0066cc;
     --sign-out-button-color-hover: #4a90e2;
     --cart-badge-color: #c53030;
