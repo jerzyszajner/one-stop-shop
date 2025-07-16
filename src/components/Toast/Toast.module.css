@@ -1,7 +1,7 @@
 /* Toast notification styling */
 .toast {
     position: fixed;
-    top: 90px;
+    top: 110px;
     right: 20px;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: var(--text-light);

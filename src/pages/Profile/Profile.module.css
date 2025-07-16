@@ -1,3 +1,5 @@
+/* ******************* LAYOUT ******************* */
+
 /* Profile page styling */
 .profileWrapper {
   width: 100%;
@@ -6,18 +8,21 @@
   justify-content: center;
   align-items: center;
   background: var(--background-gradient-light);
+  padding: var(--space-large);
 }
 
 /* Profile container */
 .profileContainer {
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   display: flex;
-  gap: var(--space-medium);
-  padding: var(--space-medium);
+  gap: var(--space-large);
+  padding: var(--space-large);
   border-radius: var(--border-radius-medium);
   background: var(--secondary-color-light);
 }
+
+/* ******************* IMAGE SECTION ******************* */
 
 /* Profile image section */
 .profileImageContainer {
@@ -47,73 +52,20 @@
   transform: scale(1.05);
 }
 
+.imageButtonsContainer {
+  display: flex;
+  gap: var(--space-small);
+  margin-bottom: var(--space-small);
+}
+
+/* ******************* WELCOME & NOTIFICATIONS ******************* */
+
 /* Welcome title */
 .welcomeTitle {
   font-size: var(--base-font-size);
   color: var(--text-dark);
   font-weight: 700;
   margin-bottom: var(--space-medium);
-}
-
-/* Profile details section */
-.profileDetailsContainer {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.profileTitle {
-  font-size: var(--medium-font-size);
-  color: var(--text-dark);
-  text-align: center;
-  border-bottom: 1px solid var(--secondary-color);
-  padding-bottom: var(--space-medium);
-}
-
-/* Details grid */
-.detailsGrid {
-  display: grid;
-}
-
-.detailItem {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-small);
-  padding: var(--space-medium);
-  background: var(--secondary-color-light);
-  border-bottom: 1px solid var(--secondary-color);
-}
-
-/* Profile labels and values */
-.profileLabel {
-  font-size: var(--small-font-size);
-  color: var(--text-dark);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.profileValue {
-  font-size: var(--base-font-size);
-  color: var(--text-dark);
-  font-weight: 500;
-}
-
-/* Status styling */
-.statusValue {
-  display: flex;
-  align-items: center;
-  gap: var(--space-small);
-}
-
-.verifiedStatus {
-  color: var(--text-success);
-  font-weight: 600;
-}
-
-.unverifiedStatus {
-  color: var(--text-warning);
-  font-weight: 600;
 }
 
 .notificationContainer {
@@ -133,6 +85,123 @@
   padding: var(--space-x-small);
   border-radius: var(--border-radius-medium);
 }
+
+/* ******************* BUTTONS ******************* */
+
+/* Buttons container */
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: var(--space-small);
+}
+
+/* ******************* DETAILS SECTION ******************* */
+
+/* Profile details section */
+.profileDetailsContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.profileTitle {
+  font-size: var(--medium-font-size);
+  color: var(--text-dark);
+  text-align: center;
+  border-bottom: 1px solid var(--secondary-color);
+  padding-bottom: var(--space-medium);
+}
+
+/* Details container */
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-x-small);
+  background: var(--secondary-color-light);
+  border-bottom: 1px solid var(--secondary-color);
+}
+
+/* ******************* FORM ELEMENTS ******************* */
+
+/* Profile input base styling */
+.profileInput {
+  border: none;
+  background: transparent;
+  color: var(--text-dark);
+  font-weight: 500;
+  cursor: default;
+  font-size: var(--base-font-size);
+  width: 100%;
+  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Override cursor for readonly inputs */
+.profileInput[readonly] {
+  cursor: default;
+}
+
+/* Edit mode styling */
+.profileInputEdit {
+  border: 1px solid var(--primary-color);
+  padding-left: var(--space-small);
+  cursor: text;
+  color: var(--active-color);
+  font-weight: bold;
+  border-radius: var(--border-radius-small);
+}
+
+/* Select styling for edit mode */
+.profileSelectEdit {
+  border: 1px solid var(--primary-color);
+  padding-left: var(--space-small);
+  color: var(--active-color);
+  font-weight: bold;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-position: right 0.6rem center;
+  background-size: var(--space-medium);
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.profileInput:focus {
+  outline: none;
+}
+
+/* Status input styling */
+.statusVerified {
+  color: var(--text-success);
+}
+
+.statusUnverified {
+  color: var(--text-warning);
+}
+
+.errorMessage {
+  color: var(--text-error);
+  text-align: center;
+  font-size: var(--small-font-size);
+}
+
+/* ******************* STATUS ELEMENTS ******************* */
+
+/* Profile labels and values */
+.profileLabel {
+  font-size: var(--base-font-size);
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* ******************* RESPONSIVE ******************* */
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
@@ -166,7 +235,7 @@
 
 @media screen and (max-width: 480px) {
   .profileWrapper {
-    padding: var(--space-small);
+    padding: var(--space-medium);
   }
 
   .profileContainer {
@@ -176,9 +245,5 @@
   .profileImage {
     width: 120px;
     height: 120px;
-  }
-
-  .detailItem {
-    padding: var(--space-small);
   }
 }

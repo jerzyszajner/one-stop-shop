@@ -25,6 +25,7 @@ button {
 input,
 select {
     font-size: var(--base-font-size);
+    font-family: var(--font-family);
     height: 34px;
     padding: 0 var(--space-small);
     border: 1px solid var(--secondary-color);
@@ -32,6 +33,17 @@ select {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-position: right 0.6rem center;
+    background-size: var(--space-medium);
+    background-repeat: no-repeat;
+    cursor: pointer;
 }
 
 input[type="date"] {
@@ -56,6 +68,7 @@ body {
     --primary-color-light: #ffffff;
     --secondary-color-light: #fafafa;
     --active-link-color: #3b82f6;
+    --active-color: #3b82f6;
     --link-color: #0066cc;
     --link-color-hover: #3b82f6;
     --button-hover-bg: #dadada;
@@ -76,6 +89,8 @@ body {
     --border-glow-subtle: 0 0 0 1px rgba(255, 255, 255, 0.1);
     --border-glow-medium: 0 0 0 1px rgba(255, 255, 255, 0.4);
     --border-glow-primary: 0 0 0 1px #8b5cf6;
+    --background-color-light: #d6d7d8;
+    --background-color-image: #ebeced;
     --background-gradient-light: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color-light) 100%);
     --background-gradient-dark: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 

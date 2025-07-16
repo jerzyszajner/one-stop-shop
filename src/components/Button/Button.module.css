@@ -60,6 +60,7 @@
     border: none;
     border-radius: var(--border-radius-small);
     border: 1px solid var(--remove-button-color);
+    width: 100%;
 }
 
 .remove:hover {
@@ -73,6 +74,7 @@
     border-radius: var(--border-radius-small);
     border: 1px solid var(--primary-color);
     color: var(--text-dark);
+    width: 100%;
 }
 
 .chooseFile:hover {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 // Custom hook to handle Firebase validation errors
 export const useFirebaseValidation = () => {
@@ -48,9 +48,9 @@ export const useFirebaseValidation = () => {
   };
 
   // Get error message directly (for immediate use in Toast)
-  const getErrorMessage = (error) => {
+  const getErrorMessage = useCallback((error) => {
     return handleAuthError(error);
-  };
+  }, []);
 
   return {
     firebaseError,
