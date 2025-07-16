@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./VerifyEmail.module.css";
 import { auth } from "../../../firebaseConfig";
 import { sendEmailVerification } from "firebase/auth";
@@ -7,6 +7,7 @@ import Toast from "../../components/Toast/Toast";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useNavigate, useLocation } from "react-router-dom";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
+import { useEmailVerification } from "../../hooks/useEmailVerification";
 
 const VerifyEmail = () => {
   // Email verification state
@@ -44,31 +45,25 @@ const VerifyEmail = () => {
     setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
-  // Check verification status periodically
-  useEffect(() => {
-    const checkVerificationStatus = async () => {
-      if (auth.currentUser) {
-        await auth.currentUser.reload();
-        const isVerified = auth.currentUser.emailVerified;
-        setEmailVerified(isVerified);
+  // Handle navigation after verification
+  const handleVerificationComplete = () => {
+    const from = location.state?.from;
 
-        if (isVerified) {
-          const from = location.state?.from;
+    if (from === "cart") {
+      navigate("/checkout");
+    } else if (from === "profile") {
+      navigate("/profile");
+    } else {
+      navigate("/");
+    }
+  };
 
-          if (from === "cart") {
-            navigate("/checkout");
-          } else if (from === "profile") {
-            navigate("/profile");
-          } else {
-            navigate("/");
-          }
-        }
-      }
-    };
-
-    const interval = setInterval(checkVerificationStatus, 5000);
-    return () => clearInterval(interval);
-  }, [navigate, location.state]);
+  // Use email verification hook with navigation
+  useEmailVerification(
+    auth.currentUser,
+    setEmailVerified,
+    handleVerificationComplete
+  );
 
   // Resend verification email
   const handleResendVerificationEmail = async () => {
