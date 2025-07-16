@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-x-small);
-  padding: var(--space-medium);
+  padding: var(--space-large);
   border-radius: var(--border-radius-medium);
   background-color: var(--secondary-color-light);
   color: var(--text-dark);
@@ -123,9 +123,6 @@
 }
 
 @media screen and (max-width: 480px) {
-  .contactForm {
-    padding: var(--space-small);
-  }
 
   .contactFormContainer {
     width: 100%;

@@ -235,14 +235,14 @@
   }
 
   .checkoutContainer {
-    padding: var(--space-small);
+    padding: var(--space-medium);
     flex-direction: column;
     gap: var(--space-x-small);
   }
 
   .cartListContainer {
     width: 100%;
-    padding: var(--space-x-small);
+    padding: 0;
   }
 
   .purchaseOverviewContainer,

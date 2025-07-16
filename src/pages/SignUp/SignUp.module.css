@@ -1,3 +1,5 @@
+/* ******************* LAYOUT ******************* */
+
 /* Form wrapper */
 .formWrapper {
     width: 100%;
@@ -12,6 +14,8 @@
     position: relative;
 }
 
+/* ******************* FORM CONTAINER ******************* */
+
 /* Sign up page styling */
 .signUpForm {
     width: 100%;
@@ -19,16 +23,18 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-small);
-    padding: var(--space-medium);
+    padding: var(--space-large);
     background-color: var(--secondary-color-light);
     border-radius: var(--border-radius-medium);
 }
+
+/* ******************* FORM GROUPS ******************* */
 
 .formGroup {
     display: flex;
     flex-direction: column;
     gap: var(--space-x-small);
-    padding: var(--space-medium);
+    padding: var(--space-large);
     border-radius: var(--border-radius-medium);
 }
 
@@ -36,6 +42,8 @@
 .formGroupTitle {
     font-weight: bold;
 }
+
+/* ******************* FORM ELEMENTS ******************* */
 
 .formInput {
     width: 100%;
@@ -46,6 +54,15 @@
 .fileInput {
     display: none;
 }
+
+.errorMessage {
+    color: var(--text-error);
+    height: 10px;
+    text-align: center;
+    font-size: var(--small-font-size);
+}
+
+/* ******************* IMAGE PREVIEW ******************* */
 
 /* Image preview container */
 .imagePreviewContainer {
@@ -75,6 +92,8 @@
     box-shadow: var(--box-shadow-base);
 }
 
+/* ******************* BUTTONS ******************* */
+
 .buttonsContainer {
     display: flex;
     flex-direction: column;
@@ -83,12 +102,7 @@
     height: 90px;
 }
 
-.errorMessage {
-    color: var(--text-error);
-    height: 10px;
-    text-align: center;
-    font-size: var(--small-font-size);
-}
+/* ******************* RESPONSIVE ******************* */
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
@@ -108,6 +122,10 @@
 
 @media screen and (max-width: 480px) {
     .signUpForm {
-        padding: var(--space-small);
+        padding: var(--space-medium);
+    }
+
+    .formGroup {
+        padding: var(--space-medium);
     }
 }

@@ -22,6 +22,7 @@
     max-width: 1200px;
     width: 100%;
     gap: var(--space-large);
+    padding: var(--space-large) 0;
 }
 
 .heroContent {
@@ -31,13 +32,14 @@
 
 /* Badge styling */
 .badge {
+    display: inline-block;
     background: var(--glass-bg-medium);
     padding: var(--space-small) var(--space-medium);
     border-radius: var(--border-radius-large);
     font-size: var(--small-font-size);
     font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    margin-bottom: var(--space-small);
 }
 
 /* Hero title and subtitle */
@@ -52,7 +54,7 @@
     font-size: var(--base-font-size);
     opacity: 0.9;
     margin-bottom: var(--space-large);
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 /* Hero buttons */

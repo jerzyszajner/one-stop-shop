@@ -134,7 +134,6 @@
   .cartListContainer {
     overflow-y: hidden;
     height: 100%;
-    margin: var(--space-small);
   }
 
   .productTitle {

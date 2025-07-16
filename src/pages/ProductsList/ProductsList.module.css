@@ -4,6 +4,9 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--background-color-light);
 }
 
 /* Sort and filter container */
@@ -11,7 +14,6 @@
   width: 100%;
   height: auto;
   padding: var(--space-large);
-  background-color: var(--secondary-color);
   display: flex;
   justify-content: center;
   gap: var(--space-medium);
@@ -21,33 +23,31 @@
 .productsContainer {
   display: grid;
   max-width: 1300px;
-  margin: 0 auto;
   width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: var(--space-medium);
-  padding: var(--space-large) var(--space-x-large);
-  background-color: var(--secondary-color-light);
+  background: var(--background-color-light);
+  padding-bottom: var(--space-large);
   justify-content: center;
 }
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
   .productsContainer {
-    padding: var(--space-medium) var(--space-small);
+    padding: 0 var(--space-small) var(--space-small);
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
 
 @media screen and (max-width: 480px) {
   .productsContainer {
-    padding: var(--space-small);
     gap: var(--space-small);
+    margin: 0;
   }
 
   .sortFilterContainer {
-    padding: var(--space-small);
+    padding: var(--space-medium) var(--space-small);
     gap: var(--space-small);
-    flex-direction: column;
   }
 
   .sort,
