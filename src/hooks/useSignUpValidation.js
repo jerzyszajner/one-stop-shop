@@ -2,7 +2,7 @@ import { useState } from "react";
 // Custom hook for contact form validation
 export const useSignUpValidation = () => {
   // Validation state and patterns
-  const [errors, setErrors] = useState({});
+  const [signUpErrors, setSignUpErrors] = useState({});
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}$/;
   const cityRegex = /^[a-zA-ZæøåÆØÅ\s]+$/;
@@ -10,7 +10,7 @@ export const useSignUpValidation = () => {
   const zipCodeRegex = /^\d{4}$/;
 
   // Validate all sign up form fields
-  const validate = (values) => {
+  const validateSignUp = (values) => {
     let newErrors = {};
 
     // First name validation
@@ -102,12 +102,18 @@ export const useSignUpValidation = () => {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    setErrors(newErrors);
+    setSignUpErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  // Only digits allowed. Clean up zip code input if user tries to input letters.
+  const sanitizeZipCode = (e) => {
+    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+  };
+
   return {
-    errors,
-    validate,
+    signUpErrors,
+    validateSignUp,
+    sanitizeZipCode,
   };
 };

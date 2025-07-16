@@ -33,7 +33,8 @@ const SignUp = () => {
   const fileInputRef = useRef(null);
 
   // Validate function from the custom hook
-  const { errors, validate } = useSignUpValidation();
+  const { signUpErrors, validateSignUp, sanitizeZipCode } =
+    useSignUpValidation();
 
   // Firebase validation hook for error handling
   const { getErrorMessage } = useFirebaseValidation();
@@ -118,7 +119,7 @@ const SignUp = () => {
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate(signUpFormData)) {
+    if (!validateSignUp(signUpFormData)) {
       return;
     }
 
@@ -209,11 +210,14 @@ const SignUp = () => {
             name="firstname"
             placeholder="Enter your first name"
             maxLength={50}
+            autoComplete="given-name"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.firstname}
           />
-          {errors && <p className={styles.errorMessage}>{errors.firstname}</p>}
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.firstname}</p>
+          )}
           {/*--------------------Last Name------------------------*/}
           <label htmlFor="lastname">Last name</label>
           <input
@@ -222,23 +226,27 @@ const SignUp = () => {
             name="lastname"
             placeholder="Enter your last name"
             maxLength={50}
+            autoComplete="family-name"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.lastname}
           />
-          {errors && <p className={styles.errorMessage}>{errors.lastname}</p>}
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.lastname}</p>
+          )}
           {/*-------------------Date of Birth-------------------------*/}
           <label htmlFor="dateOfBirth">Date of Birth</label>
           <input
             type="date"
             id="dateOfBirth"
             name="dateOfBirth"
+            autoComplete="bday"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.dateOfBirth}
           />
-          {errors && (
-            <p className={styles.errorMessage}>{errors.dateOfBirth}</p>
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.dateOfBirth}</p>
           )}
           {/*-------------------Profile Picture-------------------------*/}
           <label htmlFor="profilePicture">Profile Picture</label>
@@ -287,11 +295,14 @@ const SignUp = () => {
             name="street"
             placeholder="Enter your street name e.g., Storgata 1"
             maxLength={50}
+            autoComplete="address-line1"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.street}
           />
-          {errors && <p className={styles.errorMessage}>{errors.street}</p>}
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.street}</p>
+          )}
 
           {/*----------------City-------------------------*/}
           <label htmlFor="city">City</label>
@@ -301,11 +312,14 @@ const SignUp = () => {
             name="city"
             placeholder="Enter your city"
             maxLength={50}
+            autoComplete="address-level2"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.city}
           />
-          {errors && <p className={styles.errorMessage}>{errors.city}</p>}
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.city}</p>
+          )}
 
           {/*----------------Zip Code-------------------------*/}
           <label htmlFor="zipCode">Zip Code</label>
@@ -313,20 +327,24 @@ const SignUp = () => {
             type="text"
             id="zipCode"
             name="zipCode"
-            placeholder="Enter your zip code e.g., 0123"
+            placeholder="Enter zip code e.g., 0123"
             maxLength={4}
             inputMode="numeric"
-            pattern="[0-9]{4}"
+            autoComplete="postal-code"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.zipCode}
+            onInput={sanitizeZipCode}
           />
-          {errors && <p className={styles.errorMessage}>{errors.zipCode}</p>}
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.zipCode}</p>
+          )}
           {/*----------------Country-------------------------*/}
           <label htmlFor="country">Country</label>
           <select
             id="country"
             name="country"
+            autoComplete="country"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.country}
@@ -334,7 +352,9 @@ const SignUp = () => {
             <option value="">Select your country</option>
             <option value="Norway">Norway</option>
           </select>
-          {errors && <p className={styles.errorMessage}>{errors.country}</p>}
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.country}</p>
+          )}
         </fieldset>
         {/*------------------------Additional Information--------------------*/}
         <fieldset className={styles.formGroup}>
@@ -349,11 +369,14 @@ const SignUp = () => {
             name="email"
             placeholder="Enter your email"
             maxLength={50}
+            autoComplete="email"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.email}
           />
-          {errors && <p className={styles.errorMessage}>{errors.email}</p>}
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.email}</p>
+          )}
           {/*-----------------------Password---------------------*/}
           <label htmlFor="password">Password</label>
           <input
@@ -363,11 +386,14 @@ const SignUp = () => {
             placeholder="Enter your password"
             minLength={8}
             maxLength={20}
+            autoComplete="new-password"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.password}
           />
-          {errors && <p className={styles.errorMessage}>{errors.password}</p>}
+          {signUpErrors && (
+            <p className={styles.errorMessage}>{signUpErrors.password}</p>
+          )}
           {/*-----------------------Confirm Password---------------------*/}
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
@@ -377,12 +403,15 @@ const SignUp = () => {
             placeholder="Confirm your password"
             minLength={8}
             maxLength={20}
+            autoComplete="off"
             className={styles.formInput}
             onChange={handleInputChange}
             value={signUpFormData.confirmPassword}
           />
-          {errors && (
-            <p className={styles.errorMessage}>{errors.confirmPassword}</p>
+          {signUpErrors && (
+            <p className={styles.errorMessage}>
+              {signUpErrors.confirmPassword}
+            </p>
           )}
         </fieldset>
         {/*-----------------------End of Confirmation---------------------*/}
