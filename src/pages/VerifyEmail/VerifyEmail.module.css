@@ -3,17 +3,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  flex: 1;
   background: var(--background-gradient-light);
 }
 
 /* Verification container */
 .verificationContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-medium);
   text-align: center;
-  padding: var(--space-medium);
+  padding: var(--space-large);
   background: var(--primary-color-light);
   border-radius: var(--border-radius-large);
   max-width: 600px;
@@ -23,37 +20,46 @@
 /* Verification content */
 .verificationTitle {
   font-size: var(--large-font-size);
-  color: var(--text-light);
+  color: var(--text-dark);
+  margin-bottom: var(--space-medium-large);
 }
 
 .verificationText {
-  font-size: var(--base-font-size);
-  color: var(--primary-color-light);
+  font-size: var(--medium-small-font-size);
+  font-weight: bold;
+  color: var(--text-dark);
   margin-bottom: var(--space-medium);
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.highlight {
+  color: var(--active-color);
+  font-weight: bold;
+  animation: pulse 2s infinite;
+  display: inline-block;
+}
+
+
 
 .buttonsContainer {
   display: flex;
   flex-direction: column;
   gap: var(--space-small);
   width: 100%;
-  height: 90px;
-}
-
-/* Resend button */
-.resendButton {
-  height: 40px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border-radius: var(--border-radius-small);
-  border: none;
-  transition: all 0.3s ease-in-out;
-  font-size: var(--base-font-size);
-  box-shadow: var(--box-shadow-base);
-}
-
-.resendButton:hover {
-  background: var(--secondary-color);
+  height: auto;
 }
 
 /* Message styling */

@@ -6,7 +6,6 @@ import Button from "../../components/Button/Button";
 import Toast from "../../components/Toast/Toast";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useNavigate, useLocation } from "react-router-dom";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import { useEmailVerification } from "../../hooks/useEmailVerification";
 
 const VerifyEmail = () => {
@@ -34,10 +33,6 @@ const VerifyEmail = () => {
       description,
       type,
     });
-  };
-
-  const handleCancel = () => {
-    navigate("/");
   };
 
   // Hide toast notification
@@ -92,25 +87,23 @@ const VerifyEmail = () => {
         <h1>Email verified 🥳 Redirecting to the main page</h1>
       ) : (
         <div className={styles.verificationContainer}>
-          <h2>
-            You are not verified. Check your inbox and verify your email. After
-            verifying your email you will be automatically redirected to the
-            main page.
-          </h2>
-          <p>
-            If you haven't received a verification email, click on the link
-            below to request another verification email.
+          <h2 className={styles.verificationTitle}>Verification link sent!</h2>
+          <p className={styles.verificationText}>
+            Check your <span className={styles.highlight}>inbox</span> and click
+            the link to verify your email.
+          </p>
+          <p className={styles.verificationText}>
+            If you haven’t received it, click below to resend the verification
+            email .
           </p>
           <div className={styles.buttonsContainer}>
             <Button
-              className={styles.resendButton}
+              variant="primary"
+              type="button"
               onClick={handleResendVerificationEmail}
             >
               Resend verification email
             </Button>
-            <ButtonLink to="/" onClick={handleCancel} variant="primary">
-              Cancel
-            </ButtonLink>
           </div>
         </div>
       )}
