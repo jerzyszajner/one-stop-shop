@@ -13,8 +13,8 @@
 .confirmationHeader {
     background: var(--secondary-color-light);
     border-radius: var(--border-radius-medium);
-    padding: var(--space-medium);
-    max-width: 600px;
+    padding: var(--space-large);
+    max-width: 700px;
     width: 100%;
     text-align: center;
     margin-bottom: var(--space-medium);
@@ -38,8 +38,8 @@
 .orderCard {
     background: var(--secondary-color-light);
     border-radius: var(--border-radius-medium);
-    padding: var(--space-medium);
-    max-width: 600px;
+    padding: var(--space-large);
+    max-width: 700px;
     width: 100%;
 }
 
@@ -82,7 +82,7 @@
 
 .orderInfo {
     margin-bottom: var(--space-medium);
-    padding: var(--space-small);
+    padding: var(--space-medium);
     background: var(--secondary-color-light);
     border-radius: var(--border-radius-medium);
     border: 1px solid var(--secondary-color);
@@ -122,7 +122,7 @@
 .orderItem {
     display: flex;
     align-items: center;
-    padding: var(--space-small);
+    padding: var(--space-medium);
     border-bottom: 1px solid var(--secondary-color);
     background: var(--secondary-color-light);
 }
@@ -168,7 +168,7 @@
 
 .orderSummary {
     background: var(--secondary-color-light);
-    padding: var(--space-small);
+    padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
     margin-bottom: var(--space-small);
     border: 1px solid var(--secondary-color);
@@ -209,7 +209,7 @@
 
 .paymentDetails {
     background: var(--secondary-color-light);
-    padding: var(--space-small);
+    padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
     border: 1px solid var(--secondary-color);
 }
@@ -235,7 +235,7 @@
 
 .shippingAddress {
     background: var(--secondary-color-light);
-    padding: var(--space-small);
+    padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
     border: 1px solid var(--secondary-color);
 }
@@ -257,7 +257,7 @@
 
 .nextStepsList {
     background: var(--secondary-color-light);
-    padding: var(--space-small);
+    padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
     list-style: none;
     border: 1px solid var(--secondary-color);

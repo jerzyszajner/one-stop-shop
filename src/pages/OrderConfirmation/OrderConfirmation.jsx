@@ -9,12 +9,31 @@ import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import Link from "../../components/Link/Link";
 import { doc, getDoc } from "firebase/firestore";
 import { database } from "../../../firebaseConfig";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import Toast from "../../components/Toast/Toast";
+import { useToast } from "../../hooks/useToast";
+
 const OrderConfirmation = () => {
-  const { orderNumber } = useParams();
-  const navigate = useNavigate();
-  const { user } = getAuthContext();
-  const { order, isLoading, error } = useOrderDetails(orderNumber, user?.uid);
+  // User data state
   const [userData, setUserData] = useState(null);
+
+  // URL parameters
+  const { orderNumber } = useParams();
+
+  // Navigation
+  const navigate = useNavigate();
+
+  // Get user context
+  const { user } = getAuthContext();
+
+  // Fetch order details
+  const { order, isLoading, error } = useOrderDetails(orderNumber, user?.uid);
+
+  // Firebase validation hook
+  const { getErrorMessage } = useFirebaseValidation();
+
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   useEffect(() => {
     if (!user) {
@@ -35,11 +54,19 @@ const OrderConfirmation = () => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        showToast("❌ User Data Error", getErrorMessage(error), "error");
       }
     };
 
     fetchUserData();
-  }, [user]);
+  }, [user, showToast, getErrorMessage]);
+
+  // Handle order errors
+  useEffect(() => {
+    if (error) {
+      showToast("❌ Order Error", error, "error");
+    }
+  }, [error, showToast]);
 
   const handlePrint = () => {
     window.print();
@@ -73,14 +100,12 @@ const OrderConfirmation = () => {
     );
   }
 
-  if (error || !order) {
+  if (!order) {
     return (
       <div className={styles.orderConfirmationContainer}>
         <div className={styles.errorContainer}>
           <h1 className={styles.errorTitle}>❌ Order Not Found</h1>
-          <p className={styles.errorText}>
-            {error || "Unable to find order details"}
-          </p>
+          <p className={styles.errorText}>Unable to find order details</p>
           <ButtonLink to="/products" variant="primary">
             Back to Shop
           </ButtonLink>
@@ -228,6 +253,15 @@ const OrderConfirmation = () => {
           </ButtonLink>
         </div>
       </div>
+
+      {/* Toast notifications */}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+      />
     </div>
   );
 };

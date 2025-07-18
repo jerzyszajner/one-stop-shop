@@ -7,9 +7,14 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import Toast from "../../components/Toast/Toast";
+import { useToast } from "../../hooks/useToast";
 
 const Contact = () => {
+  // Loading state
   const [isLoading, setIsLoading] = useState(false);
+
   // Contact form state
   const [userData, setUserData] = useState({
     firstName: "",
@@ -21,9 +26,18 @@ const Contact = () => {
     message: "",
   });
 
+  // Contact modal state
   const [showContactModal, setShowContactModal] = useState(false);
+
+  // Contact validation hook
   const { contactErrors, validateContactForm, validateMessageLength } =
     useContactValidation();
+
+  // Firebase validation hook
+  const { getErrorMessage } = useFirebaseValidation();
+
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,7 +81,8 @@ const Contact = () => {
         message: "",
       });
     } catch (error) {
-      console.log(error.message);
+      console.error("Error sending message:", error);
+      showToast("❌ Message Error", getErrorMessage(error), "error");
     } finally {
       setIsLoading(false);
     }
@@ -247,6 +262,15 @@ const Contact = () => {
           </div>
         </Modal>
       )}
+
+      {/* Toast notifications */}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+      />
     </>
   );
 };

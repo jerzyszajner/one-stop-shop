@@ -6,19 +6,21 @@ const Toast = ({
   description,
   isVisible,
   onHide,
-  duration = 2000,
+  duration,
   type = "info", // success, error, warning, info
 }) => {
-  // Auto-hide toast after duration
+  // Auto-duration logic: errors stay visible, others auto-hide
+  const autoDuration = type === "error" ? undefined : duration || 3000;
+  // Auto-hide toast after duration (only if duration is provided)
   useEffect(() => {
-    if (isVisible) {
+    if (isVisible && autoDuration) {
       const timer = setTimeout(() => {
         onHide();
-      }, duration);
+      }, autoDuration);
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, onHide, duration]);
+  }, [isVisible, onHide, autoDuration]);
 
   if (!isVisible) return null;
 

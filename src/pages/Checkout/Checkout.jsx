@@ -11,9 +11,14 @@ import Counter from "../../components/Counter/Counter";
 import Button from "../../components/Button/Button";
 import Spinner from "../../components/Spinner/Spinner";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import Toast from "../../components/Toast/Toast";
+import { useToast } from "../../hooks/useToast";
 
 const Checkout = () => {
+  // Loading state
   const [isLoading, setIsLoading] = useState(false);
+
   // Payment form state
   const [paymentValues, setPaymentValues] = useState({
     cardName: "",
@@ -25,10 +30,19 @@ const Checkout = () => {
     billingAddress: "",
   });
 
+  // Get cart and user context
   const { cart, dispatch } = getCartContext();
   const { user } = getAuthContext();
+
+  // Payment validation hook
   const { paymentErrors, validatePaymentForm } = usePaymentValidation();
   const navigate = useNavigate();
+
+  // Firebase validation hook
+  const { getErrorMessage } = useFirebaseValidation();
+
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   const handleRemove = (id) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: id });
@@ -92,7 +106,8 @@ const Checkout = () => {
         billingAddress: "",
       });
     } catch (error) {
-      console.log(error.message);
+      console.error("Error creating order:", error);
+      showToast("❌ Order Error", getErrorMessage(error), "error");
     } finally {
       setIsLoading(false);
     }
@@ -296,6 +311,15 @@ const Checkout = () => {
         </div>
       </div>
       {isLoading && <Spinner />}
+
+      {/* Toast notifications */}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+      />
     </div>
   );
 };

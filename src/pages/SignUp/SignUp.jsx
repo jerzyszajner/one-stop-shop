@@ -5,6 +5,7 @@ import Toast from "../../components/Toast/Toast";
 import { useRef, useState } from "react";
 import { useSignUpValidation } from "../../hooks/useSignUpValidation";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import { useToast } from "../../hooks/useToast";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -49,28 +50,8 @@ const SignUp = () => {
   // Image upload function from the custom hook
   const { uploadImage } = useImageUpload();
 
-  // Toast state for notifications
-  const [toast, setToast] = useState({
-    isVisible: false,
-    title: "",
-    description: "",
-    type: "error",
-  });
-
-  // Show toast notification
-  const showToast = (title, description, type = "error") => {
-    setToast({
-      isVisible: true,
-      title,
-      description,
-      type,
-    });
-  };
-
-  // Hide toast notification
-  const hideToast = () => {
-    setToast((prev) => ({ ...prev, isVisible: false }));
-  };
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   // Function to handle file input change
   const handleInputChange = (e) => {
@@ -436,7 +417,6 @@ const SignUp = () => {
         isVisible={toast.isVisible}
         onHide={hideToast}
         type={toast.type}
-        duration={3000}
       />
 
       {/* Spinner overlay */}

@@ -12,17 +12,25 @@ import Button from "../Button/Button";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import ButtonLink from "../ButtonLink/ButtonLink";
 import Toast from "../Toast/Toast";
+import { useToast } from "../../hooks/useToast";
+import { RemoveScroll } from "react-remove-scroll";
 
 const Navbar = () => {
-  // Navigation state
+  // Mobile menu state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Get cart and user context
   const { cart } = getCartContext();
   const { user } = getAuthContext();
+
+  // Navigation
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   // Calculate total cart items
   const cartItemsCount = useMemo(
@@ -37,21 +45,13 @@ const Navbar = () => {
       navigate("/");
     } catch (error) {
       console.error("Sign out error:", error.message);
-      setShowToast(true);
+      showToast("❌ Sign Out Error", error.message, "error");
     }
   };
 
   // Menu toggle functions
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
-
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMenuOpen]);
 
   return (
     <nav className={styles.navbar}>
@@ -63,7 +63,11 @@ const Navbar = () => {
           onClick={closeMenu}
           aria-label="Go to home page"
         >
-          <img src="/assets/icons/nav-logo.webp" alt="One Stop Shop" />
+          <img
+            className={styles.logoImg}
+            src="/assets/icons/nav-logo.webp"
+            alt="One Stop Shop"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -153,7 +157,7 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <>
+        <RemoveScroll>
           <div className={styles.overlay} onClick={closeMenu} />
           <div className={styles.mobileNav}>
             <NavLink
@@ -193,10 +197,17 @@ const Navbar = () => {
               Contact
             </NavLink>
           </div>
-        </>
+        </RemoveScroll>
       )}
 
-      {showToast && <Toast message="Sign out failed" type="error" />}
+      {/* Toast notifications */}
+      <Toast
+        title={toast.title}
+        description={toast.description}
+        isVisible={toast.isVisible}
+        onHide={hideToast}
+        type={toast.type}
+      />
     </nav>
   );
 };

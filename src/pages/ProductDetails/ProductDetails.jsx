@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
+import { useToast } from "../../hooks/useToast";
 import styles from "./ProductDetails.module.css";
 import { doc, getDoc } from "firebase/firestore";
 import { database } from "../../../firebaseConfig";
@@ -19,43 +20,16 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // Toast state for notifications
-  const [toast, setToast] = useState({
-    isVisible: false,
-    title: "",
-    description: "",
-    type: "error",
-  });
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   const { dispatch, cart } = getCartContext();
 
-  // Show toast notification
-  const showToast = (title, description, type = "error") => {
-    setToast({
-      isVisible: true,
-      title,
-      description,
-      type,
-    });
-  };
-
-  // Hide toast notification
-  const hideToast = () => {
-    setToast((prev) => ({ ...prev, isVisible: false }));
-  };
-
-  // Add product to cart and show notification
+  // Add product to cart
   const handleAddToCart = () => {
     if (Object.keys(product).length > 0) {
       dispatch({ type: "ADD_TO_CART", payload: product });
-
-      showToast(
-        "✅ Added to Cart",
-        `${product.title} has been added to your cart!`,
-        "success"
-      );
 
       // Update last quantity in localStorage
       setTimeout(() => {
@@ -77,7 +51,6 @@ const ProductDetails = () => {
     const fetchProductDetails = async () => {
       try {
         setIsLoading(true);
-        setError(null);
 
         const productRef = doc(database, "products", id);
         const productSnap = await getDoc(productRef);
@@ -85,7 +58,7 @@ const ProductDetails = () => {
         if (productSnap.exists()) {
           setProduct(productSnap.data());
         } else {
-          setError("Product not found");
+          showToast("❌ Product Error", "Product not found", "error");
           // Redirect to products page after 3 seconds
           setTimeout(() => {
             navigate("/products");
@@ -93,7 +66,7 @@ const ProductDetails = () => {
         }
       } catch (error) {
         console.error("Error fetching product:", error);
-        setError(error);
+        showToast("❌ Product Error", getErrorMessage(error), "error");
       } finally {
         setIsLoading(false);
       }
@@ -102,14 +75,7 @@ const ProductDetails = () => {
     if (id) {
       fetchProductDetails();
     }
-  }, [id, navigate]);
-
-  // Handle errors with Toast
-  useEffect(() => {
-    if (error) {
-      showToast("❌ Product Error", getErrorMessage(error), "error");
-    }
-  }, [error, getErrorMessage]);
+  }, [id, navigate, showToast, getErrorMessage]);
 
   if (isLoading) {
     return <Spinner />;
@@ -215,7 +181,6 @@ const ProductDetails = () => {
         isVisible={toast.isVisible}
         onHide={hideToast}
         type={toast.type}
-        duration={3000}
       />
     </div>
   );

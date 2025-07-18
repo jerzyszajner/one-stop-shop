@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./Profile.module.css";
 import VerificationBadge from "../../components/VerificationBadge/VerificationBadge";
 import { getAuthContext } from "../../context/AuthContext";
@@ -21,6 +21,7 @@ import { database } from "../../../firebaseConfig";
 import Link from "../../components/Link/Link";
 import { useProfileValidation } from "../../hooks/useProfileValidation";
 import { useEmailVerification } from "../../hooks/useEmailVerification";
+import { useToast } from "../../hooks/useToast";
 import {
   deleteUser,
   EmailAuthProvider,
@@ -59,28 +60,8 @@ const Profile = () => {
   // Firebase validation hook for error handling
   const { getErrorMessage } = useFirebaseValidation();
 
-  // Toast state for notifications
-  const [toast, setToast] = useState({
-    isVisible: false,
-    title: "",
-    description: "",
-    type: "error",
-  });
-
-  // Show toast notification
-  const showToast = (title, description, type = "error") => {
-    setToast({
-      isVisible: true,
-      title,
-      description,
-      type,
-    });
-  };
-
-  // Hide toast notification
-  const hideToast = useCallback(() => {
-    setToast((prev) => ({ ...prev, isVisible: false }));
-  }, []);
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   useEffect(() => {
     // Fetch user profile data from database
@@ -137,7 +118,7 @@ const Profile = () => {
 
     fetchUserData();
     fetchLastOrder();
-  }, [user, getErrorMessage]);
+  }, [user, getErrorMessage, showToast]);
 
   // Use email verification hook
   useEmailVerification(user, () => {
@@ -732,7 +713,6 @@ const Profile = () => {
         isVisible={toast.isVisible}
         onHide={hideToast}
         type={toast.type}
-        duration={3000}
       />
 
       {/* Delete Account Modal */}

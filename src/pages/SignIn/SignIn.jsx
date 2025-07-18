@@ -9,6 +9,7 @@ import Link from "../../components/Link/Link";
 import useSignInValidation from "../../hooks/useSignInValidation";
 import useResetPasswordValidation from "../../hooks/useResetPasswordValidation";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import { useToast } from "../../hooks/useToast";
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -36,28 +37,8 @@ const SignIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Toast state for notifications
-  const [toast, setToast] = useState({
-    isVisible: false,
-    title: "",
-    description: "",
-    type: "error",
-  });
-
-  // Show toast notification
-  const showToast = (title, description, type = "error") => {
-    setToast({
-      isVisible: true,
-      title,
-      description,
-      type,
-    });
-  };
-
-  // Hide toast notification
-  const hideToast = () => {
-    setToast((prev) => ({ ...prev, isVisible: false }));
-  };
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -293,7 +274,6 @@ const SignIn = () => {
         isVisible={toast.isVisible}
         onHide={hideToast}
         type={toast.type}
-        duration={3000}
       />
 
       {/* Spinner overlay */}

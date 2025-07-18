@@ -4,6 +4,7 @@ import { auth } from "../../../firebaseConfig";
 import { sendEmailVerification } from "firebase/auth";
 import Button from "../../components/Button/Button";
 import Toast from "../../components/Toast/Toast";
+import { useToast } from "../../hooks/useToast";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEmailVerification } from "../../hooks/useEmailVerification";
@@ -17,28 +18,8 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Toast state for notifications
-  const [toast, setToast] = useState({
-    isVisible: false,
-    title: "",
-    description: "",
-    type: "error",
-  });
-
-  // Show toast notification
-  const showToast = (title, description, type = "error") => {
-    setToast({
-      isVisible: true,
-      title,
-      description,
-      type,
-    });
-  };
-
-  // Hide toast notification
-  const hideToast = () => {
-    setToast((prev) => ({ ...prev, isVisible: false }));
-  };
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   // Handle navigation after verification
   const handleVerificationComplete = () => {
@@ -76,7 +57,6 @@ const VerifyEmail = () => {
       );
     } catch (error) {
       console.error("Error sending verification email:", error);
-
       showToast("Error", getErrorMessage(error), "error");
     }
   };
@@ -115,7 +95,6 @@ const VerifyEmail = () => {
         isVisible={toast.isVisible}
         onHide={hideToast}
         type={toast.type}
-        duration={3000}
       />
     </div>
   );

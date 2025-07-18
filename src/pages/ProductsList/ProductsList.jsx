@@ -3,48 +3,29 @@ import { useSearchParams } from "react-router-dom";
 import Filter from "../../components/Filter/Filter";
 import Sort from "../../components/Sort/Sort";
 import Toast from "../../components/Toast/Toast";
+import { useToast } from "../../hooks/useToast";
 import ProductItem from "../../components/ProductItem/ProductItem";
 import styles from "./ProductsList.module.css";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
 import Spinner from "../../components/Spinner/Spinner";
-import { getCartContext } from "../../context/CartContext";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 
 const ProductsList = () => {
-  // Products and cart state
-  const { products: originalProducts, isLoading, error } = useFetchProducts();
-  const { cart } = getCartContext();
+  // Products state
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState([]);
+
+  // URL parameters
   const [searchParams] = useSearchParams();
+
+  // Fetch products hook
+  const { products: originalProducts, isLoading, error } = useFetchProducts();
+
+  // Firebase validation hook
   const { getErrorMessage } = useFirebaseValidation();
 
-  const [toast, setToast] = useState({
-    isVisible: false,
-    title: "",
-    description: "",
-    type: "error",
-  });
-
-  // Track last cart length to show add-to-cart notifications
-  const [lastCartLength, setLastCartLength] = useState(() => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
-  });
-
-  // Show toast notification
-  const showToast = (title, description, type = "error") => {
-    setToast({
-      isVisible: true,
-      title,
-      description,
-      type,
-    });
-  };
-
-  // Hide toast notification
-  const hideToast = () => {
-    setToast((prev) => ({ ...prev, isVisible: false }));
-  };
+  // Use toast hook
+  const { toast, showToast, hideToast } = useToast();
 
   // Handle filter URL parameters and toast messages
   useEffect(() => {
@@ -62,29 +43,7 @@ const ProductsList = () => {
     if (error) {
       showToast("❌ Error Fetching Products", getErrorMessage(error), "error");
     }
-  }, [error, getErrorMessage]);
-
-  // Monitor cart changes for add-to-cart notifications
-  useEffect(() => {
-    const currentLength = cart.reduce(
-      (total, item) => total + item.quantity,
-      0
-    );
-
-    // Show notification only if an item was added to the cart
-    if (currentLength > lastCartLength) {
-      const lastAddedItem = cart[cart.length - 1];
-      if (lastAddedItem) {
-        showToast(
-          "✅ Added to Cart",
-          `${lastAddedItem.title} has been added to your cart!`,
-          "success"
-        );
-      }
-    }
-
-    setLastCartLength(currentLength);
-  }, [cart, lastCartLength]);
+  }, [error, getErrorMessage, showToast]);
 
   // Handle filtered products from Filter component
   const handleFilteredProducts = (filteredProducts) => {
@@ -135,7 +94,6 @@ const ProductsList = () => {
         isVisible={toast.isVisible}
         onHide={hideToast}
         type={toast.type}
-        duration={3000}
       />
     </div>
   );

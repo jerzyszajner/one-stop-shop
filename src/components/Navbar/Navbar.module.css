@@ -29,14 +29,14 @@
   text-decoration: none;
 }
 
-.logo img {
+.logoImg {
   width: 60px;
   height: auto;
   transition: transform 0.3s ease-in-out;
   border-radius: var(--border-radius-circle);
 }
 
-.logo:hover img {
+.logo:hover .logoImg {
   transform: scale(1.05);
 }
 
