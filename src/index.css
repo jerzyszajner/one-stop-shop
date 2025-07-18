@@ -91,6 +91,7 @@ body {
     --border-glow-primary: 0 0 0 1px #8b5cf6;
     --background-color-light: #d6d7d8;
     --background-color-image: #ebeced;
+    --background-color-input-edit: #e7f0fe;
     --background-gradient-light: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color-light) 100%);
     --background-gradient-dark: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 

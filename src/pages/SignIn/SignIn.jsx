@@ -232,9 +232,8 @@ const SignIn = () => {
       </form>
       {/* Password reset modal */}
       {showForgotPasswordModal && !isLoading && (
-        <Modal>
+        <Modal title="Reset Password Form">
           <form className={styles.resetFormContainer}>
-            <h2>Reset Password Form</h2>
             <fieldset className={styles.formGroup}>
               <legend className={styles.formGroupTitle}>
                 Reset Information

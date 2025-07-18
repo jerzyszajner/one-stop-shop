@@ -232,9 +232,8 @@ const Contact = () => {
       </form>
       {/* Success modal */}
       {showContactModal && (
-        <Modal>
+        <Modal title="Your message has been delivered">
           <div className={styles.contactModalContent}>
-            <h2>Your message has been delivered</h2>
             <p>
               Thank you for reaching out! We've received your message and will
               get back to you as soon as possible.

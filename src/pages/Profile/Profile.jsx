@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import styles from "./Profile.module.css";
 import VerificationBadge from "../../components/VerificationBadge/VerificationBadge";
 import { getAuthContext } from "../../context/AuthContext";
@@ -11,15 +11,22 @@ import {
   limit,
   getDocs,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import Button from "../../components/Button/Button";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import Toast from "../../components/Toast/Toast";
-import { auth, database } from "../../../firebaseConfig";
+import { database } from "../../../firebaseConfig";
 import Link from "../../components/Link/Link";
 import { useProfileValidation } from "../../hooks/useProfileValidation";
 import { useEmailVerification } from "../../hooks/useEmailVerification";
+import {
+  deleteUser,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from "firebase/auth";
+import Modal from "../../components/Modal/Modal";
 
 const Profile = () => {
   // User profile state
@@ -33,16 +40,21 @@ const Profile = () => {
     zipCode: "",
     country: "",
     profilePicture: null,
+    previewUrl: "",
   });
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState("");
-  const fileInputRef = useRef(null);
+
   const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
   const { user } = getAuthContext();
   const { uploadImage } = useImageUpload();
 
   // Validate function from the custom hook
-  const { errors, validateProfile, sanitizeZipCode } = useProfileValidation();
+  const { errors, validateProfile, validateCurrentPassword, sanitizeZipCode } =
+    useProfileValidation();
 
   // Firebase validation hook for error handling
   const { getErrorMessage } = useFirebaseValidation();
@@ -66,9 +78,9 @@ const Profile = () => {
   };
 
   // Hide toast notification
-  const hideToast = () => {
+  const hideToast = useCallback(() => {
     setToast((prev) => ({ ...prev, isVisible: false }));
-  };
+  }, []);
 
   useEffect(() => {
     // Fetch user profile data from database
@@ -89,8 +101,8 @@ const Profile = () => {
             zipCode: userData.zipCode || "",
             country: userData.country || "",
             profilePicture: userData.profilePicture || null,
+            previewUrl: userData.profilePicture || "",
           });
-          setPreviewUrl(userData.profilePicture || "");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -135,23 +147,38 @@ const Profile = () => {
 
   // Function to handle input change
   const handleInputChange = (e) => {
+    if (e.target.name === "file") return;
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // --- Image handlers ---
+  // Retriving the selected image and displaying preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      setSelectedImage(file);
-      setPreviewUrl(URL.createObjectURL(file));
+      const previewUrl = URL.createObjectURL(file);
+      setFormData((prevData) => ({
+        ...prevData,
+        profilePicture: file,
+        previewUrl: previewUrl,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        profilePicture: null,
+        previewUrl: "",
+      }));
     }
   };
 
+  // Removing the selected image
   const handleRemoveImage = () => {
-    setSelectedImage(null);
-    setPreviewUrl("");
-    if (fileInputRef.current) fileInputRef.current.value = null;
+    setFormData((prevData) => ({
+      ...prevData,
+      profilePicture: null,
+      previewUrl: "",
+    }));
+    fileInputRef.current.value = null; // Clear the file input
   };
 
   const handleFileInputClick = () => {
@@ -169,31 +196,84 @@ const Profile = () => {
       zipCode: "",
       country: "",
       profilePicture: null,
+      previewUrl: "",
     };
-    setFormData(resetData);
-    setPreviewUrl(userData?.profilePicture || "");
-    setSelectedImage(null);
+    setFormData({
+      ...resetData,
+      previewUrl: userData?.profilePicture || "",
+    });
+    if (fileInputRef.current) fileInputRef.current.value = null;
     validateProfile(resetData); // Re-validate with correct data to clear errors
   };
 
-  // Function to handle form submission
-  const handleSubmit = async () => {
-    try {
-      setIsLoading(true);
-      if (!user?.uid) return;
-      const userDocRef = doc(database, "users", user.uid);
+  // Function to handle closing delete modal
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setCurrentPassword("");
+  };
 
-      if (!validateProfile(formData)) {
+  // Function to handle delete account
+  const handleDeleteAccount = async () => {
+    try {
+      if (!user?.uid) return;
+
+      if (!validateCurrentPassword({ currentPassword })) {
         return;
       }
 
-      let uploadedImageUrl = userData?.profilePicture || null;
-      if (selectedImage) {
-        uploadedImageUrl = await uploadImage(selectedImage);
-      } else if (previewUrl === "" && !selectedImage) {
-        // user removed image
-        uploadedImageUrl = null;
+      setIsProcessing(true);
+
+      // Use context user
+      if (!user) {
+        showToast("Error", "No authenticated user found", "error");
+        return;
       }
+
+      // Re-authenticate user
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword.trim()
+      );
+      await reauthenticateWithCredential(user, credential);
+
+      // Delete user document from Firestore
+      const userDocRef = doc(database, "users", user.uid);
+      await deleteDoc(userDocRef);
+
+      // Delete user authentication account
+      await deleteUser(user);
+
+      showToast(
+        "Account deleted",
+        "Your account has been permanently deleted",
+        "success"
+      );
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      showToast("Delete failed", getErrorMessage(error), "error");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateProfile(formData)) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      if (!user?.uid) return;
+      const userDocRef = doc(database, "users", user.uid);
+
+      const uploadedImage = formData.profilePicture
+        ? await uploadImage(formData.profilePicture)
+        : formData.previewUrl === "" && !formData.profilePicture
+        ? null
+        : userData?.profilePicture || null;
 
       await updateDoc(userDocRef, {
         firstname: formData.firstname,
@@ -202,23 +282,37 @@ const Profile = () => {
         city: formData.city,
         zipCode: formData.zipCode,
         country: formData.country,
-        profilePicture: uploadedImageUrl,
+        profilePicture: uploadedImage,
       });
-      setUserData((prev) => ({
-        ...prev,
-        ...formData,
-        profilePicture: uploadedImageUrl,
-      }));
-      setIsEditing(false);
-      setSelectedImage(null);
 
+      setUserData((prevData) => ({
+        ...prevData,
+        ...formData,
+        profilePicture: uploadedImage,
+      }));
+
+      // Success toast
       showToast(
         "Profile updated",
         "Your profile has been successfully updated",
         "success"
       );
+
+      // Reset form data after successful save
+      setFormData((prevData) => ({
+        ...prevData,
+        profilePicture: null,
+        previewUrl: uploadedImage || "",
+      }));
+      // Reset the file input
+      // Check if the ref exists before resetting
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null;
+      }
+
+      setIsEditing(false);
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.log(error.message);
       showToast("Update failed", getErrorMessage(error), "error");
     } finally {
       setIsLoading(false);
@@ -232,13 +326,11 @@ const Profile = () => {
         <section className={styles.profileImageContainer}>
           <div className={styles.imageWrapper}>
             <img
-              src={previewUrl || "/assets/icons/user-avatar.webp"}
+              src={formData.previewUrl || "/assets/icons/user-avatar.webp"}
               alt="Profile picture"
               className={styles.profileImage}
             />
-            <VerificationBadge
-              isVerified={auth?.currentUser?.emailVerified ?? false}
-            />
+            <VerificationBadge isVerified={user?.emailVerified ?? false} />
           </div>
           {!isEditing && (
             <h1 className={styles.welcomeTitle}>
@@ -247,7 +339,7 @@ const Profile = () => {
           )}
 
           {/* ---------------- Unverified email notification ---------------- */}
-          {!auth?.currentUser?.emailVerified && (
+          {!user?.emailVerified && (
             <div className={styles.notificationContainer}>
               <p className={styles.notificationText}>
                 You haven't verified your email yet. Check your inbox or click{" "}
@@ -280,11 +372,11 @@ const Profile = () => {
                       type="button"
                       onClick={handleFileInputClick}
                     >
-                      {selectedImage || previewUrl
+                      {formData.profilePicture || formData.previewUrl
                         ? "Change image"
                         : "Choose image"}
                     </Button>
-                    {(selectedImage || previewUrl) && (
+                    {(formData.profilePicture || formData.previewUrl) && (
                       <Button
                         variant="remove"
                         type="button"
@@ -313,291 +405,323 @@ const Profile = () => {
                 </Button>
               </>
             ) : (
-              <Button
-                variant="primary"
-                type="button"
-                onClick={() => setIsEditing(true)}
-              >
-                Edit profile
-              </Button>
+              <>
+                <Button
+                  variant="primary"
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit profile
+                </Button>
+                <Button
+                  variant="primary"
+                  type="button"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  Delete account
+                </Button>
+              </>
             )}
           </div>
         </section>
 
         {/* ---------------- Profile details section ---------------- */}
         <section className={styles.profileDetailsContainer}>
-          <h2 className={styles.profileTitle}>Profile Details</h2>
-          {/* ---------------- Editable Information ---------------- */}
-          <div className={styles.detailsContainer}>
-            {/*----------------First Name----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="firstname" className={styles.profileLabel}>
-                First name
-              </label>
-              <input
-                id="firstname"
-                type="text"
-                maxLength={50}
-                className={
-                  isEditing
-                    ? `${styles.profileInput} ${styles.profileInputEdit}`
-                    : styles.profileInput
-                }
-                name="firstname"
-                value={formData.firstname}
-                placeholder={isEditing ? "Enter your first name" : ""}
-                onChange={handleInputChange}
-                readOnly={!isEditing}
-              />
-              {errors.firstname && (
-                <p className={styles.errorMessage}>{errors.firstname}</p>
-              )}
-            </div>
+          <form
+            className={styles.profileForm}
+            onSubmit={handleSubmit}
+            noValidate
+          >
+            <fieldset className={styles.mainFormGroup}>
+              <legend className={styles.mainFormGroupTitle}>
+                Profile Details
+              </legend>
+              {/* ---------------- Personal Information ---------------- */}
+              <fieldset className={styles.formGroup}>
+                <legend className={styles.formGroupTitle}>
+                  Personal Information
+                </legend>
+                {/*----------------First Name----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="firstname" className={styles.profileLabel}>
+                    First name:
+                  </label>
+                  <input
+                    id="firstname"
+                    type="text"
+                    maxLength={50}
+                    className={
+                      isEditing
+                        ? `${styles.profileInput} ${styles.profileInputEdit}`
+                        : styles.profileInput
+                    }
+                    name="firstname"
+                    value={formData.firstname}
+                    placeholder={isEditing ? "Enter your first name" : ""}
+                    onChange={handleInputChange}
+                    readOnly={!isEditing}
+                  />
+                </div>
+                {errors.firstname && (
+                  <p className={styles.errorMessage}>{errors.firstname}</p>
+                )}
+                {/*----------------Last Name----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="lastname" className={styles.profileLabel}>
+                    Last name:
+                  </label>
+                  <input
+                    id="lastname"
+                    type="text"
+                    maxLength={50}
+                    className={
+                      isEditing
+                        ? `${styles.profileInput} ${styles.profileInputEdit}`
+                        : styles.profileInput
+                    }
+                    name="lastname"
+                    value={formData.lastname}
+                    placeholder={isEditing ? "Enter your last name" : ""}
+                    onChange={handleInputChange}
+                    readOnly={!isEditing}
+                  />
+                </div>
+                {errors.lastname && (
+                  <p className={styles.errorMessage}>{errors.lastname}</p>
+                )}
+              </fieldset>
 
-            {/*----------------Last Name----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="lastname" className={styles.profileLabel}>
-                Last name
-              </label>
-              <input
-                id="lastname"
-                type="text"
-                maxLength={50}
-                className={
-                  isEditing
-                    ? `${styles.profileInput} ${styles.profileInputEdit}`
-                    : styles.profileInput
-                }
-                name="lastname"
-                value={formData.lastname}
-                placeholder={isEditing ? "Enter your last name" : ""}
-                onChange={handleInputChange}
-                readOnly={!isEditing}
-              />
-              {errors.lastname && (
-                <p className={styles.errorMessage}>{errors.lastname}</p>
-              )}
-            </div>
+              {/* ---------------- Address Information ---------------- */}
+              <fieldset className={styles.formGroup}>
+                <legend className={styles.formGroupTitle}>
+                  Address Information
+                </legend>
+                {/*----------------Street----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="street" className={styles.profileLabel}>
+                    Street:
+                  </label>
+                  <input
+                    id="street"
+                    type="text"
+                    maxLength={50}
+                    className={
+                      isEditing
+                        ? `${styles.profileInput} ${styles.profileInputEdit}`
+                        : styles.profileInput
+                    }
+                    name="street"
+                    value={formData.street}
+                    placeholder={
+                      isEditing ? "Enter your street name e.g., Storgata 1" : ""
+                    }
+                    onChange={handleInputChange}
+                    readOnly={!isEditing}
+                  />
+                </div>
+                {errors.street && (
+                  <p className={styles.errorMessage}>{errors.street}</p>
+                )}
+                {/*----------------City----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="city" className={styles.profileLabel}>
+                    City:
+                  </label>
+                  <input
+                    id="city"
+                    type="text"
+                    maxLength={50}
+                    className={
+                      isEditing
+                        ? `${styles.profileInput} ${styles.profileInputEdit}`
+                        : styles.profileInput
+                    }
+                    name="city"
+                    value={formData.city}
+                    placeholder={isEditing ? "Enter your city" : ""}
+                    onChange={handleInputChange}
+                    readOnly={!isEditing}
+                  />
+                </div>
+                {errors.city && (
+                  <p className={styles.errorMessage}>{errors.city}</p>
+                )}
+                {/*----------------Zip Code----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="zipCode" className={styles.profileLabel}>
+                    Zip Code:
+                  </label>
+                  <input
+                    id="zipCode"
+                    type="text"
+                    maxLength={4}
+                    inputMode="numeric"
+                    className={
+                      isEditing
+                        ? `${styles.profileInput} ${styles.profileInputEdit}`
+                        : styles.profileInput
+                    }
+                    name="zipCode"
+                    placeholder={
+                      isEditing ? "Enter your zip code e.g., 0123" : ""
+                    }
+                    value={formData.zipCode}
+                    onChange={handleInputChange}
+                    onInput={sanitizeZipCode}
+                    readOnly={!isEditing}
+                  />
+                </div>
+                {errors.zipCode && (
+                  <p className={styles.errorMessage}>{errors.zipCode}</p>
+                )}
+                {/*----------------Country----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="country" className={styles.profileLabel}>
+                    Country:
+                  </label>
+                  <select
+                    id="country"
+                    className={
+                      isEditing
+                        ? `${styles.profileInput} ${styles.profileSelectEdit}`
+                        : styles.profileInput
+                    }
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                  >
+                    <option value="">Select country</option>
+                    <option value="Norway">Norway</option>
+                  </select>
+                </div>
+                {errors.country && (
+                  <p className={styles.errorMessage}>{errors.country}</p>
+                )}
+              </fieldset>
 
-            {/*----------------Street----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="street" className={styles.profileLabel}>
-                Street
-              </label>
-              <input
-                id="street"
-                type="text"
-                maxLength={50}
-                className={
-                  isEditing
-                    ? `${styles.profileInput} ${styles.profileInputEdit}`
-                    : styles.profileInput
-                }
-                name="street"
-                value={formData.street}
-                placeholder={
-                  isEditing ? "Enter your street name e.g., Storgata 1" : ""
-                }
-                onChange={handleInputChange}
-                readOnly={!isEditing}
-              />
-              {errors.street && (
-                <p className={styles.errorMessage}>{errors.street}</p>
-              )}
-            </div>
+              {/* ---------------- Account Information ---------------- */}
+              <fieldset className={styles.formGroup}>
+                <legend className={styles.formGroupTitle}>
+                  Account Information
+                </legend>
+                {/*----------------Date of Birth----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="dateOfBirth" className={styles.profileLabel}>
+                    Date of Birth:
+                  </label>
+                  <input
+                    id="dateOfBirth"
+                    type="date"
+                    className={styles.profileInput}
+                    name="dateOfBirth"
+                    value={userData?.dateOfBirth || ""}
+                    readOnly
+                  />
+                </div>
 
-            {/*----------------City----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="city" className={styles.profileLabel}>
-                City
-              </label>
-              <input
-                id="city"
-                type="text"
-                maxLength={50}
-                className={
-                  isEditing
-                    ? `${styles.profileInput} ${styles.profileInputEdit}`
-                    : styles.profileInput
-                }
-                name="city"
-                value={formData.city}
-                placeholder={isEditing ? "Enter your city" : ""}
-                onChange={handleInputChange}
-                readOnly={!isEditing}
-              />
-              {errors.city && (
-                <p className={styles.errorMessage}>{errors.city}</p>
-              )}
-            </div>
+                {/*----------------Email----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="email" className={styles.profileLabel}>
+                    Email:
+                  </label>
+                  <input
+                    id="email"
+                    type="text"
+                    className={styles.profileInput}
+                    name="email"
+                    value={userData?.email || ""}
+                    readOnly
+                  />
+                </div>
 
-            {/*----------------Zip Code----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="zipCode" className={styles.profileLabel}>
-                Zip Code
-              </label>
-              <input
-                id="zipCode"
-                type="text"
-                maxLength={4}
-                inputMode="numeric"
-                className={
-                  isEditing
-                    ? `${styles.profileInput} ${styles.profileInputEdit}`
-                    : styles.profileInput
-                }
-                name="zipCode"
-                placeholder={isEditing ? "Enter your zip code e.g., 0123" : ""}
-                value={formData.zipCode}
-                onChange={handleInputChange}
-                onInput={sanitizeZipCode}
-                readOnly={!isEditing}
-              />
-              {errors.zipCode && (
-                <p className={styles.errorMessage}>{errors.zipCode}</p>
-              )}
-            </div>
+                {/*----------------Account Created----------------*/}
+                <div className={styles.detailItem}>
+                  <label
+                    htmlFor="accountCreated"
+                    className={styles.profileLabel}
+                  >
+                    Account Created:
+                  </label>
+                  <input
+                    id="accountCreated"
+                    type="text"
+                    className={styles.profileInput}
+                    name="accountCreated"
+                    value={
+                      userData?.createdAt
+                        ? new Date(
+                            userData?.createdAt.toDate()
+                          ).toLocaleDateString()
+                        : "N/A"
+                    }
+                    readOnly
+                  />
+                </div>
 
-            {/*----------------Country----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="country" className={styles.profileLabel}>
-                Country
-              </label>
-              <select
-                id="country"
-                className={
-                  isEditing
-                    ? `${styles.profileInput} ${styles.profileSelectEdit}`
-                    : styles.profileInput
-                }
-                name="country"
-                value={formData.country}
-                onChange={handleInputChange}
-                disabled={!isEditing}
-              >
-                <option value="">Select country</option>
-                <option value="Norway">Norway</option>
-              </select>
+                {/*----------------Last Sign In----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="lastSignIn" className={styles.profileLabel}>
+                    Last Sign In:
+                  </label>
+                  <input
+                    id="lastSignIn"
+                    type="text"
+                    className={styles.profileInput}
+                    name="lastSignIn"
+                    value={
+                      user?.metadata.lastLoginAt
+                        ? new Date(
+                            Number(user?.metadata.lastLoginAt)
+                          ).toLocaleDateString()
+                        : "N/A"
+                    }
+                    readOnly
+                  />
+                </div>
 
-              {errors.country && (
-                <p className={styles.errorMessage}>{errors.country}</p>
-              )}
-            </div>
+                {/*----------------Last Purchase----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="lastPurchase" className={styles.profileLabel}>
+                    Last Purchase:
+                  </label>
+                  <input
+                    id="lastPurchase"
+                    type="text"
+                    className={styles.profileInput}
+                    name="lastPurchase"
+                    value={
+                      userData?.lastPurchase
+                        ? userData?.lastPurchase?.toLocaleString()
+                        : "No purchases yet"
+                    }
+                    readOnly
+                  />
+                </div>
 
-            {/*----------------Date of Birth----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="dateOfBirth" className={styles.profileLabel}>
-                Date of Birth
-              </label>
-              <input
-                id="dateOfBirth"
-                type="date"
-                className={styles.profileInput}
-                name="dateOfBirth"
-                value={userData?.dateOfBirth || ""}
-                readOnly
-              />
-            </div>
-
-            {/*----------------Email----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="email" className={styles.profileLabel}>
-                Email
-              </label>
-              <input
-                id="email"
-                type="text"
-                className={styles.profileInput}
-                name="email"
-                value={userData?.email || ""}
-                readOnly
-              />
-            </div>
-
-            {/*----------------Account Created----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="accountCreated" className={styles.profileLabel}>
-                Account Created
-              </label>
-              <input
-                id="accountCreated"
-                type="text"
-                className={styles.profileInput}
-                name="accountCreated"
-                value={
-                  userData?.createdAt
-                    ? new Date(
-                        userData?.createdAt.toDate()
-                      ).toLocaleDateString()
-                    : "N/A"
-                }
-                readOnly
-              />
-            </div>
-
-            {/*----------------Last Sign In----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="lastSignIn" className={styles.profileLabel}>
-                Last Sign In
-              </label>
-              <input
-                id="lastSignIn"
-                type="text"
-                className={styles.profileInput}
-                name="lastSignIn"
-                value={
-                  auth?.currentUser?.metadata.lastLoginAt
-                    ? new Date(
-                        Number(auth?.currentUser?.metadata.lastLoginAt)
-                      ).toLocaleDateString()
-                    : "N/A"
-                }
-                readOnly
-              />
-            </div>
-
-            {/*----------------Last Purchase----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="lastPurchase" className={styles.profileLabel}>
-                Last Purchase
-              </label>
-              <input
-                id="lastPurchase"
-                type="text"
-                className={styles.profileInput}
-                name="lastPurchase"
-                value={
-                  userData?.lastPurchase
-                    ? userData?.lastPurchase?.toLocaleString()
-                    : "No purchases yet"
-                }
-                readOnly
-              />
-            </div>
-
-            {/*----------------Email Status----------------*/}
-            <div className={styles.detailItem}>
-              <label htmlFor="emailStatus" className={styles.profileLabel}>
-                Email Status
-              </label>
-              <input
-                id="emailStatus"
-                type="text"
-                className={`${styles.profileInput} ${
-                  auth?.currentUser?.emailVerified
-                    ? styles.statusVerified
-                    : styles.statusUnverified
-                }`}
-                name="emailStatus"
-                value={
-                  auth?.currentUser?.emailVerified
-                    ? "✓ Verified"
-                    : "⚠ Not Verified"
-                }
-                readOnly
-              />
-            </div>
-          </div>
+                {/*----------------Email Status----------------*/}
+                <div className={styles.detailItem}>
+                  <label htmlFor="emailStatus" className={styles.profileLabel}>
+                    Email Status:
+                  </label>
+                  <input
+                    id="emailStatus"
+                    type="text"
+                    className={`${styles.profileInput} ${
+                      user?.emailVerified
+                        ? styles.statusVerified
+                        : styles.statusUnverified
+                    }`}
+                    name="emailStatus"
+                    value={
+                      user?.emailVerified ? "✓ Verified" : "⚠ Not Verified"
+                    }
+                    readOnly
+                  />
+                </div>
+              </fieldset>
+            </fieldset>
+          </form>
         </section>
       </div>
 
@@ -610,6 +734,67 @@ const Profile = () => {
         type={toast.type}
         duration={3000}
       />
+
+      {/* Delete Account Modal */}
+      {showDeleteModal && (
+        <Modal title="Delete Account Form">
+          <form className={styles.deleteFormContainer}>
+            <fieldset className={styles.formGroup}>
+              <legend className={styles.formGroupTitle}>
+                Delete Account Information
+              </legend>
+
+              <p className={styles.deleteFormDescription}>
+                Are you sure you want to delete your account? This action cannot
+                be undone.
+              </p>
+              <p className={styles.deleteFormDescription}>
+                This will permanently delete your account and all personal data,
+                order history, and profile information.
+              </p>
+              <p className={styles.deleteFormDescription}>
+                Please enter your password below to confirm account deletion.
+              </p>
+
+              {/*----------------Password----------------*/}
+              <label htmlFor="deletePassword">Password:</label>
+              <input
+                id="deletePassword"
+                type="password"
+                name="currentPassword"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className={styles.formInput}
+                placeholder="Enter your password"
+                disabled={isProcessing}
+              />
+              {errors.currentPassword && (
+                <p className={styles.errorMessage}>{errors.currentPassword}</p>
+              )}
+            </fieldset>
+            <div className={styles.deleteButtonsContainer}>
+              <Button
+                variant="remove"
+                type="button"
+                onClick={handleDeleteAccount}
+                disabled={isProcessing}
+                ariaLabel="Delete account"
+              >
+                {isProcessing ? "Processing..." : "Delete Account"}
+              </Button>
+              <Button
+                variant="primary"
+                type="button"
+                onClick={handleCloseDeleteModal}
+                disabled={isProcessing}
+                ariaLabel="Cancel"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </main>
   );
 };

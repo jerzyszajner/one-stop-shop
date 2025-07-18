@@ -26,7 +26,7 @@
 
 /* Profile image section */
 .profileImageContainer {
-  flex: 1;
+  flex: 0.75;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,6 +84,7 @@
   background: var(--background-color-info);
   padding: var(--space-x-small);
   border-radius: var(--border-radius-medium);
+  margin-bottom: var(--space-medium);
 }
 
 /* ******************* BUTTONS ******************* */
@@ -105,13 +106,28 @@
   flex-direction: column;
 }
 
-.profileTitle {
+.profileForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  color: var(--primary-color);
+}
+
+.mainFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  padding: var(--space-medium);
+  border-radius: var(--border-radius-medium);
+}
+
+.mainFormGroupTitle {
   font-size: var(--medium-font-size);
   color: var(--text-dark);
-  text-align: center;
-  border-bottom: 1px solid var(--secondary-color);
-  padding-bottom: var(--space-medium);
+  font-weight: 600;
 }
+
+
 
 /* Details container */
 .detailsContainer {
@@ -121,24 +137,35 @@
 
 .detailItem {
   display: flex;
-  flex-direction: column;
-  padding: var(--space-x-small);
-  background: var(--secondary-color-light);
-  border-bottom: 1px solid var(--secondary-color);
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* ******************* FORM ELEMENTS ******************* */
+
+/* Form input styling (for modal) */
+.formInput {
+  width: 100%;
+  padding: 0 var(--space-small);
+  color: var(--text-dark);
+}
 
 /* Profile input base styling */
 .profileInput {
   border: none;
   background: transparent;
   color: var(--text-dark);
-  font-weight: 500;
   cursor: default;
   font-size: var(--base-font-size);
   width: 100%;
-  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+/* Opacity for readonly and disabled inputs */
+.profileInput[readonly],
+.profileInput:disabled {
+  opacity: 0.8;
+  background: transparent;
 }
 
 /* Override cursor for readonly inputs */
@@ -148,29 +175,28 @@
 
 /* Edit mode styling */
 .profileInputEdit {
-  border: 1px solid var(--primary-color);
   padding-left: var(--space-small);
   cursor: text;
   color: var(--active-color);
   font-weight: bold;
   border-radius: var(--border-radius-small);
+  background-color: var(--background-color-input-edit);
 }
 
 /* Select styling for edit mode */
 .profileSelectEdit {
-  border: 1px solid var(--primary-color);
   padding-left: var(--space-small);
   color: var(--active-color);
+  background-color: var(--background-color-input-edit);
   font-weight: bold;
   appearance: none;
   -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2.7' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
   background-position: right 0.6rem center;
   background-size: var(--space-medium);
   background-repeat: no-repeat;
   cursor: pointer;
-  transition: border-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, background-image 0.3s ease-in-out;
 }
 
 .profileInput:focus {
@@ -198,7 +224,46 @@
 .profileLabel {
   font-size: var(--base-font-size);
   color: var(--text-dark);
-  font-weight: 600;
+  font-weight: bold;
+  text-wrap: nowrap;
+}
+
+/* ******************* DELETE FORM ******************* */
+
+/* Delete form container */
+.deleteFormContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);
+  color: var(--primary-color);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-x-small);
+  padding: var(--space-medium);
+  border-radius: var(--border-radius-medium);
+}
+
+.formGroupTitle {
+  font-weight: bold;
+}
+
+.deleteFormDescription {
+  line-height: 1.6;
+  font-size: var(--base-font-size);
+  font-weight: bold;
+  margin-bottom: var(--space-small);
+}
+
+/* Delete buttons container */
+.deleteButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  width: 100%;
+  height: 90px;
 }
 
 /* ******************* RESPONSIVE ******************* */

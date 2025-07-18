@@ -7,7 +7,7 @@ const Modal = ({ title, children, containerClassName }) => {
       <div className={styles.modalBackdrop}>
         {/* Modal content */}
         <div className={`${styles.modalContainer} ${containerClassName}`}>
-          <h2>{title}</h2>
+          <h2 className={styles.modalTitle}>{title}</h2>
           {children}
         </div>
       </div>

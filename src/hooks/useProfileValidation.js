@@ -48,6 +48,24 @@ export const useProfileValidation = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Validate current password for re-authentication
+  const validateCurrentPassword = (values) => {
+    let newErrors = { ...errors };
+
+    // Current password validation
+    if (!values.currentPassword.trim()) {
+      newErrors.currentPassword = "Password is required";
+    } else if (values.currentPassword.trim().length < 8) {
+      newErrors.currentPassword = "Password must be at least 8 characters long";
+    } else {
+      // Clear error if password is valid
+      delete newErrors.currentPassword;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // Only digits allowed. Clean up zip code input if user tries to input letters.
   const sanitizeZipCode = (e) => {
     e.target.value = e.target.value.replace(/[^0-9]/g, "");
@@ -56,6 +74,7 @@ export const useProfileValidation = () => {
   return {
     errors,
     validateProfile,
+    validateCurrentPassword,
     sanitizeZipCode,
   };
 };
