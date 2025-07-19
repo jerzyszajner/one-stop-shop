@@ -1,4 +1,7 @@
+// React
 import { useEffect } from "react";
+
+// Config
 import { auth } from "../../firebaseConfig";
 
 /**

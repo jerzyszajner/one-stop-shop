@@ -1,5 +1,8 @@
-import styles from "./Link.module.css";
+// React Router
 import { Link as RouterLink } from "react-router-dom";
+
+// Styles
+import styles from "./Link.module.css";
 
 const Link = ({
   children,

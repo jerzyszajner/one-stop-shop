@@ -1,23 +1,30 @@
+// React Router
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
+
+// App
 import App from "../App";
+
+// Components
+import RouteGuard from "../components/RouteGuard/RouteGuard";
+
+// Pages
 import About from "../pages/About/About";
 import Cart from "../pages/Cart/Cart";
 import Checkout from "../pages/Checkout/Checkout";
 import Contact from "../pages/Contact/Contact";
 import Home from "../pages/Home/Home";
 import NotFound from "../pages/NotFound/NotFound";
+import OrderConfirmation from "../pages/OrderConfirmation/OrderConfirmation";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import ProductsList from "../pages/ProductsList/ProductsList";
 import Profile from "../pages/Profile/Profile";
 import SignIn from "../pages/SignIn/SignIn";
 import SignUp from "../pages/SignUp/SignUp";
 import VerifyEmail from "../pages/VerifyEmail/VerifyEmail";
-import OrderConfirmation from "../pages/OrderConfirmation/OrderConfirmation";
-import RouteGuard from "../components/RouteGuard/RouteGuard";
 
 // Application routes configuration
 export const router = createBrowserRouter(

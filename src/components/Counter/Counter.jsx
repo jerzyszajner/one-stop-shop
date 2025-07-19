@@ -1,6 +1,11 @@
-import styles from "./Counter.module.css";
+// Components
 import Button from "../Button/Button";
+
+// Context
 import { getCartContext } from "../../context/CartContext";
+
+// Styles
+import styles from "./Counter.module.css";
 
 const Counter = ({ item }) => {
   // Cart context for quantity management

@@ -1,5 +1,8 @@
-import styles from "./ButtonLink.module.css";
+// React Router
 import { Link } from "react-router-dom";
+
+// Styles
+import styles from "./ButtonLink.module.css";
 
 // ButtonLink component
 const ButtonLink = ({

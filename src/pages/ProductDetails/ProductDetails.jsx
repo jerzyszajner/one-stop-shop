@@ -1,15 +1,30 @@
+// React
 import { useEffect, useState } from "react";
+
+// React Router
+import { useParams, useNavigate } from "react-router-dom";
+
+// Firebase
+import { doc, getDoc } from "firebase/firestore";
+
+// Components
 import Button from "../../components/Button/Button";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
-import { useToast } from "../../hooks/useToast";
-import styles from "./ProductDetails.module.css";
-import { doc, getDoc } from "firebase/firestore";
-import { database } from "../../../firebaseConfig";
-import { useParams, useNavigate } from "react-router-dom";
+
+// Context
 import { getCartContext } from "../../context/CartContext";
+
+// Hooks
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
+import { useToast } from "../../hooks/useToast";
+
+// Config
+import { database } from "../../../firebaseConfig";
+
+// Styles
+import styles from "./ProductDetails.module.css";
 
 const ProductDetails = () => {
   const { id } = useParams();

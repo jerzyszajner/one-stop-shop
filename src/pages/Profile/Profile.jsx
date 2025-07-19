@@ -1,7 +1,7 @@
+// React
 import { useEffect, useState, useRef } from "react";
-import styles from "./Profile.module.css";
-import VerificationBadge from "../../components/VerificationBadge/VerificationBadge";
-import { getAuthContext } from "../../context/AuthContext";
+
+// Firebase
 import {
   doc,
   getDoc,
@@ -13,24 +13,35 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import Button from "../../components/Button/Button";
-import { useImageUpload } from "../../hooks/useImageUpload";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
-import Toast from "../../components/Toast/Toast";
-import { database } from "../../../firebaseConfig";
-import Link from "../../components/Link/Link";
-import { useProfileValidation } from "../../hooks/useProfileValidation";
-import { useEmailVerification } from "../../hooks/useEmailVerification";
-import { useToast } from "../../hooks/useToast";
 import {
   deleteUser,
   EmailAuthProvider,
   reauthenticateWithCredential,
 } from "firebase/auth";
+
+// Components
+import Button from "../../components/Button/Button";
+import Link from "../../components/Link/Link";
 import Modal from "../../components/Modal/Modal";
+import Toast from "../../components/Toast/Toast";
+import VerificationBadge from "../../components/VerificationBadge/VerificationBadge";
+
+// Hooks
+import { useEmailVerification } from "../../hooks/useEmailVerification";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import { useImageUpload } from "../../hooks/useImageUpload";
+import { useProfileValidation } from "../../hooks/useProfileValidation";
+import { useToast } from "../../hooks/useToast";
+
+// Context & config
+import { getAuthContext } from "../../context/AuthContext";
+import { database } from "../../../firebaseConfig";
+
+// Styles
+import styles from "./Profile.module.css";
 
 const Profile = () => {
-  // User profile state
+  // State
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,24 +54,20 @@ const Profile = () => {
     profilePicture: null,
     previewUrl: "",
   });
-
   const [isLoading, setIsLoading] = useState(false);
-  const fileInputRef = useRef(null);
-
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
-  const { user } = getAuthContext();
-  const { uploadImage } = useImageUpload();
 
-  // Validate function from the custom hook
+  // Context & refs
+  const { user } = getAuthContext();
+  const fileInputRef = useRef(null);
+
+  // Hooks
+  const { uploadImage } = useImageUpload();
   const { errors, validateProfile, validateCurrentPassword, sanitizeZipCode } =
     useProfileValidation();
-
-  // Firebase validation hook for error handling
   const { getErrorMessage } = useFirebaseValidation();
-
-  // Use toast hook
   const { toast, showToast, hideToast } = useToast();
 
   useEffect(() => {
@@ -126,14 +133,49 @@ const Profile = () => {
     setUserData((prev) => ({ ...prev }));
   });
 
-  // Function to handle input change
+  // Form functions
   const handleInputChange = (e) => {
     if (e.target.name === "file") return;
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Retriving the selected image and displaying preview
+  const resetFormAfterSave = (uploadedImage) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      profilePicture: null,
+      previewUrl: uploadedImage || "",
+    }));
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  };
+
+  // Cancel edit function
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    const resetData = userData || {
+      firstname: "",
+      lastname: "",
+      street: "",
+      city: "",
+      zipCode: "",
+      country: "",
+      profilePicture: null,
+      previewUrl: "",
+    };
+    setFormData({
+      ...resetData,
+      previewUrl: userData?.profilePicture || "",
+    });
+    if (fileInputRef.current) fileInputRef.current.value = null;
+
+    // Clear validation errors when canceling
+    validateProfile(resetData);
+  };
+
+  // Image functions
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -152,7 +194,7 @@ const Profile = () => {
     }
   };
 
-  // Removing the selected image
+  // Remove image function
   const handleRemoveImage = () => {
     setFormData((prevData) => ({
       ...prevData,
@@ -162,38 +204,39 @@ const Profile = () => {
     fileInputRef.current.value = null; // Clear the file input
   };
 
+  // File input click function
   const handleFileInputClick = () => {
     fileInputRef.current?.click();
   };
 
-  // Function to handle cancel edit
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    const resetData = userData || {
-      firstname: "",
-      lastname: "",
-      street: "",
-      city: "",
-      zipCode: "",
-      country: "",
-      profilePicture: null,
-      previewUrl: "",
-    };
-    setFormData({
-      ...resetData,
-      previewUrl: userData?.profilePicture || "",
-    });
-    if (fileInputRef.current) fileInputRef.current.value = null;
-    validateProfile(resetData); // Re-validate with correct data to clear errors
+  // Image upload function
+  const handleImageUpload = async (
+    profilePicture,
+    previewUrl,
+    currentImage
+  ) => {
+    if (profilePicture) {
+      return await uploadImage(profilePicture);
+    }
+
+    if (previewUrl === "" && !profilePicture) {
+      return null;
+    }
+
+    return currentImage || null;
   };
 
-  // Function to handle closing delete modal
+  // Modal functions
   const handleCloseDeleteModal = () => {
     setShowDeleteModal(false);
     setCurrentPassword("");
   };
 
-  // Function to handle delete account
+  const handleDeleteFormSubmit = (e) => {
+    e.preventDefault();
+    handleDeleteAccount();
+  };
+
   const handleDeleteAccount = async () => {
     try {
       if (!user?.uid) return;
@@ -237,9 +280,10 @@ const Profile = () => {
     }
   };
 
-  // Function to handle form submission
+  // Submit form function
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!validateProfile(formData)) {
       return;
     }
@@ -248,14 +292,14 @@ const Profile = () => {
 
     try {
       if (!user?.uid) return;
+
+      const uploadedImage = await handleImageUpload(
+        formData.profilePicture,
+        formData.previewUrl,
+        userData?.profilePicture
+      );
+
       const userDocRef = doc(database, "users", user.uid);
-
-      const uploadedImage = formData.profilePicture
-        ? await uploadImage(formData.profilePicture)
-        : formData.previewUrl === "" && !formData.profilePicture
-        ? null
-        : userData?.profilePicture || null;
-
       await updateDoc(userDocRef, {
         firstname: formData.firstname,
         lastname: formData.lastname,
@@ -272,25 +316,13 @@ const Profile = () => {
         profilePicture: uploadedImage,
       }));
 
-      // Success toast
       showToast(
         "Profile updated",
         "Your profile has been successfully updated",
         "success"
       );
 
-      // Reset form data after successful save
-      setFormData((prevData) => ({
-        ...prevData,
-        profilePicture: null,
-        previewUrl: uploadedImage || "",
-      }));
-      // Reset the file input
-      // Check if the ref exists before resetting
-      if (fileInputRef.current) {
-        fileInputRef.current.value = null;
-      }
-
+      resetFormAfterSave(uploadedImage);
       setIsEditing(false);
     } catch (error) {
       console.log(error.message);
@@ -718,7 +750,10 @@ const Profile = () => {
       {/* Delete Account Modal */}
       {showDeleteModal && (
         <Modal title="Delete Account Form">
-          <form className={styles.deleteFormContainer}>
+          <form
+            className={styles.deleteFormContainer}
+            onSubmit={handleDeleteFormSubmit}
+          >
             <fieldset className={styles.formGroup}>
               <legend className={styles.formGroupTitle}>
                 Delete Account Information
@@ -755,8 +790,7 @@ const Profile = () => {
             <div className={styles.deleteButtonsContainer}>
               <Button
                 variant="remove"
-                type="button"
-                onClick={handleDeleteAccount}
+                type="submit"
                 disabled={isProcessing}
                 ariaLabel="Delete account"
               >

@@ -1,9 +1,18 @@
+// React DOM
 import { createRoot } from "react-dom/client";
-import "./index.css";
+
+// React Router
 import { RouterProvider } from "react-router-dom";
-import { router } from "./routes/routes.jsx";
+
+// Context
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
+
+// Routes
+import { router } from "./routes/routes.jsx";
+
+// Styles
+import "./index.css";
 
 // Application entry point with context providers
 createRoot(document.getElementById("root")).render(

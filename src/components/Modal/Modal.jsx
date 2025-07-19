@@ -1,5 +1,8 @@
-import styles from "./Modal.module.css";
+// Third-party
 import { RemoveScroll } from "react-remove-scroll";
+
+// Styles
+import styles from "./Modal.module.css";
 
 const Modal = ({ title, children, containerClassName }) => {
   return (

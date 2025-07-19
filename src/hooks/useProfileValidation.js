@@ -1,3 +1,4 @@
+// React
 import { useState } from "react";
 
 export const useProfileValidation = () => {
@@ -73,6 +74,7 @@ export const useProfileValidation = () => {
 
   return {
     errors,
+    setErrors,
     validateProfile,
     validateCurrentPassword,
     sanitizeZipCode,

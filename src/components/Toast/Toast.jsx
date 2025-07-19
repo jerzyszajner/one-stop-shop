@@ -1,4 +1,7 @@
+// React
 import { useEffect } from "react";
+
+// Styles
 import styles from "./Toast.module.css";
 
 const Toast = ({

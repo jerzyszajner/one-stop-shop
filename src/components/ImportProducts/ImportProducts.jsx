@@ -1,3 +1,4 @@
+// Firebase
 import { collection, addDoc } from "firebase/firestore";
 import { database } from "../../../firebaseConfig";
 

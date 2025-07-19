@@ -1,7 +1,10 @@
+// Firebase
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+
+// Config
 import { auth } from "../../firebaseConfig";
 
 // Custom hook for authentication

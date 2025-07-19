@@ -1,6 +1,11 @@
-import styles from "./Filter.module.css";
+// React
 import { useState, useEffect } from "react";
+
+// React Router
 import { useSearchParams } from "react-router-dom";
+
+// Styles
+import styles from "./Filter.module.css";
 
 const Filter = ({ products, onProductsFilter }) => {
   const [filterOption, setFilterOption] = useState("");

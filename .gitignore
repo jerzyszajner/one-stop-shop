@@ -23,3 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# AI Instructions
+ai-instructions.md
+
+# Autocomplete Reference
+autocomplete-reference.txt

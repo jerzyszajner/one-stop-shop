@@ -1,4 +1,13 @@
-import styles from "./Navbar.module.css";
+// React
+import { useMemo, useState } from "react";
+
+// React Router
+import { Link, NavLink, useNavigate } from "react-router-dom";
+
+// Firebase
+import { signOut } from "firebase/auth";
+
+// FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -6,33 +15,43 @@ import {
   faUser,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import { getAuthContext } from "../../context/AuthContext";
-import { getCartContext } from "../../context/CartContext";
-import Button from "../Button/Button";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../../../firebaseConfig";
-import { useMemo, useState } from "react";
-import ButtonLink from "../ButtonLink/ButtonLink";
-import Toast from "../Toast/Toast";
-import { useToast } from "../../hooks/useToast";
+
+// Third party
 import { RemoveScroll } from "react-remove-scroll";
 
+// Components
+import Button from "../Button/Button";
+import ButtonLink from "../ButtonLink/ButtonLink";
+import Toast from "../Toast/Toast";
+
+// Context
+import { getAuthContext } from "../../context/AuthContext";
+import { getCartContext } from "../../context/CartContext";
+
+// Hooks
+import { useToast } from "../../hooks/useToast";
+
+// Config
+import { auth } from "../../../firebaseConfig";
+
+// Styles
+import styles from "./Navbar.module.css";
+
 const Navbar = () => {
-  // Mobile menu state
+  // State
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Get cart and user context
+  // Context
   const { cart } = getCartContext();
   const { user } = getAuthContext();
+
+  // Hooks
+  const { toast, showToast, hideToast } = useToast();
 
   // Navigation
   const navigate = useNavigate();
 
-  // Use toast hook
-  const { toast, showToast, hideToast } = useToast();
-
-  // Calculate total cart items
+  // Memoized values
   const cartItemsCount = useMemo(
     () => cart.reduce((count, item) => count + item.quantity, 0),
     [cart]

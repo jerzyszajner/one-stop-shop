@@ -1,25 +1,40 @@
-import styles from "./Checkout.module.css";
-import { getCartContext } from "../../context/CartContext";
-import { getAuthContext } from "../../context/AuthContext";
-import usePaymentValidation from "../../hooks/usePaymentValidation";
-import { database } from "../../../firebaseConfig";
+// React
 import { useMemo, useState } from "react";
-import { nanoid } from "nanoid";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+
+// React Router
 import { useNavigate } from "react-router-dom";
-import Counter from "../../components/Counter/Counter";
+
+// Firebase
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+
+// Third party
+import { nanoid } from "nanoid";
+
+// Components
 import Button from "../../components/Button/Button";
-import Spinner from "../../components/Spinner/Spinner";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import Counter from "../../components/Counter/Counter";
+import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
+
+// Context
+import { getAuthContext } from "../../context/AuthContext";
+import { getCartContext } from "../../context/CartContext";
+
+// Hooks
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import usePaymentValidation from "../../hooks/usePaymentValidation";
 import { useToast } from "../../hooks/useToast";
 
-const Checkout = () => {
-  // Loading state
-  const [isLoading, setIsLoading] = useState(false);
+// Config
+import { database } from "../../../firebaseConfig";
 
-  // Payment form state
+// Styles
+import styles from "./Checkout.module.css";
+
+const Checkout = () => {
+  // State
+  const [isLoading, setIsLoading] = useState(false);
   const [paymentValues, setPaymentValues] = useState({
     cardName: "",
     cardNumber: "",
@@ -30,19 +45,17 @@ const Checkout = () => {
     billingAddress: "",
   });
 
-  // Get cart and user context
+  // Context
   const { cart, dispatch } = getCartContext();
   const { user } = getAuthContext();
 
-  // Payment validation hook
+  // Hooks
   const { paymentErrors, validatePaymentForm } = usePaymentValidation();
-  const navigate = useNavigate();
-
-  // Firebase validation hook
   const { getErrorMessage } = useFirebaseValidation();
-
-  // Use toast hook
   const { toast, showToast, hideToast } = useToast();
+
+  // Navigation
+  const navigate = useNavigate();
 
   const handleRemove = (id) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: id });

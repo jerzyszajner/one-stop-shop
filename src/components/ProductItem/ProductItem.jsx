@@ -1,7 +1,12 @@
+// Components
 import ButtonLink from "../ButtonLink/ButtonLink";
-import styles from "./ProductItem.module.css";
 import Button from "../Button/Button";
+
+// Context
 import { getCartContext } from "../../context/CartContext";
+
+// Styles
+import styles from "./ProductItem.module.css";
 
 const ProductItem = ({ product }) => {
   const { dispatch } = getCartContext();

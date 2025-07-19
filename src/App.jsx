@@ -1,7 +1,12 @@
-import styles from "./App.module.css";
+// React Router
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
+
+// Components
 import Footer from "./components/Footer/Footer";
+import Navbar from "./components/Navbar/Navbar";
+
+// Styles
+import styles from "./App.module.css";
 
 function App() {
   return (

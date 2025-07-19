@@ -1,13 +1,26 @@
+// React
 import { useState } from "react";
-import styles from "./VerifyEmail.module.css";
-import { auth } from "../../../firebaseConfig";
+
+// React Router
+import { useNavigate, useLocation } from "react-router-dom";
+
+// Firebase
 import { sendEmailVerification } from "firebase/auth";
+
+// Components
 import Button from "../../components/Button/Button";
 import Toast from "../../components/Toast/Toast";
-import { useToast } from "../../hooks/useToast";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
-import { useNavigate, useLocation } from "react-router-dom";
+
+// Hooks
 import { useEmailVerification } from "../../hooks/useEmailVerification";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import { useToast } from "../../hooks/useToast";
+
+// Config
+import { auth } from "../../../firebaseConfig";
+
+// Styles
+import styles from "./VerifyEmail.module.css";
 
 const VerifyEmail = () => {
   // Email verification state

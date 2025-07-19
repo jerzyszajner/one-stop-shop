@@ -1,8 +1,11 @@
+// FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
   faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
+
+// Styles
 import styles from "./VerificationBadge.module.css";
 
 const VerificationBadge = ({ isVerified, className = "" }) => {

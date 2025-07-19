@@ -10,7 +10,7 @@
     display: flex;
     justify-content: center;
     min-height: 45vh;
-    padding: var(--space-large) 5%;
+    padding: var(--space-large);
     background: var(--background-gradient-dark);
     color: var(--text-light);
 }
@@ -314,7 +314,7 @@
 @media screen and (max-width: 768px) {
     .hero {
         min-height: 40vh;
-        padding: var(--space-medium) 5%;
+        padding: var(--space-medium);
     }
 
     .heroContainer {

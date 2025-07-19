@@ -1,21 +1,30 @@
+// React
 import React, { useState } from "react";
-import styles from "./Contact.module.css";
-import Button from "../../components/Button/Button";
-import useContactValidation from "../../hooks/useContactValidation";
-import { database } from "../../../firebaseConfig";
+
+// Firebase
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+
+// Components
+import Button from "../../components/Button/Button";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import Toast from "../../components/Toast/Toast";
+
+// Hooks
+import useContactValidation from "../../hooks/useContactValidation";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useToast } from "../../hooks/useToast";
 
-const Contact = () => {
-  // Loading state
-  const [isLoading, setIsLoading] = useState(false);
+// Config
+import { database } from "../../../firebaseConfig";
 
-  // Contact form state
+// Styles
+import styles from "./Contact.module.css";
+
+const Contact = () => {
+  // State
+  const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -25,18 +34,12 @@ const Contact = () => {
     subject: "",
     message: "",
   });
-
-  // Contact modal state
   const [showContactModal, setShowContactModal] = useState(false);
 
-  // Contact validation hook
+  // Hooks
   const { contactErrors, validateContactForm, validateMessageLength } =
     useContactValidation();
-
-  // Firebase validation hook
   const { getErrorMessage } = useFirebaseValidation();
-
-  // Use toast hook
   const { toast, showToast, hideToast } = useToast();
 
   const handleChange = (e) => {

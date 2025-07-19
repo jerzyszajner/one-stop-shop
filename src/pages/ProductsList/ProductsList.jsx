@@ -1,14 +1,23 @@
+// React
 import { useEffect, useState } from "react";
+
+// React Router
 import { useSearchParams } from "react-router-dom";
+
+// Components
 import Filter from "../../components/Filter/Filter";
-import Sort from "../../components/Sort/Sort";
-import Toast from "../../components/Toast/Toast";
-import { useToast } from "../../hooks/useToast";
 import ProductItem from "../../components/ProductItem/ProductItem";
-import styles from "./ProductsList.module.css";
-import { useFetchProducts } from "../../hooks/useFetchProducts";
+import Sort from "../../components/Sort/Sort";
 import Spinner from "../../components/Spinner/Spinner";
+import Toast from "../../components/Toast/Toast";
+
+// Hooks
+import { useFetchProducts } from "../../hooks/useFetchProducts";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import { useToast } from "../../hooks/useToast";
+
+// Styles
+import styles from "./ProductsList.module.css";
 
 const ProductsList = () => {
   // Products state

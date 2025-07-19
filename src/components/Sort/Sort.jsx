@@ -1,4 +1,7 @@
+// React
 import { useState } from "react";
+
+// Styles
 import styles from "./Sort.module.css";
 
 const Sort = ({ products, onProductsSort }) => {

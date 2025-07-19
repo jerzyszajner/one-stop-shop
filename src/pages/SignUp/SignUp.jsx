@@ -1,20 +1,33 @@
-import styles from "./SignUp.module.css";
+// React
+import { useRef, useState } from "react";
+
+// React Router
+import { useLocation, useNavigate } from "react-router-dom";
+
+// Firebase
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+
+// Components
 import Button from "../../components/Button/Button";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
-import { useRef, useState } from "react";
-import { useSignUpValidation } from "../../hooks/useSignUpValidation";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
-import { useToast } from "../../hooks/useToast";
-import { useImageUpload } from "../../hooks/useImageUpload";
+
+// Hooks
 import { useAuth } from "../../hooks/useAuth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import { useImageUpload } from "../../hooks/useImageUpload";
+import { useSignUpValidation } from "../../hooks/useSignUpValidation";
+import { useToast } from "../../hooks/useToast";
+
+// Config
 import { database } from "../../../firebaseConfig";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
+
+// Styles
+import styles from "./SignUp.module.css";
 
 const SignUp = () => {
-  // Declare state to manage form data
+  // State
   const [signUpFormData, setSignUpFormData] = useState({
     firstname: "",
     lastname: "",
@@ -29,29 +42,20 @@ const SignUp = () => {
     zipCode: "",
     country: "",
   });
-
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Validate function from the custom hook
+  // Hooks
   const { signUpErrors, validateSignUp, sanitizeZipCode } =
     useSignUpValidation();
-
-  // Firebase validation hook for error handling
   const { getErrorMessage } = useFirebaseValidation();
-
-  // Sign up function from the custom hook
   const { signUp } = useAuth();
+  const { uploadImage } = useImageUpload();
+  const { toast, showToast, hideToast } = useToast();
 
-  // Redirect users after successful sign up
+  // Navigation
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Image upload function from the custom hook
-  const { uploadImage } = useImageUpload();
-
-  // Use toast hook
-  const { toast, showToast, hideToast } = useToast();
 
   // Function to handle file input change
   const handleInputChange = (e) => {

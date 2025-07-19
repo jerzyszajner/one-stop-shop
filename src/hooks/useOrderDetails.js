@@ -1,5 +1,10 @@
+// React
 import { useState, useEffect } from "react";
+
+// Firebase
 import { collection, query, where, getDocs } from "firebase/firestore";
+
+// Config
 import { database } from "../../firebaseConfig";
 
 const useOrderDetails = (orderNumber, userId) => {

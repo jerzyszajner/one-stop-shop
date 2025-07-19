@@ -1,17 +1,32 @@
-import { useParams, useNavigate } from "react-router-dom";
+// React
 import { useEffect, useState } from "react";
-import styles from "./OrderConfirmation.module.css";
-import { getAuthContext } from "../../context/AuthContext";
-import useOrderDetails from "../../hooks/useOrderDetails";
-import Spinner from "../../components/Spinner/Spinner";
+
+// React Router
+import { useParams, useNavigate } from "react-router-dom";
+
+// Firebase
+import { doc, getDoc } from "firebase/firestore";
+
+// Components
 import Button from "../../components/Button/Button";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import Link from "../../components/Link/Link";
-import { doc, getDoc } from "firebase/firestore";
-import { database } from "../../../firebaseConfig";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
+
+// Context
+import { getAuthContext } from "../../context/AuthContext";
+
+// Hooks
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useToast } from "../../hooks/useToast";
+import useOrderDetails from "../../hooks/useOrderDetails";
+
+// Config
+import { database } from "../../../firebaseConfig";
+
+// Styles
+import styles from "./OrderConfirmation.module.css";
 
 const OrderConfirmation = () => {
   // User data state

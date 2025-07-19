@@ -1,25 +1,38 @@
-import { useNavigate, useLocation } from "react-router-dom";
+// React
 import { useState } from "react";
-import styles from "./SignIn.module.css";
-import Button from "../../components/Button/Button";
-import Modal from "../../components/Modal/Modal";
-import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
-import Link from "../../components/Link/Link";
-import useSignInValidation from "../../hooks/useSignInValidation";
-import useResetPasswordValidation from "../../hooks/useResetPasswordValidation";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
-import { useToast } from "../../hooks/useToast";
+
+// React Router
+import { useNavigate, useLocation } from "react-router-dom";
+
+// Firebase
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../../../firebaseConfig";
+
+// Components
+import Button from "../../components/Button/Button";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
+import Link from "../../components/Link/Link";
+import Modal from "../../components/Modal/Modal";
+import Spinner from "../../components/Spinner/Spinner";
+import Toast from "../../components/Toast/Toast";
+
+// Hooks
+import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import useResetPasswordValidation from "../../hooks/useResetPasswordValidation";
+import useSignInValidation from "../../hooks/useSignInValidation";
+import { useToast } from "../../hooks/useToast";
+
+// Config
+import { auth } from "../../../firebaseConfig";
+
+// Styles
+import styles from "./SignIn.module.css";
 
 const SignIn = () => {
+  // State
   const [isLoading, setIsLoading] = useState(false);
-  // Sign in form state
   const [signInFormData, setSignInFormData] = useState({
     email: "",
     password: "",
@@ -27,18 +40,16 @@ const SignIn = () => {
   const [resetFormData, setResetFormData] = useState({ email: "" });
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
-  // Validation hooks
+  // Hooks
   const { validateSignIn, signInErrors } = useSignInValidation();
   const { validateResetEmail, resetPasswordErrors } =
     useResetPasswordValidation();
   const { getErrorMessage } = useFirebaseValidation();
+  const { toast, showToast, hideToast } = useToast();
 
   // Navigation
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Use toast hook
-  const { toast, showToast, hideToast } = useToast();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

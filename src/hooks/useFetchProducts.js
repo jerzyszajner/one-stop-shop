@@ -1,5 +1,10 @@
-import { collection, getDocs } from "firebase/firestore";
+// React
 import { useEffect, useState } from "react";
+
+// Firebase
+import { collection, getDocs } from "firebase/firestore";
+
+// Config
 import { database } from "../../firebaseConfig";
 // Custom hook for fetching products from Firestore
 export const useFetchProducts = () => {
