@@ -14,6 +14,7 @@ import RouteGuard from "../components/RouteGuard/RouteGuard";
 // Pages
 import About from "../pages/About/About";
 import Cart from "../pages/Cart/Cart";
+import Delivery from "../pages/Delivery/Delivery";
 import Checkout from "../pages/Checkout/Checkout";
 import Contact from "../pages/Contact/Contact";
 import Home from "../pages/Home/Home";
@@ -46,6 +47,14 @@ export const router = createBrowserRouter(
         element={
           <RouteGuard>
             <Profile />
+          </RouteGuard>
+        }
+      />
+      <Route
+        path="delivery"
+        element={
+          <RouteGuard>
+            <Delivery />
           </RouteGuard>
         }
       />

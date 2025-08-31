@@ -3,22 +3,21 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: var(--background-gradient-light);
-    padding: var(--space-medium);
-    gap: var(--space-large);
+    background: var(--secondary-color-light);
 }
 
 /* Hero section */
 .hero {
     background: var(--background-gradient-dark);
     color: var(--text-light);
-    padding: var(--space-large);
+    padding: var(--space-x-large);
     text-align: center;
-    border-radius: var(--border-radius-large);
     width: 100%;
-    max-width: 1200px;
+}
+
+.heroContent {
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .title {
@@ -35,14 +34,14 @@
 /* Content container */
 .content {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
     padding: var(--space-large);
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
     gap: var(--space-large);
-    background-color: var(--card-color);
-    border-radius: var(--border-radius-large);
-    box-shadow: var(--box-shadow-base);
+    margin: 0 auto;
+    flex: 1;
 }
 
 /* Section styling */
@@ -90,6 +89,19 @@
     margin-bottom: var(--space-medium);
 }
 
+.valueIconQuality {
+    color: var(--value-icon-quality);
+}
+
+.valueIconCustomer {
+    color: var(--value-icon-customer);
+}
+
+.valueIconGlobal {
+    color: var(--value-icon-global);
+}
+
+
 .valueTitle {
     font-size: var(--medium-font-size);
     color: var(--primary-color);
@@ -106,7 +118,6 @@
 /* Responsive */
 @media (max-width: 768px) {
     .aboutPage {
-        padding: var(--space-small);
         gap: var(--space-medium);
     }
 

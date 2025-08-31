@@ -1,6 +1,31 @@
 /* Product sort dropdown styling */
 .sort {
+  font-size: var(--base-font-size);
   min-width: 195px;
+  height: 34px;
   padding: 0 var(--space-small);
+  border: 1px solid transparent;
   border-radius: var(--border-radius-small);
+  color: var(--text-dark);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.sort:hover {
+  outline: none;
+  border-color: var(--input-color-focus);
+}
+
+.sort:focus {
+  outline: none;
+  border-color: var(--input-color-focus);
+  box-shadow: var(--input-shadow-focus);
+}
+
+@media screen and (max-width: 768px) {
+  .sort {
+    height: 50px;
+  }
 }

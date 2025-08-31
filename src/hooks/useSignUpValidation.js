@@ -1,14 +1,19 @@
 // React
 import { useState } from "react";
-// Custom hook for contact form validation
+
+// Regex patterns
+import {
+  emailRegex,
+  passwordRegex,
+  cityRegex,
+  streetRegex,
+  zipCodeRegex,
+  phoneRegex,
+} from "../config/regexPatterns";
+// Custom hook for sign up form validation
 export const useSignUpValidation = () => {
   // Validation state and patterns
   const [signUpErrors, setSignUpErrors] = useState({});
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,}$/;
-  const cityRegex = /^[a-zA-ZæøåÆØÅ\s]+$/;
-  const streetRegex = /^[a-zA-ZæøåÆØÅ\s]+\s\d+[a-zA-ZæøåÆØÅ]*$/;
-  const zipCodeRegex = /^\d{4}$/;
 
   // Validate all sign up form fields
   const validateSignUp = (values) => {
@@ -26,32 +31,31 @@ export const useSignUpValidation = () => {
     if (!values.dateOfBirth.trim()) {
       newErrors.dateOfBirth = "Date of birth is required";
     } else {
-      const today = new Date();
       const birthDate = new Date(values.dateOfBirth);
-      today.setHours(0, 0, 0, 0); // Ignore time for comparison
+      const today = new Date();
 
-      if (birthDate > today) {
+      if (isNaN(birthDate.getTime())) {
+        newErrors.dateOfBirth = "Please provide a valid date of birth.";
+      } else if (birthDate > today) {
         newErrors.dateOfBirth = "Date of birth cannot be in the future";
       } else {
-        const minAge = 18;
-        const requiredBirthDate = new Date(
-          today.getFullYear() - minAge,
-          today.getMonth(),
-          today.getDate()
-        );
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
 
-        if (birthDate > requiredBirthDate) {
+        if (
+          monthDiff < 0 ||
+          (monthDiff === 0 && today.getDate() < birthDate.getDate())
+        ) {
+          age--;
+        }
+
+        const minAge = 18;
+        if (age < minAge) {
           newErrors.dateOfBirth = `You must be at least ${minAge} years old to register.`;
         }
 
         const maxAge = 120;
-        const oldestBirthDate = new Date(
-          today.getFullYear() - maxAge,
-          today.getMonth(),
-          today.getDate()
-        );
-
-        if (birthDate < oldestBirthDate) {
+        if (age > maxAge) {
           newErrors.dateOfBirth = "Please provide a valid date of birth.";
         }
       }
@@ -81,6 +85,12 @@ export const useSignUpValidation = () => {
     if (!values.country.trim()) {
       newErrors.country = "Country is required";
     }
+    // Phone validation
+    if (!values.phone?.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!phoneRegex.test(values.phone.trim())) {
+      newErrors.phone = "Phone number must be exactly 8 digits";
+    }
     // Email validation
     if (!values.email.trim()) {
       newErrors.email = "Email is required";
@@ -107,14 +117,8 @@ export const useSignUpValidation = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Only digits allowed. Clean up zip code input if user tries to input letters.
-  const sanitizeZipCode = (e) => {
-    e.target.value = e.target.value.replace(/[^0-9]/g, "");
-  };
-
   return {
     signUpErrors,
     validateSignUp,
-    sanitizeZipCode,
   };
 };

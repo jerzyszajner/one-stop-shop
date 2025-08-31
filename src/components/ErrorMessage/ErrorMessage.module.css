@@ -1,0 +1,6 @@
+/* Error message styles */
+.errorMessage {
+    color: var(--text-error);
+    text-align: center;
+    font-size: var(--small-font-size);
+}

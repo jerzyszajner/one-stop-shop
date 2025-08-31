@@ -1,30 +1,14 @@
 // React
-import { useEffect, useState, useRef } from "react";
-
-// Firebase
-import {
-  doc,
-  getDoc,
-  collection,
-  query,
-  orderBy,
-  limit,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
-import {
-  deleteUser,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-} from "firebase/auth";
+import { useEffect, useState } from "react";
 
 // Components
 import Button from "../../components/Button/Button";
-import Link from "../../components/Link/Link";
+import CustomLink from "../../components/CustomLink/CustomLink";
 import Modal from "../../components/Modal/Modal";
 import Toast from "../../components/Toast/Toast";
 import VerificationBadge from "../../components/VerificationBadge/VerificationBadge";
+import DeleteForm from "../../components/DeleteForm/DeleteForm";
+import EditProfile from "../../components/EditProfile/EditProfile";
 
 // Hooks
 import { useEmailVerification } from "../../hooks/useEmailVerification";
@@ -32,251 +16,145 @@ import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useProfileValidation } from "../../hooks/useProfileValidation";
 import { useToast } from "../../hooks/useToast";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useUserContext } from "../../hooks/useUserContext";
+import { useFetchLastOrder } from "../../hooks/useFetchLastOrder";
+import { useDeleteAccount } from "../../hooks/useDeleteAccount";
+import { useImageHandler } from "../../hooks/useImageHandler";
 
-// Context & config
-import { getAuthContext } from "../../context/AuthContext";
-import { database } from "../../../firebaseConfig";
+// Config
+import { initialEditFormData } from "../../config/formsConfig";
+
+// Utils
+import { formatDigits } from "../../utils/helpers";
 
 // Styles
 import styles from "./Profile.module.css";
 
 const Profile = () => {
   // State
-  const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    street: "",
-    city: "",
-    zipCode: "",
-    country: "",
-    profilePicture: null,
-    previewUrl: "",
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("");
-
-  // Context & refs
-  const { user } = getAuthContext();
-  const fileInputRef = useRef(null);
+  const [editFormData, setEditFormData] = useState(initialEditFormData);
+  const [isSaving, setIsSaving] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const { user } = useAuthContext();
 
   // Hooks
   const { uploadImage } = useImageUpload();
-  const { errors, validateProfile, validateCurrentPassword, sanitizeZipCode } =
-    useProfileValidation();
+  const { profileErrors, validateProfile } = useProfileValidation();
   const { getErrorMessage } = useFirebaseValidation();
   const { toast, showToast, hideToast } = useToast();
+  const {
+    userData,
+    error: userError,
+    updateUserData,
+    isUpdating,
+  } = useUserContext();
+  const { lastPurchase, error: orderError } = useFetchLastOrder();
+  const {
+    showDeleteModal,
+    currentPassword,
+    isDeleting,
+    error: deleteError,
+    deleteFormErrors,
+    openDeleteModal,
+    handleCancelDelete,
+    handleDeleteInputChange,
+    handleDeleteSubmit,
+  } = useDeleteAccount();
 
+  // Image handler hook
+  const {
+    selectedFile,
+    previewUrl,
+    fileInputRef,
+    handleImageChange,
+    handleRemoveImage,
+    handleFileInputClick,
+    updateCurrentImage,
+  } = useImageHandler();
+
+  // Handle image load
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  // Handle error messages
   useEffect(() => {
-    // Fetch user profile data from database
-    const fetchUserData = async () => {
-      try {
-        if (!user?.uid) return;
-        const userDocRef = doc(database, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
+    if (userError) {
+      showToast(
+        "Error fetching user data",
+        getErrorMessage(userError),
+        "error"
+      );
+    }
 
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUserData(userData);
-          setFormData({
-            firstname: userData.firstname || "",
-            lastname: userData.lastname || "",
-            street: userData.street || "",
-            city: userData.city || "",
-            zipCode: userData.zipCode || "",
-            country: userData.country || "",
-            profilePicture: userData.profilePicture || null,
-            previewUrl: userData.profilePicture || "",
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        showToast("Error", getErrorMessage(error), "error");
+    if (deleteError) {
+      showToast("Delete failed", getErrorMessage(deleteError), "error");
+    }
+
+    if (orderError) {
+      showToast(
+        "Error fetching last purchase",
+        getErrorMessage(orderError),
+        "error"
+      );
+    }
+  }, [userError, deleteError, orderError, showToast, getErrorMessage]);
+
+  // Fetch user data and set it to the edit form data
+  useEffect(() => {
+    if (userData) {
+      setEditFormData({
+        firstname: userData.firstname || "",
+        lastname: userData.lastname || "",
+        street: userData.street || "",
+        zipCode: userData.zipCode || "",
+        city: userData.city || "",
+        country: userData.country || "",
+        phone: userData.phone || "",
+        dateOfBirth: userData.dateOfBirth || "",
+      });
+      // Update image handler with new profile picture
+      if (userData.profilePicture) {
+        updateCurrentImage(userData.profilePicture);
       }
-    };
+    }
+  }, [userData, updateCurrentImage]);
 
-    // Fetch user's most recent order
-    const fetchLastOrder = async () => {
-      try {
-        if (!user?.uid) return;
-        const ordersQuery = query(
-          collection(database, "users", user.uid, "orders"),
-          orderBy("createdAt", "desc"),
-          limit(1)
-        );
-
-        const querySnapshot = await getDocs(ordersQuery);
-
-        if (!querySnapshot.empty) {
-          const latestOrder = querySnapshot.docs[0].data();
-          setUserData((prev) => ({
-            ...prev,
-            lastPurchase: latestOrder.createdAt.toDate(),
-          }));
-        }
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-        showToast("Error", getErrorMessage(error), "error");
-      }
-    };
-
-    fetchUserData();
-    fetchLastOrder();
-  }, [user, getErrorMessage, showToast]);
-
-  // Use email verification hook
+  // Use email verification hook to force re-render when verification status changes
   useEmailVerification(user, () => {
-    // Force re-render when verification status changes
-    setUserData((prev) => ({ ...prev }));
+    setEditFormData((prev) => ({ ...prev }));
   });
 
-  // Form functions
+  // ---------------- Form functions ----------------
   const handleInputChange = (e) => {
     if (e.target.name === "file") return;
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setEditFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const resetFormAfterSave = (uploadedImage) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      profilePicture: null,
-      previewUrl: uploadedImage || "",
-    }));
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null;
+    handleRemoveImage();
+    if (uploadedImage) {
+      updateCurrentImage(uploadedImage);
     }
   };
 
   // Cancel edit function
   const handleCancelEdit = () => {
     setIsEditing(false);
-    const resetData = userData || {
-      firstname: "",
-      lastname: "",
-      street: "",
-      city: "",
-      zipCode: "",
-      country: "",
-      profilePicture: null,
-      previewUrl: "",
-    };
-    setFormData({
-      ...resetData,
-      previewUrl: userData?.profilePicture || "",
-    });
-    if (fileInputRef.current) fileInputRef.current.value = null;
-
-    // Clear validation errors when canceling
+    const resetData = userData || initialEditFormData;
     validateProfile(resetData);
-  };
+    setEditFormData({
+      ...resetData,
+    });
 
-  // Image functions
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const previewUrl = URL.createObjectURL(file);
-      setFormData((prevData) => ({
-        ...prevData,
-        profilePicture: file,
-        previewUrl: previewUrl,
-      }));
+    // Reset image to original
+    if (userData?.profilePicture) {
+      updateCurrentImage(userData.profilePicture);
     } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        profilePicture: null,
-        previewUrl: "",
-      }));
-    }
-  };
-
-  // Remove image function
-  const handleRemoveImage = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      profilePicture: null,
-      previewUrl: "",
-    }));
-    fileInputRef.current.value = null; // Clear the file input
-  };
-
-  // File input click function
-  const handleFileInputClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  // Image upload function
-  const handleImageUpload = async (
-    profilePicture,
-    previewUrl,
-    currentImage
-  ) => {
-    if (profilePicture) {
-      return await uploadImage(profilePicture);
-    }
-
-    if (previewUrl === "" && !profilePicture) {
-      return null;
-    }
-
-    return currentImage || null;
-  };
-
-  // Modal functions
-  const handleCloseDeleteModal = () => {
-    setShowDeleteModal(false);
-    setCurrentPassword("");
-  };
-
-  const handleDeleteFormSubmit = (e) => {
-    e.preventDefault();
-    handleDeleteAccount();
-  };
-
-  const handleDeleteAccount = async () => {
-    try {
-      if (!user?.uid) return;
-
-      if (!validateCurrentPassword({ currentPassword })) {
-        return;
-      }
-
-      setIsProcessing(true);
-
-      // Use context user
-      if (!user) {
-        showToast("Error", "No authenticated user found", "error");
-        return;
-      }
-
-      // Re-authenticate user
-      const credential = EmailAuthProvider.credential(
-        user.email,
-        currentPassword.trim()
-      );
-      await reauthenticateWithCredential(user, credential);
-
-      // Delete user document from Firestore
-      const userDocRef = doc(database, "users", user.uid);
-      await deleteDoc(userDocRef);
-
-      // Delete user authentication account
-      await deleteUser(user);
-
-      showToast(
-        "Account deleted",
-        "Your account has been permanently deleted",
-        "success"
-      );
-    } catch (error) {
-      console.error("Error deleting account:", error);
-      showToast("Delete failed", getErrorMessage(error), "error");
-    } finally {
-      setIsProcessing(false);
+      handleRemoveImage();
     }
   };
 
@@ -284,37 +162,51 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateProfile(formData)) {
+    // Create form data with image info
+    const formDataWithImage = {
+      ...editFormData,
+      selectedFile,
+      previewUrl,
+    };
+
+    if (!validateProfile(formDataWithImage)) {
       return;
     }
 
-    setIsLoading(true);
+    setIsSaving(true);
 
     try {
-      if (!user?.uid) return;
+      // Handle image upload
+      let uploadedImage = userData?.profilePicture;
 
-      const uploadedImage = await handleImageUpload(
-        formData.profilePicture,
-        formData.previewUrl,
-        userData?.profilePicture
-      );
+      if (selectedFile) {
+        // User selected new image
+        const result = await uploadImage(selectedFile);
+        if (result.success) {
+          uploadedImage = result.url;
+        } else {
+          showToast("Upload failed", result.error, "error");
+          return;
+        }
+      } else if (previewUrl === "") {
+        // User removed image (previewUrl is empty)
+        uploadedImage = null;
+      }
 
-      const userDocRef = doc(database, "users", user.uid);
-      await updateDoc(userDocRef, {
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        street: formData.street,
-        city: formData.city,
-        zipCode: formData.zipCode,
-        country: formData.country,
+      const updatedData = {
+        firstname: editFormData.firstname,
+        lastname: editFormData.lastname,
+        street: editFormData.street,
+        city: editFormData.city,
+        zipCode: editFormData.zipCode,
+        country: editFormData.country,
+        phone: editFormData.phone,
+        dateOfBirth: editFormData.dateOfBirth,
         profilePicture: uploadedImage,
-      });
+      };
 
-      setUserData((prevData) => ({
-        ...prevData,
-        ...formData,
-        profilePicture: uploadedImage,
-      }));
+      // Update user data in Firestore
+      await updateUserData(updatedData);
 
       showToast(
         "Profile updated",
@@ -325,416 +217,177 @@ const Profile = () => {
       resetFormAfterSave(uploadedImage);
       setIsEditing(false);
     } catch (error) {
-      console.log(error.message);
-      showToast("Update failed", getErrorMessage(error), "error");
+      showToast("Update failed", error.message, "error");
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
   };
 
   return (
-    <main className={styles.profileWrapper}>
+    <div className={styles.profileWrapper}>
       <div className={styles.profileContainer}>
         {/* ---------------- Profile header section ---------------- */}
-        <section className={styles.profileImageContainer}>
-          <div className={styles.imageWrapper}>
+        <section className={styles.profileHeader}>
+          {/* ---------------- Profile image ---------------- */}
+          <div className={styles.profileImageWrapper}>
             <img
-              src={formData.previewUrl || "/assets/icons/user-avatar.webp"}
+              src={previewUrl || "/assets/images/fallback.webp"}
               alt="Profile picture"
-              className={styles.profileImage}
+              className={`${styles.profileImage} ${
+                imageLoaded ? styles.loaded : ""
+              } ${!previewUrl ? styles.fallback : ""}`}
+              onLoad={handleImageLoad}
             />
             <VerificationBadge isVerified={user?.emailVerified ?? false} />
           </div>
           {!isEditing && (
-            <h1 className={styles.welcomeTitle}>
-              Welcome, {userData?.firstname || "User"}!
+            <h1 className={styles.profileTitle}>
+              Welcome to your profile,&nbsp;
+              {userData && userData.firstname ? userData.firstname : "User"}!
             </h1>
           )}
 
           {/* ---------------- Unverified email notification ---------------- */}
           {!user?.emailVerified && (
-            <div className={styles.notificationContainer}>
-              <p className={styles.notificationText}>
-                You haven't verified your email yet. Check your inbox or click{" "}
-                <Link
+            <div className={styles.emailStatusContainer}>
+              <p className={styles.emailStatus}>
+                You haven't verified your email yet. Check your inbox or
+                click&nbsp;
+                <CustomLink
                   variant="primary"
                   to="/verify-email"
                   state={{ from: "profile" }}
                 >
                   Verify Email
-                </Link>{" "}
-                to get a new link.
+                </CustomLink>
+                &nbsp; to get a new link.
               </p>
             </div>
           )}
-          {/* ******************* Edit profile buttons ******************* */}
+          {/* ---------------- Edit profile buttons ---------------- */}
           <div className={styles.buttonsContainer}>
-            {isEditing ? (
-              <>
-                <div className={styles.buttonsContainer}>
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.webp"
-                    style={{ display: "none" }}
-                    onChange={handleImageChange}
-                    ref={fileInputRef}
-                  />
-                  <div className={styles.imageButtonsContainer}>
-                    <Button
-                      variant="chooseFile"
-                      type="button"
-                      onClick={handleFileInputClick}
-                    >
-                      {formData.profilePicture || formData.previewUrl
-                        ? "Change image"
-                        : "Choose image"}
-                    </Button>
-                    {(formData.profilePicture || formData.previewUrl) && (
-                      <Button
-                        variant="remove"
-                        type="button"
-                        onClick={handleRemoveImage}
-                      >
-                        Remove image
-                      </Button>
-                    )}
-                  </div>
-                </div>
-                <Button
-                  variant="primary"
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Saving..." : "Save"}
-                </Button>
-                <Button
-                  variant="primary"
-                  type="button"
-                  disabled={isLoading}
-                  onClick={handleCancelEdit}
-                >
-                  Cancel
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="primary"
-                  type="button"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit profile
-                </Button>
-                <Button
-                  variant="primary"
-                  type="button"
-                  onClick={() => setShowDeleteModal(true)}
-                >
-                  Delete account
-                </Button>
-              </>
-            )}
+            <Button
+              variant="primary"
+              type="button"
+              onClick={() => setIsEditing(true)}
+              disabled={isUpdating}
+            >
+              Edit profile
+            </Button>
+            <Button variant="primary" type="button" onClick={openDeleteModal}>
+              Delete account
+            </Button>
           </div>
         </section>
 
         {/* ---------------- Profile details section ---------------- */}
-        <section className={styles.profileDetailsContainer}>
-          <form
-            className={styles.profileForm}
-            onSubmit={handleSubmit}
-            noValidate
-          >
-            <fieldset className={styles.mainFormGroup}>
-              <legend className={styles.mainFormGroupTitle}>
-                Profile Details
-              </legend>
-              {/* ---------------- Personal Information ---------------- */}
-              <fieldset className={styles.formGroup}>
-                <legend className={styles.formGroupTitle}>
-                  Personal Information
-                </legend>
-                {/*----------------First Name----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="firstname" className={styles.profileLabel}>
-                    First name:
-                  </label>
-                  <input
-                    id="firstname"
-                    type="text"
-                    maxLength={50}
-                    className={
-                      isEditing
-                        ? `${styles.profileInput} ${styles.profileInputEdit}`
-                        : styles.profileInput
-                    }
-                    name="firstname"
-                    value={formData.firstname}
-                    placeholder={isEditing ? "Enter your first name" : ""}
-                    onChange={handleInputChange}
-                    readOnly={!isEditing}
-                  />
-                </div>
-                {errors.firstname && (
-                  <p className={styles.errorMessage}>{errors.firstname}</p>
+        <section className={styles.profileDetails}>
+          {/* Personal Information */}
+          <div className={styles.profileSection}>
+            <h3 className={styles.sectionTitle}>Personal Information</h3>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>First name:</span>
+              <span className={styles.infoValue}>
+                {userData?.firstname || "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Last name:</span>
+              <span className={styles.infoValue}>
+                {userData?.lastname || "N/A"}
+              </span>
+            </div>
+          </div>
+
+          {/* Address Information */}
+          <div className={styles.profileSection}>
+            <h3 className={styles.sectionTitle}>Address Information</h3>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Street:</span>
+              <span className={styles.infoValue}>
+                {userData?.street || "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>City:</span>
+              <span className={styles.infoValue}>
+                {userData?.city || "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Zip Code:</span>
+              <span className={styles.infoValue}>
+                {userData?.zipCode || "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Country:</span>
+              <span className={styles.infoValue}>
+                {userData?.country || "N/A"}
+              </span>
+            </div>
+          </div>
+
+          {/* Account Information */}
+          <div className={styles.profileSection}>
+            <h3 className={styles.sectionTitle}>Account Information</h3>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Phone:</span>
+              <span className={styles.infoValue}>
+                {userData?.phone || "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Date of Birth:</span>
+              <span className={styles.infoValue}>
+                {userData?.dateOfBirth || "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Email:</span>
+              <span className={styles.infoValue}>
+                {userData?.email || "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Account Created:</span>
+              <span className={styles.infoValue}>
+                {userData?.createdAt
+                  ? new Date(userData.createdAt.toDate()).toLocaleDateString()
+                  : "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Last Sign In:</span>
+              <span className={styles.infoValue}>
+                {user && user.metadata && user.metadata.lastLoginAt
+                  ? new Date(
+                      Number(user.metadata.lastLoginAt)
+                    ).toLocaleDateString()
+                  : "N/A"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Last Purchase:</span>
+              <span className={styles.infoValue}>
+                {lastPurchase
+                  ? lastPurchase.toLocaleString()
+                  : "No purchases yet"}
+              </span>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>Email Status:</span>
+              <span className={styles.infoValue}>
+                {user && user.emailVerified ? (
+                  <span className={styles.statusVerified}>✓ Verified</span>
+                ) : (
+                  <span className={styles.statusNotVerified}>
+                    ⚠ Not Verified
+                  </span>
                 )}
-                {/*----------------Last Name----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="lastname" className={styles.profileLabel}>
-                    Last name:
-                  </label>
-                  <input
-                    id="lastname"
-                    type="text"
-                    maxLength={50}
-                    className={
-                      isEditing
-                        ? `${styles.profileInput} ${styles.profileInputEdit}`
-                        : styles.profileInput
-                    }
-                    name="lastname"
-                    value={formData.lastname}
-                    placeholder={isEditing ? "Enter your last name" : ""}
-                    onChange={handleInputChange}
-                    readOnly={!isEditing}
-                  />
-                </div>
-                {errors.lastname && (
-                  <p className={styles.errorMessage}>{errors.lastname}</p>
-                )}
-              </fieldset>
-
-              {/* ---------------- Address Information ---------------- */}
-              <fieldset className={styles.formGroup}>
-                <legend className={styles.formGroupTitle}>
-                  Address Information
-                </legend>
-                {/*----------------Street----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="street" className={styles.profileLabel}>
-                    Street:
-                  </label>
-                  <input
-                    id="street"
-                    type="text"
-                    maxLength={50}
-                    className={
-                      isEditing
-                        ? `${styles.profileInput} ${styles.profileInputEdit}`
-                        : styles.profileInput
-                    }
-                    name="street"
-                    value={formData.street}
-                    placeholder={
-                      isEditing ? "Enter your street name e.g., Storgata 1" : ""
-                    }
-                    onChange={handleInputChange}
-                    readOnly={!isEditing}
-                  />
-                </div>
-                {errors.street && (
-                  <p className={styles.errorMessage}>{errors.street}</p>
-                )}
-                {/*----------------City----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="city" className={styles.profileLabel}>
-                    City:
-                  </label>
-                  <input
-                    id="city"
-                    type="text"
-                    maxLength={50}
-                    className={
-                      isEditing
-                        ? `${styles.profileInput} ${styles.profileInputEdit}`
-                        : styles.profileInput
-                    }
-                    name="city"
-                    value={formData.city}
-                    placeholder={isEditing ? "Enter your city" : ""}
-                    onChange={handleInputChange}
-                    readOnly={!isEditing}
-                  />
-                </div>
-                {errors.city && (
-                  <p className={styles.errorMessage}>{errors.city}</p>
-                )}
-                {/*----------------Zip Code----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="zipCode" className={styles.profileLabel}>
-                    Zip Code:
-                  </label>
-                  <input
-                    id="zipCode"
-                    type="text"
-                    maxLength={4}
-                    inputMode="numeric"
-                    className={
-                      isEditing
-                        ? `${styles.profileInput} ${styles.profileInputEdit}`
-                        : styles.profileInput
-                    }
-                    name="zipCode"
-                    placeholder={
-                      isEditing ? "Enter your zip code e.g., 0123" : ""
-                    }
-                    value={formData.zipCode}
-                    onChange={handleInputChange}
-                    onInput={sanitizeZipCode}
-                    readOnly={!isEditing}
-                  />
-                </div>
-                {errors.zipCode && (
-                  <p className={styles.errorMessage}>{errors.zipCode}</p>
-                )}
-                {/*----------------Country----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="country" className={styles.profileLabel}>
-                    Country:
-                  </label>
-                  <select
-                    id="country"
-                    className={
-                      isEditing
-                        ? `${styles.profileInput} ${styles.profileSelectEdit}`
-                        : styles.profileInput
-                    }
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                  >
-                    <option value="">Select country</option>
-                    <option value="Norway">Norway</option>
-                  </select>
-                </div>
-                {errors.country && (
-                  <p className={styles.errorMessage}>{errors.country}</p>
-                )}
-              </fieldset>
-
-              {/* ---------------- Account Information ---------------- */}
-              <fieldset className={styles.formGroup}>
-                <legend className={styles.formGroupTitle}>
-                  Account Information
-                </legend>
-                {/*----------------Date of Birth----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="dateOfBirth" className={styles.profileLabel}>
-                    Date of Birth:
-                  </label>
-                  <input
-                    id="dateOfBirth"
-                    type="date"
-                    className={styles.profileInput}
-                    name="dateOfBirth"
-                    value={userData?.dateOfBirth || ""}
-                    readOnly
-                  />
-                </div>
-
-                {/*----------------Email----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="email" className={styles.profileLabel}>
-                    Email:
-                  </label>
-                  <input
-                    id="email"
-                    type="text"
-                    className={styles.profileInput}
-                    name="email"
-                    value={userData?.email || ""}
-                    readOnly
-                  />
-                </div>
-
-                {/*----------------Account Created----------------*/}
-                <div className={styles.detailItem}>
-                  <label
-                    htmlFor="accountCreated"
-                    className={styles.profileLabel}
-                  >
-                    Account Created:
-                  </label>
-                  <input
-                    id="accountCreated"
-                    type="text"
-                    className={styles.profileInput}
-                    name="accountCreated"
-                    value={
-                      userData?.createdAt
-                        ? new Date(
-                            userData?.createdAt.toDate()
-                          ).toLocaleDateString()
-                        : "N/A"
-                    }
-                    readOnly
-                  />
-                </div>
-
-                {/*----------------Last Sign In----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="lastSignIn" className={styles.profileLabel}>
-                    Last Sign In:
-                  </label>
-                  <input
-                    id="lastSignIn"
-                    type="text"
-                    className={styles.profileInput}
-                    name="lastSignIn"
-                    value={
-                      user?.metadata.lastLoginAt
-                        ? new Date(
-                            Number(user?.metadata.lastLoginAt)
-                          ).toLocaleDateString()
-                        : "N/A"
-                    }
-                    readOnly
-                  />
-                </div>
-
-                {/*----------------Last Purchase----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="lastPurchase" className={styles.profileLabel}>
-                    Last Purchase:
-                  </label>
-                  <input
-                    id="lastPurchase"
-                    type="text"
-                    className={styles.profileInput}
-                    name="lastPurchase"
-                    value={
-                      userData?.lastPurchase
-                        ? userData?.lastPurchase?.toLocaleString()
-                        : "No purchases yet"
-                    }
-                    readOnly
-                  />
-                </div>
-
-                {/*----------------Email Status----------------*/}
-                <div className={styles.detailItem}>
-                  <label htmlFor="emailStatus" className={styles.profileLabel}>
-                    Email Status:
-                  </label>
-                  <input
-                    id="emailStatus"
-                    type="text"
-                    className={`${styles.profileInput} ${
-                      user?.emailVerified
-                        ? styles.statusVerified
-                        : styles.statusUnverified
-                    }`}
-                    name="emailStatus"
-                    value={
-                      user?.emailVerified ? "✓ Verified" : "⚠ Not Verified"
-                    }
-                    readOnly
-                  />
-                </div>
-              </fieldset>
-            </fieldset>
-          </form>
+              </span>
+            </div>
+          </div>
         </section>
       </div>
 
@@ -747,69 +400,41 @@ const Profile = () => {
         type={toast.type}
       />
 
+      {/* Edit Profile Modal */}
+      {isEditing && (
+        <Modal title="Edit Profile">
+          <EditProfile
+            onSubmit={handleSubmit}
+            onInputChange={handleInputChange}
+            onFormatDigits={formatDigits}
+            onFileInputClick={handleFileInputClick}
+            onImageChange={handleImageChange}
+            onRemoveImage={handleRemoveImage}
+            onCancelEdit={handleCancelEdit}
+            formData={editFormData}
+            selectedFile={selectedFile}
+            previewUrl={previewUrl}
+            fileInputRef={fileInputRef}
+            errors={profileErrors}
+            isSaving={isSaving || isUpdating}
+          />
+        </Modal>
+      )}
+
       {/* Delete Account Modal */}
       {showDeleteModal && (
         <Modal title="Delete Account Form">
-          <form
-            className={styles.deleteFormContainer}
-            onSubmit={handleDeleteFormSubmit}
-          >
-            <fieldset className={styles.formGroup}>
-              <legend className={styles.formGroupTitle}>
-                Delete Account Information
-              </legend>
-
-              <p className={styles.deleteFormDescription}>
-                Are you sure you want to delete your account? This action cannot
-                be undone.
-              </p>
-              <p className={styles.deleteFormDescription}>
-                This will permanently delete your account and all personal data,
-                order history, and profile information.
-              </p>
-              <p className={styles.deleteFormDescription}>
-                Please enter your password below to confirm account deletion.
-              </p>
-
-              {/*----------------Password----------------*/}
-              <label htmlFor="deletePassword">Password:</label>
-              <input
-                id="deletePassword"
-                type="password"
-                name="currentPassword"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                className={styles.formInput}
-                placeholder="Enter your password"
-                disabled={isProcessing}
-              />
-              {errors.currentPassword && (
-                <p className={styles.errorMessage}>{errors.currentPassword}</p>
-              )}
-            </fieldset>
-            <div className={styles.deleteButtonsContainer}>
-              <Button
-                variant="remove"
-                type="submit"
-                disabled={isProcessing}
-                ariaLabel="Delete account"
-              >
-                {isProcessing ? "Processing..." : "Delete Account"}
-              </Button>
-              <Button
-                variant="primary"
-                type="button"
-                onClick={handleCloseDeleteModal}
-                disabled={isProcessing}
-                ariaLabel="Cancel"
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
+          <DeleteForm
+            onDeleteSubmit={handleDeleteSubmit}
+            onDeleteInputChange={handleDeleteInputChange}
+            onCancelDelete={handleCancelDelete}
+            currentPassword={currentPassword}
+            errors={deleteFormErrors}
+            isProcessing={isDeleting}
+          />
         </Modal>
       )}
-    </main>
+    </div>
   );
 };
 

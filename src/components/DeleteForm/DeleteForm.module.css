@@ -1,0 +1,34 @@
+/* Delete form styles */
+.deleteFormContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-medium);
+    color: var(--primary-color);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+    padding: var(--space-medium);
+    border-radius: var(--border-radius-medium);
+}
+
+.formGroupTitle {
+    font-weight: bold;
+}
+
+.deleteFormDescription {
+    line-height: 1.6;
+    font-size: var(--base-font-size);
+    font-weight: bold;
+    margin-bottom: var(--space-small);
+}
+
+/* Delete buttons container */
+.deleteButtonsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+    width: 100%;
+}

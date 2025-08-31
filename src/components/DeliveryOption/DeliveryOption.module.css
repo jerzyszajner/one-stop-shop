@@ -1,0 +1,34 @@
+.optionInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+}
+
+.optionName {
+    font-size: var(--base-font-size);
+    font-weight: 500;
+    color: var(--text-dark);
+    text-align: left;
+}
+
+.optionTime {
+    font-size: var(--small-font-size);
+    color: var(--text-dark);
+    text-align: left;
+}
+
+.optionDescription {
+    font-size: var(--small-font-size);
+    color: var(--text-dark);
+    text-align: left;
+}
+
+.optionPrice {
+    font-size: var(--base-font-size);
+    color: var(--text-dark);
+}
+
+.selected {
+    background: var(--background-color-light-blue);
+    border-color: var(--primary-color);
+}

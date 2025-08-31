@@ -1,7 +1,7 @@
 import styles from "./Button.module.css";
 
 const Button = ({
-  children = "Click",
+  children,
   onClick,
   className,
   disabled = false,
@@ -13,7 +13,7 @@ const Button = ({
   return (
     // Reusable button component with customizable props
     <button
-      className={`${styles.button} ${styles[variant]} ${className}`}
+      className={`${styles.button} ${styles[variant]} ${className || ""}`}
       disabled={disabled}
       onClick={onClick}
       aria-label={ariaLabel}

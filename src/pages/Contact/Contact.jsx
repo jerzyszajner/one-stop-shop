@@ -10,30 +10,37 @@ import ButtonLink from "../../components/ButtonLink/ButtonLink";
 import Modal from "../../components/Modal/Modal";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
+import FormGroup from "../../components/FormGroup/FormGroup";
+import FieldRow from "../../components/FieldRow/FieldRow";
+import InputField from "../../components/InputField/InputField";
+import TextField from "../../components/TextField/TextField";
 
 // Hooks
-import useContactValidation from "../../hooks/useContactValidation";
+import { useContactValidation } from "../../hooks/useContactValidation";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useToast } from "../../hooks/useToast";
 
 // Config
 import { database } from "../../../firebaseConfig";
+import {
+  initialContactFormData,
+  MESSAGE_MAX_LENGTH,
+} from "../../config/contactConfig";
+
+// Helpers
+import { formatDigits } from "../../utils/helpers";
 
 // Styles
 import styles from "./Contact.module.css";
 
+// Initial form data
+
 const Contact = () => {
   // State
   const [isLoading, setIsLoading] = useState(false);
-  const [userData, setUserData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    orderNumber: "",
-    subject: "",
-    message: "",
-  });
+  const [contactFormData, setContactFormData] = useState(
+    initialContactFormData
+  );
   const [showContactModal, setShowContactModal] = useState(false);
 
   // Hooks
@@ -42,15 +49,15 @@ const Contact = () => {
   const { getErrorMessage } = useFirebaseValidation();
   const { toast, showToast, hideToast } = useToast();
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prevData) => ({
+    setContactFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
     // Real-time message length validation
     if (name === "message") {
-      validateMessageLength(value, 300);
+      validateMessageLength(value, MESSAGE_MAX_LENGTH);
     }
   };
 
@@ -58,34 +65,24 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateContactForm(userData)) {
-      console.log("Form is not valid");
+    if (!validateContactForm(contactFormData)) {
       return;
     }
-
     setIsLoading(true);
 
     try {
       // Save contact message to database
       const docRef = await addDoc(collection(database, "contactMessages"), {
-        ...userData,
+        ...contactFormData,
         submittedAt: serverTimestamp(),
       });
       setShowContactModal(true);
-      console.log("Document added with ID: ", docRef.id);
+      showToast("Message sent", `Reference ID: ${docRef.id}`, "success");
+
       // Reset form
-      setUserData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phoneNumber: "",
-        orderNumber: "",
-        subject: "",
-        message: "",
-      });
+      setContactFormData(initialContactFormData);
     } catch (error) {
-      console.error("Error sending message:", error);
-      showToast("❌ Message Error", getErrorMessage(error), "error");
+      showToast("Message failed", getErrorMessage(error), "error");
     } finally {
       setIsLoading(false);
     }
@@ -96,165 +93,126 @@ const Contact = () => {
   };
 
   return (
-    <>
+    <div className={styles.formWrapper}>
       <form className={styles.contactForm} onSubmit={handleSubmit} noValidate>
-        <div className={styles.contactFormContainer}>
-          <h2 className={styles.formTitle}>Contact us</h2>
-          {/* Name section */}
-          <section className={styles.nameSection}>
+        <h2 className={styles.formTitle}>Contact us</h2>
+        <FormGroup title="Contact Information">
+          {/*----------------First Name and Last Name----------------*/}
+          <FieldRow>
             {/*----------------First Name----------------*/}
-            <div className={styles.inputGroup}>
-              <label htmlFor="firstName">First name</label>
-              <input
-                type="text"
-                name="firstName"
-                id="firstName"
-                placeholder="Enter your first name"
-                className={styles.inputElement}
-                onChange={handleChange}
-                value={userData.firstName}
-              />
-              {contactErrors && (
-                <p className={styles.errorMessage}>{contactErrors.firstName}</p>
-              )}
-            </div>
+            <InputField
+              label="First name"
+              type="text"
+              id="firstname"
+              name="firstname"
+              placeholder="Enter your first name"
+              maxLength={50}
+              autoComplete="given-name"
+              onChange={handleInputChange}
+              value={contactFormData.firstname}
+              errors={contactErrors.firstname}
+            />
 
             {/*----------------Last Name----------------*/}
-            <div className={styles.inputGroup}>
-              <label htmlFor="lastName">Last name</label>
-              <input
-                type="text"
-                name="lastName"
-                id="lastName"
-                placeholder="Enter your last name"
-                className={styles.inputElement}
-                onChange={handleChange}
-                value={userData.lastName}
-              />
-              {contactErrors && (
-                <p className={styles.errorMessage}>{contactErrors.lastName}</p>
-              )}
-            </div>
-          </section>
-          {/* Contact info section */}
-          <section className={styles.contactSection}>
+            <InputField
+              label="Last name"
+              type="text"
+              id="lastname"
+              name="lastname"
+              placeholder="Enter your last name"
+              maxLength={50}
+              autoComplete="family-name"
+              onChange={handleInputChange}
+              value={contactFormData.lastname}
+              errors={contactErrors.lastname}
+            />
+          </FieldRow>
+          {/*----------------Email and Phone Number----------------*/}
+          <FieldRow>
             {/*----------------Email----------------*/}
-            <div className={styles.inputGroup}>
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your email address"
-                className={styles.inputElement}
-                onChange={handleChange}
-                value={userData.email}
-              />
-              {contactErrors && (
-                <p className={styles.errorMessage}>{contactErrors.email}</p>
-              )}
-            </div>
+            <InputField
+              label="Email"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email address"
+              maxLength={50}
+              autoComplete="email"
+              onChange={handleInputChange}
+              value={contactFormData.email}
+              errors={contactErrors.email}
+            />
 
             {/*----------------Phone Number----------------*/}
-            <div className={styles.inputGroup}>
-              <label htmlFor="phoneNumber">Phone number</label>
-              <input
-                type="tel"
-                name="phoneNumber"
-                id="phoneNumber"
-                placeholder="Enter your phone number (8 digits)"
-                className={styles.inputElement}
-                onChange={handleChange}
-                value={userData.phoneNumber}
-              />
-              {contactErrors && (
-                <p className={styles.errorMessage}>
-                  {contactErrors.phoneNumber}
-                </p>
-              )}
-            </div>
-          </section>
+            <InputField
+              label="Phone number"
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="Enter your phone number"
+              maxLength={8}
+              autoComplete="tel"
+              onChange={handleInputChange}
+              onInput={formatDigits}
+              value={contactFormData.phone}
+              errors={contactErrors.phone}
+            />
+          </FieldRow>
           {/*----------------Order Number----------------*/}
-          <div className={styles.inputGroup}>
-            <label htmlFor="orderNumber">Order number</label>
-            <input
-              type="text"
-              name="orderNumber"
-              id="orderNumber"
-              placeholder="Enter order number in case your inquiry is about an order"
-              className={styles.inputElement}
-              onChange={handleChange}
-              value={userData.orderNumber}
-            />
-            {contactErrors && (
-              <p className={styles.errorMessage}>{contactErrors.orderNumber}</p>
-            )}
-          </div>
+          <InputField
+            label="Order number"
+            type="text"
+            id="orderNumber"
+            name="orderNumber"
+            placeholder="Enter order number"
+            maxLength={12}
+            onChange={handleInputChange}
+            value={contactFormData.orderNumber}
+            errors={contactErrors.orderNumber}
+            required={false}
+          />
           {/*----------------Subject----------------*/}
-          <div className={styles.inputGroup}>
-            <label htmlFor="subject">Subject</label>
-            <input
-              type="text"
-              name="subject"
-              id="subject"
-              placeholder="Enter your message subject (max 20 characters)"
-              className={styles.inputElement}
-              onChange={handleChange}
-              value={userData.subject}
-              maxLength={20}
-            />
-            {contactErrors && (
-              <p className={styles.errorMessage}>{contactErrors.subject}</p>
-            )}
-          </div>
+          <InputField
+            label="Subject"
+            type="text"
+            id="subject"
+            name="subject"
+            placeholder="Enter your message subject (max 20 characters)"
+            maxLength={20}
+            onChange={handleInputChange}
+            value={contactFormData.subject}
+            errors={contactErrors.subject}
+          />
 
           {/*----------------Message----------------*/}
-          <div className={styles.inputGroup}>
-            <label htmlFor="message">Message</label>
-            <textarea
-              name="message"
-              id="message"
-              placeholder="Enter your message (max 200 characters)"
-              rows="3"
-              maxLength={200}
-              className={styles.textareaElement}
-              onChange={handleChange}
-              value={userData.message}
-            ></textarea>
-            <div className={styles.messageErrorAndCount}>
-              <div className={styles.messageCountSection}>
-                Typed characters:
-                <span className={styles.messageCount}>
-                  {userData.message ? userData.message.length : 0}
-                </span>
-                /<span className={styles.messageCount}>200</span>
-              </div>
-              {contactErrors && (
-                <div className={styles.errorMessage}>
-                  {contactErrors.message}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className={styles.buttonsContainer}>
-            <Button variant="primary" disabled={isLoading}>
-              {isLoading ? "Sending..." : "Send Message"}
-            </Button>
-            <ButtonLink to="/" variant="primary">
-              Cancel
-            </ButtonLink>
-          </div>
+          <TextField
+            label="Message"
+            id="message"
+            name="message"
+            placeholder="Enter your message"
+            maxLength={MESSAGE_MAX_LENGTH}
+            onChange={handleInputChange}
+            value={contactFormData.message}
+            errors={contactErrors.message}
+          />
+        </FormGroup>
+        {/* Buttons container */}
+        <div className={styles.buttonsContainer}>
+          <Button variant="primary" disabled={isLoading}>
+            {isLoading ? "Sending..." : "Send Message"}
+          </Button>
+          <ButtonLink to="/" variant="primary">
+            Cancel
+          </ButtonLink>
         </div>
-        {/* Spinner overlay */}
-        {isLoading && <Spinner />}
       </form>
       {/* Success modal */}
       {showContactModal && (
         <Modal title="Your message has been delivered">
           <div className={styles.contactModalContent}>
             <p>
-              Thank you for reaching out! We've received your message and will
-              get back to you as soon as possible.
+              Thank you for reaching out! We&apos;ve received your message and
+              will get back to you as soon as possible.
             </p>
             <p>
               We appreciate your patience and look forward to assisting you.
@@ -274,7 +232,10 @@ const Contact = () => {
         onHide={hideToast}
         type={toast.type}
       />
-    </>
+
+      {/* Spinner overlay */}
+      {isLoading && <Spinner />}
+    </div>
   );
 };
 

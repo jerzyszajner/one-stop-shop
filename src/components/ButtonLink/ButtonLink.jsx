@@ -17,7 +17,7 @@ const ButtonLink = ({
     <Link
       to={to}
       onClick={onClick}
-      className={`${styles.button} ${styles[variant]} ${className}`}
+      className={`${styles.button} ${styles[variant]} ${className || ""}`}
       {...props}
     >
       {children}

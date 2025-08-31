@@ -1,0 +1,49 @@
+.editProfileForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+    background-color: var(--secondary-color-light);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+    padding: var(--space-medium);
+    border-radius: var(--border-radius-medium);
+}
+
+.formGroupTitle {
+    font-weight: bold;
+}
+
+.fieldRow {
+    display: flex;
+    gap: var(--space-medium);
+}
+
+.fieldContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+    width: 100%;
+}
+
+/* Responsive design */
+@media screen and (max-width: 480px) {
+
+    .formGroup {
+        padding: var(--space-medium);
+    }
+
+    .fieldRow {
+        flex-direction: column;
+    }
+}

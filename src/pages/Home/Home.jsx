@@ -5,9 +5,22 @@ import styles from "./Home.module.css";
 import { useFetchProducts } from "../../hooks/useFetchProducts";
 import Spinner from "../../components/Spinner/Spinner";
 
+// Icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faStar,
+  faTruckFast,
+  faRotateLeft,
+  faLock,
+  faComments,
+} from "@fortawesome/free-solid-svg-icons";
+
 const Home = () => {
-  const { products: allProducts, isLoading } = useFetchProducts();
+  // State
   const [topRated, setTopRated] = useState([]);
+
+  // Hooks
+  const { products: allProducts, isLoading } = useFetchProducts();
 
   useEffect(() => {
     if (allProducts.length === 0) return;
@@ -24,7 +37,7 @@ const Home = () => {
   return (
     <div className={styles.homePage}>
       <section className={styles.hero}>
-        <div className={styles.heroContainer}>
+        <div className={styles.heroWrapper}>
           <div className={styles.heroContent}>
             <span className={styles.badge}>Best Deals</span>
             <h1 className={styles.heroTitle}>One Stop Shop</h1>
@@ -50,55 +63,51 @@ const Home = () => {
               <img
                 src="/assets/images/shopping-hero.webp"
                 alt="Shopping Experience"
-                className={styles.heroImageImg}
+                className={styles.heroMainImage}
               />
               <img
                 src="/assets/images/shopping-hero-hover.webp"
                 alt="Shopping Experience"
-                className={styles.heroImageImgHover}
+                className={styles.heroHoverImage}
               />
             </div>
           </Link>
         </div>
       </section>
-
       <section className={styles.categories}>
         <h2 className={styles.sectionTitle}>Shop by Category</h2>
         <div className={styles.categoryGrid}>
-          <Link to="/products?filter=beauty" className={styles.categoryCard}>
+          <Link to="/products?filter=beauty" className={styles.productCard}>
             <img
               src="/assets/images/beauty-thumb.webp"
               alt="Beauty"
-              className={styles.categoryCardImg}
+              className={styles.productCardImage}
             />
-            <h3 className={styles.categoryCardTitle}>Beauty</h3>
+            <h3 className={styles.productCardTitle}>Beauty</h3>
           </Link>
-          <Link
-            to="/products?filter=fragrances"
-            className={styles.categoryCard}
-          >
+          <Link to="/products?filter=fragrances" className={styles.productCard}>
             <img
               src="/assets/images/fragrances-thumb.webp"
               alt="Fragrances"
-              className={styles.categoryCardImg}
+              className={styles.productCardImage}
             />
-            <h3 className={styles.categoryCardTitle}>Fragrances</h3>
+            <h3 className={styles.productCardTitle}>Fragrances</h3>
           </Link>
-          <Link to="/products?filter=furniture" className={styles.categoryCard}>
+          <Link to="/products?filter=furniture" className={styles.productCard}>
             <img
               src="/assets/images/furniture-thumb.webp"
               alt="Furniture"
-              className={styles.categoryCardImg}
+              className={styles.productCardImage}
             />
-            <h3 className={styles.categoryCardTitle}>Furniture</h3>
+            <h3 className={styles.productCardTitle}>Furniture</h3>
           </Link>
-          <Link to="/products?filter=groceries" className={styles.categoryCard}>
+          <Link to="/products?filter=groceries" className={styles.productCard}>
             <img
               src="/assets/images/groceries-thumb.webp"
               alt="Groceries"
-              className={styles.categoryCardImg}
+              className={styles.productCardImage}
             />
-            <h3 className={styles.categoryCardTitle}>Groceries</h3>
+            <h3 className={styles.productCardTitle}>Groceries</h3>
           </Link>
         </div>
       </section>
@@ -112,22 +121,27 @@ const Home = () => {
             <Link
               key={prod.id}
               to={`/products/${prod.documentId}`}
-              className={styles.categoryCard}
+              className={styles.productCard}
             >
               <img
-                src={prod.thumbnail || prod.images?.[0]}
+                src={
+                  prod.thumbnail ||
+                  prod.images?.[0] ||
+                  "/assets/images/fallback.webp"
+                }
                 alt={prod.title}
-                className={styles.categoryCardImg}
+                className={styles.productCardImage}
               />
-              <div className={styles.productOverlay}>
-                <span className={styles.productOverlayPrice}>
-                  💲{prod.price.toFixed(2)}
-                </span>
-                <span className={styles.productOverlayRating}>
-                  ⭐ {prod.rating}
+              <div className={styles.productInfo}>
+                <span className={styles.productRating}>
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    className={styles.productRatingIcon}
+                  />
+                  {prod.rating.toFixed(2)}
                 </span>
               </div>
-              <h3 className={styles.categoryCardTitle}>{prod.title}</h3>
+              <h3 className={styles.productCardTitle}>{prod.title}</h3>
             </Link>
           ))}
         </div>
@@ -138,46 +152,53 @@ const Home = () => {
           <h2 className={styles.sectionTitle}>Our Features</h2>
         </div>
         <div className={styles.featuresGrid}>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIcon}>🚚</div>
-            <h3 className={styles.featureItemTitle}>Free Shipping</h3>
-            <p className={styles.featureItemText}>On orders over $50</p>
+          <div className={styles.feature}>
+            <div className={styles.featureIcon}>
+              <FontAwesomeIcon icon={faTruckFast} />
+            </div>
+            <h3 className={styles.featureTitle}>Free Shipping</h3>
+            <p className={styles.featureDescription}>On orders over $50</p>
           </div>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIcon}>↩️</div>
-            <h3 className={styles.featureItemTitle}>Easy Returns</h3>
-            <p className={styles.featureItemText}>30-day return policy</p>
+          <div className={styles.feature}>
+            <div className={styles.featureIcon}>
+              <FontAwesomeIcon icon={faRotateLeft} />
+            </div>
+            <h3 className={styles.featureTitle}>Easy Returns</h3>
+            <p className={styles.featureDescription}>30-day return policy</p>
           </div>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIcon}>🔒</div>
-            <h3 className={styles.featureItemTitle}>Secure Payment</h3>
-            <p className={styles.featureItemText}>Your data is protected</p>
+          <div className={styles.feature}>
+            <div className={styles.featureIcon}>
+              <FontAwesomeIcon icon={faLock} />
+            </div>
+            <h3 className={styles.featureTitle}>Secure Payment</h3>
+            <p className={styles.featureDescription}>Your data is protected</p>
           </div>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIcon}>💬</div>
-            <h3 className={styles.featureItemTitle}>24/7 Support</h3>
-            <p className={styles.featureItemText}>Always here to help</p>
+          <div className={styles.feature}>
+            <div className={styles.featureIcon}>
+              <FontAwesomeIcon icon={faComments} />
+            </div>
+            <h3 className={styles.featureTitle}>24/7 Support</h3>
+            <p className={styles.featureDescription}>Always here to help</p>
           </div>
         </div>
       </section>
-
       <section className={styles.stats}>
         <div className={styles.statsGrid}>
-          <div className={styles.statItem}>
-            <h3 className={styles.statItemTitle}>1M+</h3>
-            <p className={styles.statItemText}>Happy Customers</p>
+          <div className={styles.stat}>
+            <h3 className={styles.statNumber}>1M+</h3>
+            <p className={styles.statLabel}>Happy Customers</p>
           </div>
-          <div className={styles.statItem}>
-            <h3 className={styles.statItemTitle}>10K+</h3>
-            <p className={styles.statItemText}>Products Available</p>
+          <div className={styles.stat}>
+            <h3 className={styles.statNumber}>10K+</h3>
+            <p className={styles.statLabel}>Products Available</p>
           </div>
-          <div className={styles.statItem}>
-            <h3 className={styles.statItemTitle}>50+</h3>
-            <p className={styles.statItemText}>Product Categories</p>
+          <div className={styles.stat}>
+            <h3 className={styles.statNumber}>50+</h3>
+            <p className={styles.statLabel}>Product Categories</p>
           </div>
-          <div className={styles.statItem}>
-            <h3 className={styles.statItemTitle}>99%</h3>
-            <p className={styles.statItemText}>Customer Satisfaction</p>
+          <div className={styles.stat}>
+            <h3 className={styles.statNumber}>99%</h3>
+            <p className={styles.statLabel}>Customer Satisfaction</p>
           </div>
         </div>
       </section>

@@ -7,13 +7,15 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 // Firebase
 import { signOut } from "firebase/auth";
 
-// FontAwesome
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faCartPlus,
   faUser,
   faTimes,
+  faRightToBracket,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Third party
@@ -22,14 +24,16 @@ import { RemoveScroll } from "react-remove-scroll";
 // Components
 import Button from "../Button/Button";
 import ButtonLink from "../ButtonLink/ButtonLink";
+import CustomNavLink from "../CustomNavLink/CustomNavLink";
 import Toast from "../Toast/Toast";
 
-// Context
-import { getAuthContext } from "../../context/AuthContext";
-import { getCartContext } from "../../context/CartContext";
+// State
+import { useCartContext } from "../../hooks/useCartContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 // Hooks
 import { useToast } from "../../hooks/useToast";
+import { useUserContext } from "../../hooks/useUserContext";
 
 // Config
 import { auth } from "../../../firebaseConfig";
@@ -40,13 +44,12 @@ import styles from "./Navbar.module.css";
 const Navbar = () => {
   // State
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Context
-  const { cart } = getCartContext();
-  const { user } = getAuthContext();
+  const { cart } = useCartContext();
+  const { user } = useAuthContext();
 
   // Hooks
   const { toast, showToast, hideToast } = useToast();
+  const { userData } = useUserContext();
 
   // Navigation
   const navigate = useNavigate();
@@ -56,21 +59,19 @@ const Navbar = () => {
     () => cart.reduce((count, item) => count + item.quantity, 0),
     [cart]
   );
+  // Menu toggle functions
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
   // Handle user sign out
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
       navigate("/");
+      await signOut(auth);
     } catch (error) {
-      console.error("Sign out error:", error.message);
       showToast("❌ Sign Out Error", error.message, "error");
     }
   };
-
-  // Menu toggle functions
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <nav className={styles.navbar}>
@@ -85,44 +86,24 @@ const Navbar = () => {
           <img
             className={styles.logoImg}
             src="/assets/icons/nav-logo.webp"
-            alt="One Stop Shop"
+            alt="One Stop Shop Logo"
           />
         </Link>
 
         {/* Desktop Navigation */}
         <div className={styles.desktopNav}>
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `${styles.navLink} ${isActive ? styles.activeLink : ""}`
-            }
-          >
+          <CustomNavLink to="/" variant="primary">
             Home
-          </NavLink>
-          <NavLink
-            to="/products"
-            className={({ isActive }) =>
-              `${styles.navLink} ${isActive ? styles.activeLink : ""}`
-            }
-          >
+          </CustomNavLink>
+          <CustomNavLink to="/products" variant="primary">
             Products
-          </NavLink>
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              `${styles.navLink} ${isActive ? styles.activeLink : ""}`
-            }
-          >
+          </CustomNavLink>
+          <CustomNavLink to="/about" variant="primary">
             About
-          </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              `${styles.navLink} ${isActive ? styles.activeLink : ""}`
-            }
-          >
+          </CustomNavLink>
+          <CustomNavLink to="/contact" variant="primary">
             Contact
-          </NavLink>
+          </CustomNavLink>
         </div>
 
         {/* Actions */}
@@ -130,11 +111,12 @@ const Navbar = () => {
           {/* Auth Button */}
           {user ? (
             <div className={styles.userSection}>
+              {/* Profile button */}
               <ButtonLink to="/profile" aria-label="Profile" variant="circle">
-                {user.imageUrl ? (
+                {userData?.profilePicture ? (
                   <img
-                    src={user.imageUrl}
-                    alt="Profile"
+                    src={userData.profilePicture}
+                    alt="Profile Picture"
                     className={styles.avatar}
                     aria-label="Go to profile page"
                   />
@@ -142,25 +124,33 @@ const Navbar = () => {
                   <FontAwesomeIcon icon={faUser} />
                 )}
               </ButtonLink>
+              {/* Sign out button */}
               <Button onClick={handleSignOut} variant="signOutBtn">
-                Sign out
+                <FontAwesomeIcon
+                  icon={faRightFromBracket}
+                  className={styles.signOutIcon}
+                />
               </Button>
             </div>
           ) : (
-            <ButtonLink to="/sign-in" variant="signInBtn">
-              Sign in
+            // Sign in button
+            <ButtonLink to="/sign-in" variant="circle">
+              <FontAwesomeIcon
+                icon={faRightToBracket}
+                className={styles.signInIcon}
+              />
             </ButtonLink>
           )}
 
-          {/* Cart */}
+          {/* Cart button */}
           <ButtonLink to="/cart" aria-label="Go to cart page" variant="circle">
-            <FontAwesomeIcon icon={faCartPlus} />
+            <FontAwesomeIcon icon={faCartPlus} className={styles.cartIcon} />
             {cartItemsCount > 0 && (
               <span className={styles.cartBadge}>{cartItemsCount}</span>
             )}
           </ButtonLink>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Menu Toggle button */}
           <Button
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -179,42 +169,18 @@ const Navbar = () => {
         <RemoveScroll>
           <div className={styles.overlay} onClick={closeMenu} />
           <div className={styles.mobileNav}>
-            <NavLink
-              to="/"
-              onClick={closeMenu}
-              className={({ isActive }) =>
-                `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
-              }
-            >
+            <CustomNavLink to="/" onClick={closeMenu} variant="primary">
               Home
-            </NavLink>
-            <NavLink
-              to="/products"
-              onClick={closeMenu}
-              className={({ isActive }) =>
-                `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
-              }
-            >
+            </CustomNavLink>
+            <CustomNavLink to="/products" onClick={closeMenu} variant="primary">
               Products
-            </NavLink>
-            <NavLink
-              to="/about"
-              onClick={closeMenu}
-              className={({ isActive }) =>
-                `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
-              }
-            >
+            </CustomNavLink>
+            <CustomNavLink to="/about" onClick={closeMenu} variant="primary">
               About
-            </NavLink>
-            <NavLink
-              to="/contact"
-              onClick={closeMenu}
-              className={({ isActive }) =>
-                `${styles.mobileNavLink} ${isActive ? styles.activeLink : ""}`
-              }
-            >
+            </CustomNavLink>
+            <CustomNavLink to="/contact" onClick={closeMenu} variant="primary">
               Contact
-            </NavLink>
+            </CustomNavLink>
           </div>
         </RemoveScroll>
       )}

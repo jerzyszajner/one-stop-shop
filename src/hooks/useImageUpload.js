@@ -1,15 +1,25 @@
 // Custom hook to handle image uploads to Cloudinary
 export const useImageUpload = () => {
   const cloudinaryKey = import.meta.env.VITE_CLOUDINARY_NAME;
-  if (!cloudinaryKey) {
-    console.error(
-      "Cloudinary key is not defined in environment variables. If needed, create a .env file with the following content: VITE_CLOUDINARY_NAME=your_cloudinary_name"
-    );
-    return;
-  }
 
-  // Upload file to Cloudinary and return URL
+  // Upload file to Cloudinary and return result object
   const uploadImage = async (file) => {
+    if (!cloudinaryKey) {
+      return {
+        success: false,
+        url: null,
+        error: "Image upload is not configured.",
+      };
+    }
+    // Validate file type
+    if (!file || !file.type || !file.type.startsWith("image/")) {
+      return {
+        success: false,
+        url: null,
+        error: "Please select an image file.",
+      };
+    }
+
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -24,9 +34,27 @@ export const useImageUpload = () => {
       );
 
       const data = await response.json();
-      return data.secure_url; // Return the URL of the uploaded image
-    } catch (error) {
-      console.log(error);
+
+      // Check if upload was successful
+      if (!response.ok) {
+        return {
+          success: false,
+          url: null,
+          error: "Failed to upload image. Please try again.",
+        };
+      }
+
+      return {
+        success: true,
+        url: data.secure_url,
+        error: null,
+      };
+    } catch {
+      return {
+        success: false,
+        url: null,
+        error: "Network error. Please check your connection.",
+      };
     }
   };
   return { uploadImage };

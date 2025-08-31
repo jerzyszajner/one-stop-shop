@@ -1,11 +1,12 @@
 // React
 import { useState } from "react";
-// Custom hook for contact form validation
-const usePaymentValidation = () => {
+
+// Regex patterns
+import { cardRegex, cvvRegex } from "../config/regexPatterns";
+// Custom hook for payment form validation
+export const usePaymentValidation = () => {
   // Validation state and patterns
   const [paymentErrors, setPaymentErrors] = useState({});
-  const cardRegex = /^[0-9]{16}$/;
-  const cvvRegex = /^[0-9]{3}$/;
 
   // Validate all payment form fields
   const validatePaymentForm = (values) => {
@@ -73,5 +74,3 @@ const usePaymentValidation = () => {
     validatePaymentForm,
   };
 };
-
-export default usePaymentValidation;

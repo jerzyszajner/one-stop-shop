@@ -1,0 +1,63 @@
+/* Form textarea styling */
+
+.fieldContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fieldLabel {
+    font-size: var(--base-font-size);
+    color: var(--text-dark);
+    font-weight: bold;
+    margin-bottom: var(--space-x-small);
+}
+
+.fieldRequired {
+    margin-left: var(--space-x-small);
+}
+
+.fieldInput {
+    width: 100%;
+    padding: var(--space-small);
+    resize: none;
+    font-size: var(--base-font-size);
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--secondary-color);
+    color: var(--text-dark);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.fieldInput:hover {
+    outline: none;
+    border-color: var(--input-color-focus);
+}
+
+.fieldInput:focus {
+    outline: none;
+    border-color: var(--input-color-focus);
+    box-shadow: var(--input-shadow-focus);
+}
+
+.messageErrorAndCount {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.messageCountSection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-x-small);
+}
+
+.messageCount {
+    font-size: var(--small-font-size);
+}
+
+.errorContainer {
+    height: 10px;
+}

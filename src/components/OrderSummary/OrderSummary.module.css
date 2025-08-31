@@ -1,0 +1,32 @@
+/* Order summary styling */
+.summaryTitle {
+    font-size: var(--base-font-size);
+    margin-bottom: var(--space-x-small);
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.summaryContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--base-font-size);
+    color: var(--text-dark);
+}
+
+.summaryLabel {
+    font-weight: bold;
+}
+
+.summaryTotal {
+    font-size: var(--base-font-size);
+    font-weight: bold;
+    color: var(--primary-color);
+    padding-top: var(--space-x-small);
+    border-top: 1px solid var(--secondary-color);
+}

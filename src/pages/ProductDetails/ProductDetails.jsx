@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // React Router
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // Firebase
 import { doc, getDoc } from "firebase/firestore";
@@ -14,10 +14,12 @@ import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
 
 // Context
-import { getCartContext } from "../../context/CartContext";
+import { useCartContext } from "../../hooks/useCartContext";
+
+// Reducer
+import { CART_ACTIONS } from "../../reducers/cartReducer";
 
 // Hooks
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useToast } from "../../hooks/useToast";
 
 // Config
@@ -27,37 +29,26 @@ import { database } from "../../../firebaseConfig";
 import styles from "./ProductDetails.module.css";
 
 const ProductDetails = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { getErrorMessage } = useFirebaseValidation();
-
-  // Product details state
+  // State
   const [product, setProduct] = useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Use toast hook
+  // Hooks
+  const { id } = useParams();
   const { toast, showToast, hideToast } = useToast();
+  const { dispatch } = useCartContext();
 
-  const { dispatch, cart } = getCartContext();
+  // Handle image load
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
 
   // Add product to cart
   const handleAddToCart = () => {
     if (Object.keys(product).length > 0) {
-      dispatch({ type: "ADD_TO_CART", payload: product });
-
-      // Update last quantity in localStorage
-      setTimeout(() => {
-        const totalQuantity =
-          cart.reduce((total, item) => total + item.quantity, 0) + 1;
-        const cartToken = localStorage.getItem("productStore_cartToken");
-        if (cartToken) {
-          localStorage.setItem(
-            `${cartToken}_lastQuantity`,
-            totalQuantity.toString()
-          );
-        }
-      }, 100);
+      dispatch({ type: CART_ACTIONS.ADD_TO_CART, payload: product });
     }
   };
 
@@ -74,14 +65,9 @@ const ProductDetails = () => {
           setProduct(productSnap.data());
         } else {
           showToast("❌ Product Error", "Product not found", "error");
-          // Redirect to products page after 3 seconds
-          setTimeout(() => {
-            navigate("/products");
-          }, 3000);
         }
       } catch (error) {
-        console.error("Error fetching product:", error);
-        showToast("❌ Product Error", getErrorMessage(error), "error");
+        showToast("❌ Product Error", error.message, "error");
       } finally {
         setIsLoading(false);
       }
@@ -90,7 +76,7 @@ const ProductDetails = () => {
     if (id) {
       fetchProductDetails();
     }
-  }, [id, navigate, showToast, getErrorMessage]);
+  }, [id, showToast]);
 
   if (isLoading) {
     return <Spinner />;
@@ -101,82 +87,80 @@ const ProductDetails = () => {
       <div className={styles.productDetailsContainer}>
         {/* Product image gallery */}
         <div className={styles.productImageContainer}>
-          {product.images && product.images.length > 0 ? (
-            <div className={styles.imageGallery}>
-              {/*----------------Main Image----------------*/}
-              <div className={styles.mainImageContainer}>
-                <img
-                  src={product.images[selectedImageIndex]}
-                  alt={product.title}
-                  className={styles.mainImage}
-                />
-              </div>
+          <div className={styles.imageGallery}>
+            {/*----------------Main Image----------------*/}
+            <div className={styles.mainImageContainer}>
+              <img
+                src={
+                  product.images?.[selectedImageIndex] ||
+                  product.thumbnail ||
+                  "/assets/images/fallback.webp"
+                }
+                alt={product.title}
+                className={`${styles.mainImage} ${
+                  imageLoaded ? styles.loaded : ""
+                }`}
+                onLoad={handleImageLoad}
+              />
+            </div>
 
-              {/*----------------Thumbnails----------------*/}
-              {product.images.length > 1 && (
-                <div className={styles.thumbnailsContainer}>
-                  {product.images.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`${product.title} ${index + 1}`}
-                      className={`${styles.thumbnail} ${
-                        index === selectedImageIndex
-                          ? styles.activeThumbnail
-                          : ""
-                      }`}
-                      onClick={() => setSelectedImageIndex(index)}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className={styles.noImage}>
-              <span className={styles.noImageText}>No image available</span>
-            </div>
-          )}
+            {/*----------------Thumbnails----------------*/}
+            {product.images && product.images.length > 1 && (
+              <div className={styles.thumbnailsContainer}>
+                {product.images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image || "/assets/images/fallback.webp"}
+                    alt={`${product.title} ${index + 1}`}
+                    className={`${styles.thumbnail} ${
+                      index === selectedImageIndex ? styles.activeThumbnail : ""
+                    }`}
+                    onClick={() => setSelectedImageIndex(index)}
+                    onLoad={handleImageLoad}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         {/* Product information */}
-        <div className={styles.productDescriptionContainer}>
+        <div className={styles.productInfoContainer}>
           <h2 className={styles.productTitle}>{product.title}</h2>
           {/*----------------Category----------------*/}
           <p className={styles.productCategory}>
-            <strong className={styles.productLabel}>Category: </strong>
+            <span className={styles.productLabel}>Category: </span>
             {product.category}
           </p>
           {/*----------------Stock----------------*/}
           <p className={styles.productStock}>
-            <strong className={styles.productLabel}>Stock: </strong>
+            <span className={styles.productLabel}>Stock: </span>
             {product.stock}
           </p>
           {/*----------------Discount----------------*/}
           <p className={styles.productDiscount}>
-            <strong className={styles.productLabel}>
-              Discount Percentage:{" "}
-            </strong>
+            <span className={styles.productLabel}>Discount Percentage: </span>
             {product.discountPercentage}
           </p>
           {/*----------------Rating----------------*/}
           <p className={styles.productRating}>
-            <strong className={styles.productLabel}>Rating: </strong>
+            <span className={styles.productLabel}>Rating: </span>
             {product.rating}
           </p>
           {/*----------------Minimum Order----------------*/}
           <p className={styles.productMinOrder}>
-            <strong className={styles.productLabel}>
+            <span className={styles.productLabel}>
               Minimum Order Quantity:{" "}
-            </strong>
+            </span>
             {product.minimumOrderQuantity}
           </p>
           {/*----------------Price----------------*/}
           <p className={styles.productPrice}>
-            <strong className={styles.productLabel}>Price: </strong>
+            <span className={styles.productLabel}>Price: </span>
             {product.price}
           </p>
           {/*----------------Description----------------*/}
           <p className={styles.productDescription}>
-            <strong className={styles.productLabel}>Description: </strong>
+            <span className={styles.productLabel}>Description: </span>
             {product.description}
           </p>
           <div className={styles.buttonsContainer}>

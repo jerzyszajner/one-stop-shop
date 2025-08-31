@@ -1,49 +1,39 @@
 // Components
 import Button from "../Button/Button";
 
-// Context
-import { getCartContext } from "../../context/CartContext";
+// Hooks
+import { useCounter } from "../../hooks/useCounter";
+
+// Icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 // Styles
 import styles from "./Counter.module.css";
 
 const Counter = ({ item }) => {
-  // Cart context for quantity management
-  const { dispatch } = getCartContext();
-
-  // Handle increase in quantity
-  const handleIncrease = () => {
-    dispatch({ type: "INCREASE_QUANTITY", payload: item.id });
-  };
-
-  // Handle decrease in quantity
-  const handleDecrease = () => {
-    if (item.quantity > 1) {
-      dispatch({ type: "DECREASE_QUANTITY", payload: item.id });
-    } else {
-      dispatch({ type: "REMOVE_FROM_CART", payload: item.id });
-    }
-  };
+  // Hooks
+  const { handleIncrease, handleDecrease } = useCounter(item.id, item.quantity);
 
   return (
     <div className={styles.counterCard}>
       {/* Decrease button */}
       <Button
+        variant="counterMinus"
         ariaLabel="Decrease count"
-        className={styles.decreaseButton}
         onClick={handleDecrease}
       >
-        -
+        <FontAwesomeIcon icon={faMinus} />
       </Button>
       {/* Quantity display */}
       <span className={styles.countDisplay}>{item.quantity}</span>
       {/* Increase button */}
       <Button
+        variant="counterPlus"
         ariaLabel="Increase count"
-        className={styles.increaseButton}
         onClick={handleIncrease}
       >
-        +
+        <FontAwesomeIcon icon={faPlus} />
       </Button>
     </div>
   );

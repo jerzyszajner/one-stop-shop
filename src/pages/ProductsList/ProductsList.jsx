@@ -1,5 +1,5 @@
 // React
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 // React Router
 import { useSearchParams } from "react-router-dom";
@@ -11,15 +11,23 @@ import Sort from "../../components/Sort/Sort";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
 
+// Context
+import { useCartContext } from "../../hooks/useCartContext";
+
+// Reducer
+import { CART_ACTIONS } from "../../reducers/cartReducer";
+
 // Hooks
 import { useFetchProducts } from "../../hooks/useFetchProducts";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
 import { useToast } from "../../hooks/useToast";
 
 // Styles
 import styles from "./ProductsList.module.css";
 
 const ProductsList = () => {
+  // Cart context for dispatching cart actions
+  const { dispatch } = useCartContext();
+
   // Products state
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState([]);
@@ -29,9 +37,6 @@ const ProductsList = () => {
 
   // Fetch products hook
   const { products: originalProducts, isLoading, error } = useFetchProducts();
-
-  // Firebase validation hook
-  const { getErrorMessage } = useFirebaseValidation();
 
   // Use toast hook
   const { toast, showToast, hideToast } = useToast();
@@ -50,19 +55,24 @@ const ProductsList = () => {
   // Handle fetch errors
   useEffect(() => {
     if (error) {
-      showToast("❌ Error Fetching Products", getErrorMessage(error), "error");
+      showToast("❌ Error Fetching Products", error.message, "error");
     }
-  }, [error, getErrorMessage, showToast]);
+  }, [error, showToast]);
 
   // Handle filtered products from Filter component
-  const handleFilteredProducts = (filteredProducts) => {
+  const handleFilteredProducts = useCallback((filteredProducts) => {
     setFilteredProducts(filteredProducts);
     setDisplayedProducts(filteredProducts);
-  };
+  }, []);
 
   // Handle sorted products from Sort component
-  const handleSortedProducts = (sortedProducts) => {
+  const handleSortedProducts = useCallback((sortedProducts) => {
     setDisplayedProducts(sortedProducts);
+  }, []);
+
+  // Handle add product to cart from ProductItem component
+  const handleAddToCart = (product) => {
+    dispatch({ type: CART_ACTIONS.ADD_TO_CART, payload: product });
   };
 
   if (isLoading) {
@@ -81,6 +91,7 @@ const ProductsList = () => {
         <Filter
           products={originalProducts}
           onProductsFilter={handleFilteredProducts}
+          initialFilter={searchParams.get("filter")}
           className={styles.filter}
         />
       </div>
@@ -89,10 +100,18 @@ const ProductsList = () => {
       <ul className={styles.productsContainer}>
         {displayedProducts.length > 0
           ? displayedProducts.map((product) => (
-              <ProductItem key={product.id} product={product} />
+              <ProductItem
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+              />
             ))
           : originalProducts.map((product) => (
-              <ProductItem key={product.id} product={product} />
+              <ProductItem
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+              />
             ))}
       </ul>
 

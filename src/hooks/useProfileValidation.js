@@ -1,11 +1,16 @@
 // React
 import { useState } from "react";
 
+// Regex patterns
+import {
+  cityRegex,
+  streetRegex,
+  zipCodeRegex,
+  phoneRegex,
+} from "../config/regexPatterns";
+// Custom hook for profile form validation
 export const useProfileValidation = () => {
-  const [errors, setErrors] = useState({});
-  const cityRegex = /^[a-zA-ZæøåÆØÅ\s]+$/;
-  const streetRegex = /^[a-zA-ZæøåÆØÅ\s]+\s\d+[a-zA-ZæøåÆØÅ]*$/;
-  const zipCodeRegex = /^\d{4}$/;
+  const [profileErrors, setProfileErrors] = useState({});
 
   // Validate edit profile form fields
   const validateProfile = (values) => {
@@ -44,39 +49,59 @@ export const useProfileValidation = () => {
     if (!values.country.trim()) {
       newErrors.country = "Country is required";
     }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // Validate current password for re-authentication
-  const validateCurrentPassword = (values) => {
-    let newErrors = { ...errors };
-
-    // Current password validation
-    if (!values.currentPassword.trim()) {
-      newErrors.currentPassword = "Password is required";
-    } else if (values.currentPassword.trim().length < 8) {
-      newErrors.currentPassword = "Password must be at least 8 characters long";
+    // Date of birth validation
+    if (!values.dateOfBirth.trim()) {
+      newErrors.dateOfBirth = "Date of birth is required";
     } else {
-      // Clear error if password is valid
-      delete newErrors.currentPassword;
+      const birthDate = new Date(values.dateOfBirth);
+      const today = new Date();
+
+      if (isNaN(birthDate.getTime())) {
+        newErrors.dateOfBirth = "Please provide a valid date of birth.";
+      } else if (birthDate > today) {
+        newErrors.dateOfBirth = "Date of birth cannot be in the future";
+      } else {
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        if (
+          monthDiff < 0 ||
+          (monthDiff === 0 && today.getDate() < birthDate.getDate())
+        ) {
+          age--;
+        }
+
+        const minAge = 18;
+        if (age < minAge) {
+          newErrors.dateOfBirth = `You must be at least ${minAge} years old to register.`;
+        }
+
+        const maxAge = 120;
+        if (age > maxAge) {
+          newErrors.dateOfBirth = "Please provide a valid date of birth.";
+        }
+      }
+    }
+    // Phone validation
+    if (!values.phone?.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!phoneRegex.test(values.phone.trim())) {
+      newErrors.phone = "Phone number must be exactly 8 digits";
     }
 
-    setErrors(newErrors);
+    setProfileErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Only digits allowed. Clean up zip code input if user tries to input letters.
-  const sanitizeZipCode = (e) => {
-    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+  // Clear profile errors
+  const clearProfileErrors = () => {
+    setProfileErrors({});
   };
 
   return {
-    errors,
-    setErrors,
+    profileErrors,
+    setProfileErrors,
     validateProfile,
-    validateCurrentPassword,
-    sanitizeZipCode,
+    clearProfileErrors,
   };
 };

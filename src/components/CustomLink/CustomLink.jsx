@@ -2,9 +2,9 @@
 import { Link as RouterLink } from "react-router-dom";
 
 // Styles
-import styles from "./Link.module.css";
+import styles from "./CustomLink.module.css";
 
-const Link = ({
+const CustomLink = ({
   children,
   to,
   className = "",
@@ -14,7 +14,7 @@ const Link = ({
   return (
     <RouterLink
       to={to}
-      className={`${styles.link} ${styles[variant]} ${className}`}
+      className={`${styles.link} ${styles[variant]} ${className || ""}`}
       {...props}
     >
       {children}
@@ -22,4 +22,4 @@ const Link = ({
   );
 };
 
-export default Link;
+export default CustomLink;

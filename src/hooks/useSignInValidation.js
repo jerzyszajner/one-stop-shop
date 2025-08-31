@@ -1,7 +1,8 @@
 // React
 import { useState } from "react";
+
 // Custom hook for sign in validation
-const useSignInValidation = () => {
+export const useSignInValidation = () => {
   // Validation state and patterns
   const [signInErrors, setSignInErrors] = useState({});
   // Email validation pattern
@@ -29,7 +30,16 @@ const useSignInValidation = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  return { validateSignIn, signInErrors };
-};
+  // Clear all sign in errors
+  const clearSignInErrors = () => {
+    if (signInErrors) {
+      setSignInErrors({});
+    }
+  };
 
-export default useSignInValidation;
+  return {
+    validateSignIn,
+    signInErrors,
+    clearSignInErrors,
+  };
+};

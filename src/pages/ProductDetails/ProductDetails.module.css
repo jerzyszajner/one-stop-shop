@@ -7,6 +7,7 @@
   align-items: center;
   background: var(--background-color-light);
   position: relative;
+  padding: var(--space-large);
 }
 
 /* Product details container */
@@ -16,19 +17,21 @@
   height: auto;
   display: flex;
   flex-direction: column;
+  line-height: 1.4;
   border-radius: var(--border-radius-medium);
-  background: var(--card-color);
+  background: var(--secondary-color-light);
+  padding: var(--space-large);
 
 }
 
 /* Product sections */
-.productDescriptionContainer,
+.productInfoContainer,
 .productImageContainer {
-  padding: var(--space-medium) var(--space-medium);
+  padding: var(--space-small);
   flex: 1;
 }
 
-.productDescriptionContainer {
+.productInfoContainer {
   display: flex;
   flex-direction: column;
 }
@@ -46,13 +49,25 @@
 
 .mainImageContainer {
   width: 250px;
-  height: auto;
+  height: 250px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-color-image);
+  border-radius: var(--border-radius-small);
 }
 
 .mainImage {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mainImage.loaded {
+  opacity: 1;
 }
 
 /* Thumbnails */
@@ -79,32 +94,16 @@
 }
 
 .activeThumbnail {
-  border-color: #b3b3b4;
+  border-color: var(--border-color-active-thumbnails);
   opacity: 1;
-}
-
-/* No image placeholder */
-.noImage {
-  width: 100%;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--card-color);
-  border-radius: var(--border-radius-small);
-  padding: 40px;
-  color: var(--text-dark);
-}
-
-.noImageText {
-  color: var(--text-dark);
 }
 
 /* Product information */
 .productTitle {
   font-size: var(--medium-font-size);
   color: var(--text-dark);
-  margin-bottom: var(--space-small);
+  margin-bottom: var(--space-medium);
+  text-align: center;
 }
 
 .productCategory,
@@ -112,22 +111,20 @@
 .productDiscount,
 .productRating,
 .productMinOrder,
-.productPrice,
-.productDescription {
+.productPrice {
+  display: flex;
+  justify-content: space-between;
   font-size: var(--base-font-size);
-  color: var(--text-dark);
-  font-weight: bold;
-  line-height: 1.6;
 }
 
 .productLabel {
-  color: var(--text-dark);
+  font-weight: bold;
 }
 
 .buttonsContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--space-small);
+  gap: var(--space-x-small);
   margin-top: var(--space-medium);
 }
 

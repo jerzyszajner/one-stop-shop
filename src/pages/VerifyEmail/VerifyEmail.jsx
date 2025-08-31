@@ -23,23 +23,23 @@ import { auth } from "../../../firebaseConfig";
 import styles from "./VerifyEmail.module.css";
 
 const VerifyEmail = () => {
-  // Email verification state
+  // State
   const [emailVerified, setEmailVerified] = useState(false);
+
+  // Hooks
   const { getErrorMessage } = useFirebaseValidation();
+  const { toast, showToast, hideToast } = useToast();
 
   // Navigation
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Use toast hook
-  const { toast, showToast, hideToast } = useToast();
 
   // Handle navigation after verification
   const handleVerificationComplete = () => {
     const from = location.state?.from;
 
     if (from === "cart") {
-      navigate("/checkout");
+      navigate("/delivery");
     } else if (from === "profile") {
       navigate("/profile");
     } else {
@@ -69,7 +69,6 @@ const VerifyEmail = () => {
         "success"
       );
     } catch (error) {
-      console.error("Error sending verification email:", error);
       showToast("Error", getErrorMessage(error), "error");
     }
   };
@@ -86,8 +85,8 @@ const VerifyEmail = () => {
             the link to verify your email.
           </p>
           <p className={styles.verificationText}>
-            If you haven’t received it, click below to resend the verification
-            email .
+            If you haven&apos;t received it, click below to resend the
+            verification email .
           </p>
           <div className={styles.buttonsContainer}>
             <Button

@@ -5,8 +5,9 @@
     border-radius: var(--border-radius-small);
     border: none;
     font-size: var(--base-font-size);
+    line-height: 1;
     text-decoration: none;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease;
     cursor: pointer;
 }
 
@@ -27,7 +28,6 @@
     background-color: var(--secondary-color-light);
     color: var(--text-dark);
     padding: var(--space-medium) var(--space-large);
-    border: 1px solid var(--primary-color);
     border-radius: var(--border-radius-medium);
     border: 1px solid transparent;
 }
@@ -53,27 +53,11 @@
 }
 
 /*** Details button ***/
-.detailsBtn {
-    height: 40px;
+.details {
+    height: auto;
+    width: 100%;
+    flex-direction: column;
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-}
-
-.detailsBtn:hover {
-    background-color: var(--primary-color);
-    color: var(--text-light);
-}
-
-/*** Sign in/out buttons ***/
-.signInBtn {
-    background: var(--glass-bg-light);
-    color: var(--text-light);
-    padding: var(--space-small) var(--space-medium);
-    border-radius: var(--border-radius-medium);
-}
-
-.signInBtn:hover {
-    background: var(--glass-bg-medium);
 }
 
 /*** Circle button ***/
@@ -81,7 +65,7 @@
     position: relative;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: var(--border-radius-circle);
     background: var(--glass-bg-light);
     color: var(--text-light);
 }
@@ -93,6 +77,10 @@
 /* Responsive design */
 @media screen and (max-width: 768px) {
 
+    .primary {
+        height: 50px;
+        font-size: var(--medium-small-font-size);
+    }
 
     .secondary,
     .tertiary {
@@ -100,6 +88,12 @@
         width: 100%;
         max-width: 300px;
         text-align: center;
+        font-size: var(--medium-small-font-size);
+    }
+
+    .circle {
+        width: 50px;
+        height: 50px;
     }
 }
 

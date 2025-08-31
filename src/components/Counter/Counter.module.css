@@ -1,51 +1,38 @@
 /* Quantity counter component styling */
 .counterCard {
-  min-width: 120px;
-  border: 1px solid var(--secondary-color);
-  border-radius: var(--border-radius-medium);
-  display: flex;
-  align-items: center;
-  gap: var(--space-x-small);
-  justify-content: space-between;
-  padding: var(--space-x-small);
-}
-
-/* Increase and decrease buttons */
-.increaseButton,
-.decreaseButton {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--border-radius-small);
+  width: auto;
   border: none;
-  background-color: var(--secondary-color);
-  color: var(--text-light);
-  font-size: var(--medium-font-size);
-  font-weight: bold;
+  border-radius: var(--border-radius-small);
   display: flex;
-  justify-content: center;
   align-items: center;
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-.increaseButton:hover,
-.decreaseButton:hover {
-  opacity: 0.9;
-  transform: scale(1.1);
+  justify-content: space-between;
 }
 
 /* Quantity display */
 .countDisplay {
-  font-size: var(--medium-font-size);
+  font-size: var(--medium-small-font-size);
+  border: none;
+  background-color: var(--background-color-light);
+  color: var(--text-dark);
   font-weight: bold;
-  padding: 0 var(--space-small);
-  min-width: 28px;
-  text-align: center;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Responsive design */
-@media (max-width: 480px) {
-  .counterCard {
-    width: 100%;
+@media screen and (max-width: 768px) {
+  .countDisplay {
+    width: 50px;
+    height: 50px;
+    font-size: var(--medium-font-size);
   }
+}
+
+@media (max-width: 480px) {
+  /* .counterCard {
+    width: 100%;
+  } */
 }

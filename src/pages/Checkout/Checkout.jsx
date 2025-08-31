@@ -1,5 +1,5 @@
 // React
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 // React Router
 import { useNavigate } from "react-router-dom";
@@ -13,114 +13,155 @@ import { nanoid } from "nanoid";
 // Components
 import Button from "../../components/Button/Button";
 import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import Counter from "../../components/Counter/Counter";
 import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
+import AddressPreview from "../../components/AddressPreview/AddressPreview";
+import OrderSummary from "../../components/OrderSummary/OrderSummary";
+import CustomLink from "../../components/CustomLink/CustomLink";
+import CartItem from "../../components/CartItem/CartItem";
+import FormGroup from "../../components/FormGroup/FormGroup";
+import FieldRow from "../../components/FieldRow/FieldRow";
+import InputField from "../../components/InputField/InputField";
+import SelectField from "../../components/SelectField/SelectField";
 
 // Context
-import { getAuthContext } from "../../context/AuthContext";
-import { getCartContext } from "../../context/CartContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useCartContext } from "../../hooks/useCartContext";
+import { useDeliveryContext } from "../../hooks/useDeliveryContext";
+
+// Reducer
+import { CART_ACTIONS } from "../../reducers/cartReducer";
 
 // Hooks
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
-import usePaymentValidation from "../../hooks/usePaymentValidation";
+import { usePaymentValidation } from "../../hooks/usePaymentValidation";
 import { useToast } from "../../hooks/useToast";
+import { useCartCalculations } from "../../hooks/useCartCalculations";
+
+// Utils
+import { formatDigits } from "../../utils/helpers";
 
 // Config
 import { database } from "../../../firebaseConfig";
+import { DELIVERY_METHODS } from "../../config/deliveryConfig";
+import { getPaymentMethodOptions } from "../../config/paymentConfig";
 
 // Styles
 import styles from "./Checkout.module.css";
 
+// Initial form data
+const initialCheckoutFormData = {
+  cardName: "",
+  cardNumber: "",
+  expiryMonth: "",
+  expiryYear: "",
+  paymentMethod: "",
+  cvv: "",
+  billingAddress: "",
+};
+
 const Checkout = () => {
   // State
   const [isLoading, setIsLoading] = useState(false);
-  const [paymentValues, setPaymentValues] = useState({
-    cardName: "",
-    cardNumber: "",
-    expiryMonth: "",
-    expiryYear: "",
-    paymentMethod: "",
-    cvv: "",
-    billingAddress: "",
-  });
-
-  // Context
-  const { cart, dispatch } = getCartContext();
-  const { user } = getAuthContext();
+  const [checkoutFormData, setCheckoutFormData] = useState(
+    initialCheckoutFormData
+  );
+  const { user } = useAuthContext();
+  const { cart, dispatch } = useCartContext();
+  const { deliveryData, currentAddress, clearDeliveryData } =
+    useDeliveryContext();
+  const { deliveryPrice, selectedMethod, deliveryMessage } = deliveryData;
 
   // Hooks
+  const { subtotalPrice, totalPrice } = useCartCalculations();
   const { paymentErrors, validatePaymentForm } = usePaymentValidation();
-  const { getErrorMessage } = useFirebaseValidation();
   const { toast, showToast, hideToast } = useToast();
 
   // Navigation
   const navigate = useNavigate();
 
+  // Handle remove item from cart
   const handleRemove = (id) => {
-    dispatch({ type: "REMOVE_FROM_CART", payload: id });
+    dispatch({ type: CART_ACTIONS.REMOVE_FROM_CART, payload: id });
   };
 
-  // Calculate total cart price
-  const totalPrice = useMemo(() => {
-    return cart
-      .reduce((total, item) => total + item.price * item.quantity, 0)
-      .toFixed(2);
-  }, [cart]);
+  // Handle clear cart
+  const handleClearCart = () => {
+    dispatch({ type: CART_ACTIONS.CLEAR_CART });
+  };
 
-  const handleChange = (e) => {
+  // Handle input change
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setPaymentValues((prevValues) => ({
+    setCheckoutFormData((prevValues) => ({
       ...prevValues,
       [name]: value,
     }));
   };
 
-  // Process payment and create order
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validatePaymentForm(paymentValues)) {
-      console.log("Payment form is not valid");
+    if (!validatePaymentForm(checkoutFormData)) {
       return;
     }
 
     setIsLoading(true);
 
-    // Prepare order data for database
-    const orderData = {
-      userId: user?.uid,
-      orderNumber: nanoid(10),
-      cartItems: cart,
-      totalPrice,
-      paymentMethod: paymentValues.paymentMethod,
-      billingAddress: paymentValues.billingAddress,
-      createdAt: serverTimestamp(),
-    };
     try {
-      // Save order to user's subcollection
+      // Prepare order data for database
+      const orderData = {
+        userId: user?.uid,
+        orderNumber: nanoid(10),
+        createdAt: serverTimestamp(),
+        message: deliveryMessage,
+
+        cartItems: cart,
+
+        orderSummary: {
+          subtotalPrice,
+          deliveryPrice,
+          totalPrice,
+        },
+        paymentDetails: {
+          cardName: checkoutFormData.cardName,
+          paymentMethod: checkoutFormData.paymentMethod,
+          billingAddress: checkoutFormData.billingAddress,
+        },
+        deliveryAddress: {
+          firstname: currentAddress.firstname,
+          lastname: currentAddress.lastname,
+          street: currentAddress.street,
+          zipCode: currentAddress.zipCode,
+          city: currentAddress.city,
+          country: currentAddress.country,
+          phone: currentAddress.phone,
+        },
+        deliveryMethod: {
+          id: selectedMethod,
+          name: DELIVERY_METHODS[selectedMethod]?.name,
+          time: DELIVERY_METHODS[selectedMethod]?.time,
+          description: DELIVERY_METHODS[selectedMethod]?.description,
+          price: DELIVERY_METHODS[selectedMethod]?.price,
+        },
+      };
+
+      // Save order to user's subcollection in database
       await addDoc(
         collection(database, "users", user.uid, "orders"),
         orderData
       );
-      dispatch({ type: "CLEAR_CART" });
-      console.log("Order has been registered successfully:", orderData);
+
+      handleClearCart();
+      clearDeliveryData(); // Clear delivery data after successful order
+      showToast("Success", "Order created successfully", "success");
 
       // Redirect to order confirmation page
       navigate(`/order-confirmation/${orderData.orderNumber}`);
 
       // Reset form
-      setPaymentValues({
-        cardName: "",
-        cardNumber: "",
-        expiryMonth: "",
-        expiryYear: "",
-        paymentMethod: "",
-        cvv: "",
-        billingAddress: "",
-      });
+      setCheckoutFormData(initialCheckoutFormData);
     } catch (error) {
-      console.error("Error creating order:", error);
-      showToast("❌ Order Error", getErrorMessage(error), "error");
+      showToast("Order failed", error.message, "error");
     } finally {
       setIsLoading(false);
     }
@@ -132,195 +173,202 @@ const Checkout = () => {
         {/* Cart overview section */}
         <div className={styles.purchaseOverviewContainer}>
           {cart.length === 0 ? (
-            <p>Your cart is empty.</p>
+            <p className={styles.emptyCard}>Your cart is empty.</p>
           ) : (
             <div className={styles.cartListContainer}>
               <ul className={styles.cartList}>
                 {cart.map((item) => (
-                  <li key={item.id} className={styles.cartItem}>
-                    <img
-                      src={item.thumbnail}
-                      alt={item.title}
-                      className={styles.productImage}
-                    />
-                    <div className={styles.productDetails}>
-                      <h3>{item.title}</h3>
-                      <p>Price: ${item.price}</p>
-                      <p>Total: ${item.price * item.quantity}</p>
-                    </div>
-                    <div className={styles.quantity}>
-                      <Counter className={styles.itemCount} item={item} />
-                      <Button
-                        onClick={() => handleRemove(item.id)}
-                        variant="remove"
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </li>
+                  // Cart item component
+                  <CartItem key={item.id} item={item} onRemove={handleRemove} />
                 ))}
               </ul>
-              <div className={styles.totalContainer}>
-                <p className={styles.totalAmount}>Total: {`$${totalPrice}`}</p>
+
+              {/* ---------------- Order Summary Section ---------------- */}
+              <div className={styles.orderSummarySection}>
+                <OrderSummary
+                  title="Order Summary"
+                  subtotalPrice={subtotalPrice}
+                  deliveryPrice={deliveryPrice}
+                  totalPrice={totalPrice}
+                />
               </div>
             </div>
           )}
         </div>
-        {/* Payment form section */}
-        <div className={styles.paymentContainer}>
-          <form className={styles.paymentForm} onSubmit={handleSubmit}>
-            <h2 className={styles.formTitle}>Payment Details</h2>
-            {/*----------------Cardholder Name----------------*/}
-            <label htmlFor="cardName" className={styles.label}>
-              Cardholder Name
-            </label>
-            <input
-              type="text"
-              id="cardName"
-              name="cardName"
-              className={styles.input}
-              placeholder="John Smith"
-              onChange={handleChange}
-              value={paymentValues.cardName}
-            />
-            {paymentErrors && (
-              <p className={styles.errorMessage}>{paymentErrors.cardName}</p>
-            )}
-            {/*----------------Payment Method----------------*/}
-            <label htmlFor="paymentMethod" className={styles.label}>
-              Payment Method
-            </label>
-            <select
-              id="paymentMethod"
-              name="paymentMethod"
-              className={styles.paymentSelect}
-              onChange={handleChange}
-              value={paymentValues.paymentMethod}
-            >
-              <option value="">Select Payment Method</option>
-              <option value="visa">Visa</option>
-              <option value="mastercard">Mastercard</option>
-            </select>
-            {paymentErrors && (
-              <p className={styles.errorMessage}>
-                {paymentErrors.paymentMethod}
-              </p>
-            )}
-            {/*----------------Card Number----------------*/}
-            <label htmlFor="cardNumber" className={styles.label}>
-              Card Number
-            </label>
-            <input
-              type="text"
-              id="cardNumber"
-              name="cardNumber"
-              className={styles.input}
-              maxLength="16"
-              placeholder="💳 1234 5678 9012 3456"
-              onChange={handleChange}
-              value={paymentValues.cardNumber}
-            />
-            {paymentErrors && (
-              <p className={styles.errorMessage}>{paymentErrors.cardNumber}</p>
-            )}
-            <div className={styles.cardDetails}>
-              {/*----------------Card Expiry----------------*/}
-
-              <div className={styles.expiryMonth}>
-                <label
-                  htmlFor="expiryMonth"
-                  className={`${styles.label} ${styles.expiryLabel}`}
-                >
-                  Expiry Month
-                </label>
-                <input
-                  type="text"
-                  name="expiryMonth"
-                  id="expiryMonth"
-                  placeholder="MM"
-                  className={styles.expiryInput}
-                  onChange={handleChange}
-                  value={paymentValues.expiryMonth}
-                />
-                {paymentErrors && (
-                  <p className={styles.errorMessage}>
-                    {paymentErrors.expiryMonth}
-                  </p>
-                )}
-              </div>
-              <div className={styles.expiryYear}>
-                <label
-                  htmlFor="expiryYear"
-                  className={`${styles.label} ${styles.expiryLabel}`}
-                >
-                  Expiry Year
-                </label>
-                <input
-                  type="text"
-                  name="expiryYear"
-                  id="expiryYear"
-                  placeholder="YYYY"
-                  className={styles.expiryInput}
-                  onChange={handleChange}
-                  value={paymentValues.expiryYear}
-                />
-                {paymentErrors && (
-                  <p className={styles.errorMessage}>
-                    {paymentErrors.expiryYear}
-                  </p>
-                )}
+        <div className={styles.checkoutFormsContainer}>
+          {/* Delivery information section */}
+          <div className={styles.deliverySection}>
+            <h2 className={styles.deliveryTitle}>Delivery Information</h2>
+            <div className={styles.deliveryContent}>
+              <div className={styles.methodSection}>
+                <h3 className={styles.sectionTitle}>
+                  Delivery Method:
+                  <CustomLink to="/delivery" variant="primary">
+                    {selectedMethod ? "Edit" : "Add"}
+                  </CustomLink>
+                </h3>
+                <div className={styles.methodInfo}>
+                  <div className={styles.method}>
+                    <h3 className={styles.methodName}>
+                      {DELIVERY_METHODS[selectedMethod]?.name}
+                    </h3>
+                    <p className={styles.methodTime}>
+                      {DELIVERY_METHODS[selectedMethod]?.time}
+                    </p>
+                    <p className={styles.methodDescription}>
+                      {DELIVERY_METHODS[selectedMethod]?.description}
+                    </p>
+                  </div>
+                  <div className={styles.methodPrice}>
+                    ${DELIVERY_METHODS[selectedMethod]?.price}
+                  </div>
+                </div>
               </div>
 
-              <div className={styles.cvvContainer}>
-                {/*----------------CVV----------------*/}
-                <label
-                  htmlFor="cvv"
-                  className={`${styles.label} ${styles.cvvLabel}`}
-                >
-                  CVV
-                </label>
-                <input
-                  type="text"
-                  id="cvv"
-                  name="cvv"
-                  className={styles.cvvInput}
-                  maxLength="3"
-                  placeholder="123 💳"
-                  onChange={handleChange}
-                  value={paymentValues.cvv}
-                />
-                {paymentErrors && (
-                  <p className={styles.errorMessage}>{paymentErrors.cvv}</p>
-                )}
+              <div className={styles.deliveryAddressSection}>
+                <h3 className={styles.sectionTitle}>
+                  Delivery Address:
+                  <CustomLink to="/delivery" variant="primary">
+                    {currentAddress ? "Edit" : "Add"}
+                  </CustomLink>
+                </h3>
+                <div className={styles.addressCard}>
+                  <AddressPreview previewData={currentAddress} />
+                </div>
+              </div>
+
+              <div className={styles.deliveryMessageSection}>
+                <h3 className={styles.sectionTitle}>
+                  Delivery Message:
+                  <CustomLink to="/delivery" variant="primary">
+                    {deliveryMessage ? "Edit" : "Add"}
+                  </CustomLink>
+                </h3>
+                <p className={styles.deliveryMessageText}>
+                  {deliveryMessage || "No delivery instructions provided."}
+                </p>
               </div>
             </div>
-            {/*----------------Billing Address----------------*/}
-            <label htmlFor="billingAddress" className={styles.label}>
-              Billing Address
-            </label>
-            <input
-              type="text"
-              id="billingAddress"
-              name="billingAddress"
-              placeholder="123 Main St, City, Country"
-              className={styles.input}
-              onChange={handleChange}
-              value={paymentValues.billingAddress}
-            />
-            {paymentErrors && (
-              <p className={styles.errorMessage}>
-                {paymentErrors.billingAddress}
-              </p>
-            )}
-            <div className={styles.buttonsContainer}>
-              <Button type="submit" disabled={isLoading} variant="primary">
-                {isLoading ? "Processing..." : "Complete Purchase"}
-              </Button>
-              <ButtonLink to="/products" variant="primary">
-                Cancel
-              </ButtonLink>
-            </div>
-          </form>
+          </div>
+
+          {/* Payment form section */}
+          <div className={styles.paymentSection}>
+            <form className={styles.paymentForm} onSubmit={handleSubmit}>
+              {/* <h2 className={styles.formTitle}>Payment Information</h2> */}
+              <FormGroup title="Payment Details">
+                {/*----------------Cardholder Name----------------*/}
+                <InputField
+                  label="Cardholder Name"
+                  type="text"
+                  id="cardName"
+                  name="cardName"
+                  placeholder="e.g., John Smith"
+                  autoComplete="cc-name"
+                  onChange={handleInputChange}
+                  value={checkoutFormData.cardName}
+                  errors={paymentErrors.cardName}
+                />
+                {/*----------------Payment Method----------------*/}
+                <SelectField
+                  label="Payment Method"
+                  id="paymentMethod"
+                  name="paymentMethod"
+                  autoComplete="cc-type"
+                  placeholder="Select Payment Method"
+                  options={getPaymentMethodOptions()}
+                  onChange={handleInputChange}
+                  value={checkoutFormData.paymentMethod}
+                  errors={paymentErrors.paymentMethod}
+                />
+                {/*----------------Card Number and CVV----------------*/}
+                <FieldRow>
+                  {/*----------------Card Number----------------*/}
+                  <InputField
+                    label="Card Number"
+                    type="text"
+                    id="cardNumber"
+                    name="cardNumber"
+                    placeholder="💳 e.g., 1234 5678 9012 3456"
+                    maxLength={16}
+                    inputMode="numeric"
+                    autoComplete="cc-number"
+                    onInput={formatDigits}
+                    onChange={handleInputChange}
+                    value={checkoutFormData.cardNumber}
+                    errors={paymentErrors.cardNumber}
+                  />
+                  {/*----------------CVV----------------*/}
+                  <InputField
+                    label="CVV"
+                    type="text"
+                    id="cvv"
+                    name="cvv"
+                    placeholder="💳 e.g., 123"
+                    maxLength={3}
+                    inputMode="numeric"
+                    autoComplete="cc-csc"
+                    onInput={formatDigits}
+                    onChange={handleInputChange}
+                    value={checkoutFormData.cvv}
+                    errors={paymentErrors.cvv}
+                  />
+                </FieldRow>
+                {/*----------------Card Expiry Date----------------*/}
+                <FieldRow>
+                  {/*----------------Expiry Month----------------*/}
+                  <InputField
+                    label="Expiry Month"
+                    type="text"
+                    id="expiryMonth"
+                    name="expiryMonth"
+                    placeholder="e.g., 01"
+                    maxLength={2}
+                    inputMode="numeric"
+                    autoComplete="cc-exp-month"
+                    onInput={formatDigits}
+                    onChange={handleInputChange}
+                    value={checkoutFormData.expiryMonth}
+                    errors={paymentErrors.expiryMonth}
+                  />
+                  {/*----------------Expiry Year----------------*/}
+                  <InputField
+                    label="Expiry Year"
+                    type="text"
+                    id="expiryYear"
+                    name="expiryYear"
+                    placeholder="e.g., 2025"
+                    maxLength={4}
+                    inputMode="numeric"
+                    autoComplete="cc-exp-year"
+                    onInput={formatDigits}
+                    onChange={handleInputChange}
+                    value={checkoutFormData.expiryYear}
+                    errors={paymentErrors.expiryYear}
+                  />
+                </FieldRow>
+                {/*----------------Billing Address----------------*/}
+                <InputField
+                  label="Billing Address"
+                  type="text"
+                  id="billingAddress"
+                  name="billingAddress"
+                  placeholder="e.g., Storgata 1, 0123 Oslo, Norway"
+                  autoComplete="billing street-address"
+                  onChange={handleInputChange}
+                  value={checkoutFormData.billingAddress}
+                  errors={paymentErrors.billingAddress}
+                />
+              </FormGroup>
+              <div className={styles.buttonsContainer}>
+                <Button type="submit" disabled={isLoading} variant="primary">
+                  {isLoading ? "Processing..." : "Complete Purchase"}
+                </Button>
+                <ButtonLink to="/products" variant="primary">
+                  Cancel
+                </ButtonLink>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
       {isLoading && <Spinner />}

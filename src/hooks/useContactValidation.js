@@ -1,24 +1,28 @@
 // React
 import { useState } from "react";
+
+// Regex patterns
+import {
+  emailRegex,
+  phoneRegex,
+  orderNumberRegex,
+} from "../config/regexPatterns";
 // Custom hook for contact form validation
-const useContactValidation = () => {
+export const useContactValidation = () => {
   // Validation state and patterns
   const [contactErrors, setContactErrors] = useState({});
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const phoneRegex = /^[0-9]{8}$/; // Exactly 8 digits
-  const orderNumberRegex = /^[A-Z0-9]{6,12}$/; // 6-12 characters, alphanumeric uppercase
 
   // Validate all contact form fields
   const validateContactForm = (values) => {
     let newErrors = {};
 
     // First name validation
-    if (!values.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+    if (!values.firstname.trim()) {
+      newErrors.firstname = "First name is required";
     }
     // Last name validation
-    if (!values.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+    if (!values.lastname.trim()) {
+      newErrors.lastname = "Last name is required";
     }
     // Email validation
     if (!values.email.trim()) {
@@ -27,10 +31,10 @@ const useContactValidation = () => {
       newErrors.email = "Please enter a valid email address";
     }
     // Phone number validation
-    if (!values.phoneNumber.trim()) {
-      newErrors.phoneNumber = "Phone number is required";
-    } else if (!phoneRegex.test(values.phoneNumber.trim())) {
-      newErrors.phoneNumber = "Phone number must be exactly 8 digits";
+    if (!values.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!phoneRegex.test(values.phone.trim())) {
+      newErrors.phone = "Phone number must be exactly 8 digits";
     }
     // Order number validation (optional field)
     if (values.orderNumber && values.orderNumber.trim()) {
@@ -56,7 +60,7 @@ const useContactValidation = () => {
     setContactErrors((prevErrors) => ({
       ...prevErrors,
       message:
-        value.trim().length >= maxLength
+        value.trim().length > maxLength
           ? `Maximum characters allowed is ${maxLength}`
           : "",
     }));
@@ -68,5 +72,3 @@ const useContactValidation = () => {
     validateMessageLength,
   };
 };
-
-export default useContactValidation;

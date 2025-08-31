@@ -1,0 +1,13 @@
+/* Field row styling */
+.fieldRow {
+    display: flex;
+    gap: var(--space-medium);
+}
+
+
+@media screen and (max-width: 480px) {
+    .fieldRow {
+        flex-direction: column;
+        gap: 0;
+    }
+}

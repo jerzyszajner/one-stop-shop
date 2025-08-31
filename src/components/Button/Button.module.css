@@ -1,7 +1,8 @@
 /* Button component styles */
 .button {
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease;
+    font-family: var(--font-family);
 }
 
 .button:disabled {
@@ -18,6 +19,8 @@
     border-radius: var(--border-radius-small);
     border: none;
     font-size: var(--base-font-size);
+    width: 100%;
+    line-height: 1;
 }
 
 .primary:hover {
@@ -54,30 +57,53 @@
 
 /*** Remove button ***/
 .remove {
+    height: 40px;
     color: var(--text-light);
     background-color: var(--remove-button-color);
-    padding: var(--space-small) var(--space-medium);
     border: none;
     border-radius: var(--border-radius-small);
-    border: 1px solid var(--remove-button-color);
     width: 100%;
+    font-size: var(--base-font-size);
 }
 
 .remove:hover {
     background-color: var(--remove-button-color-hover);
 }
 
-/*** Choose file button ***/
-.chooseFile {
+.removeCircle {
+    background-color: transparent;
+    color: var(--text-light);
+    border-radius: var(--border-radius-circle);
+    border: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+
+}
+
+.removeCircle:hover {
+    background: var(--glass-bg-hover);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/*** File button ***/
+.file {
     padding: var(--space-small) var(--space-medium);
     align-self: flex-start;
     border-radius: var(--border-radius-small);
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--secondary-color);
     color: var(--text-dark);
     width: 100%;
+    height: 34px;
+    font-size: var(--base-font-size);
+    line-height: 1;
 }
 
-.chooseFile:hover {
+.file:hover {
     background-color: var(--button-hover-bg);
 }
 
@@ -89,7 +115,7 @@
     position: relative;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: var(--border-radius-circle);
     background: var(--glass-bg-light);
     color: var(--text-light);
     border: none;
@@ -101,19 +127,101 @@
 
 /*** Sign out button ***/
 .signOutBtn {
-    background: var(--sign-out-button-color);
-    color: var(--text-light);
-    padding: var(--space-small) var(--space-medium);
-    border-radius: var(--border-radius-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass-bg-light);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-circle);
     border: none;
 }
 
 .signOutBtn:hover {
-    background: var(--sign-out-button-color-hover);
+    background: var(--glass-bg-medium);
 }
 
+/*** Delivery option buttons ***/
+.deliveryOption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-small) var(--space-medium);
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--border-radius-medium);
+    background: var(--secondary-color-light);
+}
+
+.deliveryOption:hover {
+    border-color: var(--primary-color);
+    background: var(--background-color-light-blue);
+}
+
+.deliveryOption.selected {
+    background: var(--background-color-light-blue);
+    border-color: var(--primary-color);
+}
+
+/*** Counter button ***/
+.counterMinus {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: var(--border-radius-small) 0 0 var(--border-radius-small);
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    font-size: var(--base-font-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.counterPlus {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 0 var(--border-radius-small) var(--border-radius-small) 0;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    font-size: var(--base-font-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.counterMinus:hover,
+.counterPlus:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Responsive design for touch devices */
 @media screen and (max-width: 768px) {
     .toggleMenu {
         display: flex;
+    }
+
+    .link {
+        font-size: var(--medium-small-font-size);
+    }
+
+    .primary,
+    .remove,
+    .file {
+        height: 50px;
+        font-size: var(--medium-small-font-size);
+    }
+
+    .signOutBtn,
+    .toggleMenu {
+        width: 50px;
+        height: 50px;
+        font-size: var(--medium-small-font-size);
+    }
+
+    .counterMinus,
+    .counterPlus {
+        width: 50px;
+        height: 50px;
+        font-size: var(--medium-small-font-size);
     }
 }

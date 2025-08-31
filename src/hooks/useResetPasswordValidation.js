@@ -1,10 +1,12 @@
 // React
 import { useState } from "react";
+
+// Regex patterns
+import { emailRegex } from "../config/regexPatterns";
 // Custom hook for reset password validation
-const useResetPasswordValidation = () => {
+export const useResetPasswordValidation = () => {
   const [resetPasswordErrors, setResetPasswordErrors] = useState({});
   // Email validation pattern
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // Validate reset password email
   const validateResetEmail = (email) => {
@@ -21,7 +23,12 @@ const useResetPasswordValidation = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  return { validateResetEmail, resetPasswordErrors };
-};
+  // Clear all reset password errors
+  const clearResetPasswordErrors = () => {
+    if (resetPasswordErrors) {
+      setResetPasswordErrors({});
+    }
+  };
 
-export default useResetPasswordValidation;
+  return { validateResetEmail, resetPasswordErrors, clearResetPasswordErrors };
+};

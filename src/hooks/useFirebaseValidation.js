@@ -48,7 +48,7 @@ export const useFirebaseValidation = () => {
     setFirebaseError("");
   };
 
-  // Get error message directly (for immediate use in Toast)
+  // Get error message
   const getErrorMessage = useCallback((error) => {
     return handleAuthError(error);
   }, []);

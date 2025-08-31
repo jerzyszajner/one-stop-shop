@@ -1,0 +1,149 @@
+/* Delivery page styling */
+.deliveryWrapper {
+    padding: var(--space-large);
+    background: var(--background-color-light);
+}
+
+.deliveryContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-large);
+    border-radius: var(--border-radius-medium);
+    background: var(--secondary-color-light);
+}
+
+.deliveryTitle {
+    font-size: var(--medium-font-size);
+    margin-bottom: var(--space-medium);
+    text-align: center;
+}
+
+/* ******************* Delivery Method Section ******************* */
+.deliverySection {
+    background: var(--secondary-color-light);
+    border-radius: var(--border-radius-medium);
+    padding: var(--space-small) 0;
+}
+
+.sectionTitle {
+    font-size: var(--base-font-size);
+    margin-bottom: var(--space-small);
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.deliveryOptions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+}
+
+.errorContainer {
+    margin-top: var(--space-x-small);
+    height: 10px;
+}
+
+/* ******************* Delivery Address Section ******************* */
+.deliveryForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.defaultAddress {
+    margin: var(--space-medium) 0 var(--space-small) 0;
+    padding: var(--space-medium);
+    border-radius: var(--border-radius-medium);
+    border: 1px dashed var(--secondary-color);
+    position: relative;
+}
+
+.addressTitle {
+    position: absolute;
+    top: -12px;
+    background: var(--secondary-color-light);
+    font-size: var(--base-font-size);
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.alternativeAddress {
+    padding: var(--space-x-small);
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-small);
+    font-size: var(--base-font-size);
+    color: var(--text-dark);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 1px solid var(--secondary-color);
+    background: var(--card-color);
+    position: relative;
+    transition: box-shadow 0.2s ease;
+}
+
+.checkbox:hover {
+    outline: none;
+    box-shadow: var(--input-shadow-focus);
+}
+
+.checkbox:focus {
+    outline: none;
+    box-shadow: var(--input-shadow-focus);
+}
+
+/* ******************* BUTTONS ******************* */
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+    width: 100%;
+    margin-top: var(--space-small);
+}
+
+/* ******************* RESPONSIVE ******************* */
+
+@media (max-width: 768px) {
+    .deliveryContainer {
+        padding: var(--space-medium);
+    }
+
+    .deliverySection {
+        padding: var(--space-medium);
+    }
+
+    .checkbox {
+        width: 30px;
+        height: 30px;
+    }
+
+    .buttonsContainer {
+        flex-direction: column;
+        padding: 0 var(--space-medium) var(--space-medium);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .deliveryWrapper {
+        padding: 0;
+        background: var(--background-color-light);
+    }
+
+    .deliveryContainer {
+        padding: var(--space-medium) 0;
+    }
+
+    .buttonsContainer {
+        flex-direction: column;
+        padding: 0 var(--space-medium);
+    }
+}

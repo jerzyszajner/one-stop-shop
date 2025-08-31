@@ -1,3 +1,12 @@
+// Icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBullseye,
+  faHeart,
+  faGlobe,
+} from "@fortawesome/free-solid-svg-icons";
+
+// Styles
 import styles from "./About.module.css";
 
 const About = () => {
@@ -24,7 +33,12 @@ const About = () => {
           <h2 className={styles.sectionTitle}>Our Values</h2>
           <div className={styles.valuesGrid}>
             <div className={styles.valueItem}>
-              <div className={styles.valueIcon}>🎯</div>
+              <div className={styles.valueIcon}>
+                <FontAwesomeIcon
+                  icon={faBullseye}
+                  className={styles.valueIconQuality}
+                />
+              </div>
               <h3 className={styles.valueTitle}>Quality First</h3>
               <p className={styles.valueText}>
                 We carefully curate every product to ensure the highest
@@ -32,14 +46,24 @@ const About = () => {
               </p>
             </div>
             <div className={styles.valueItem}>
-              <div className={styles.valueIcon}>❤️</div>
+              <div className={styles.valueIcon}>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  className={styles.valueIconCustomer}
+                />
+              </div>
               <h3 className={styles.valueTitle}>Customer Focus</h3>
               <p className={styles.valueText}>
                 Your satisfaction is our priority, from browsing to delivery
               </p>
             </div>
             <div className={styles.valueItem}>
-              <div className={styles.valueIcon}>🌍</div>
+              <div className={styles.valueIcon}>
+                <FontAwesomeIcon
+                  icon={faGlobe}
+                  className={styles.valueIconGlobal}
+                />
+              </div>
               <h3 className={styles.valueTitle}>Global Reach</h3>
               <p className={styles.valueText}>
                 Connecting customers worldwide with products they love

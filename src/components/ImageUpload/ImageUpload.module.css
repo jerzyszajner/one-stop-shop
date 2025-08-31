@@ -1,0 +1,75 @@
+/* Main container for image upload component */
+.imageUploadContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+}
+
+.fieldContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fieldLabel {
+    font-size: var(--base-font-size);
+    color: var(--text-dark);
+    font-weight: bold;
+    margin-bottom: var(--space-x-small);
+}
+
+.fileInput {
+    display: none;
+}
+
+.fileName {
+    color: var(--text-dark);
+    font-size: var(--base-font-size);
+    margin-left: var(--space-x-small);
+}
+
+/* Image preview container */
+.imagePreviewContainer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color-light);
+    border: 1px solid var(--primary-color);
+    padding: var(--space-small);
+    border-radius: var(--border-radius-small);
+}
+
+.imagePreviewWrapper {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+/* Profile picture preview image */
+.imagePreview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--border-radius-circle);
+}
+
+/* Remove image button icon */
+.trashIcon {
+    font-size: var(--medium-font-size);
+    position: absolute;
+    color: var(--text-light);
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    opacity: 0.8;
+    filter: var(--icon-shadow-dark);
+}
+
+@media screen and (max-width: 768px) {
+    .fileName {
+        font-size: var(--medium-small-font-size);
+    }
+}

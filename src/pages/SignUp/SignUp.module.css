@@ -1,6 +1,4 @@
-/* ******************* LAYOUT ******************* */
-
-/* Form wrapper */
+/* Sign up page styling */
 .formWrapper {
     width: 100%;
     height: 100%;
@@ -14,12 +12,10 @@
     position: relative;
 }
 
-/* ******************* FORM CONTAINER ******************* */
-
-/* Sign up page styling */
+/* Sign up form */
 .signUpForm {
     width: 100%;
-    max-width: 500px;
+    max-width: 670px;
     display: flex;
     flex-direction: column;
     gap: var(--space-small);
@@ -28,81 +24,18 @@
     border-radius: var(--border-radius-medium);
 }
 
-/* ******************* FORM GROUPS ******************* */
-
-.formGroup {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-x-small);
-    padding: var(--space-medium);
-    border-radius: var(--border-radius-medium);
-}
-
-/* Form styling */
-.formGroupTitle {
+.formTitle {
     font-weight: bold;
+    font-size: var(--medium-font-size);
 }
 
-/* ******************* FORM ELEMENTS ******************* */
-
-.formInput {
-    width: 100%;
-    padding: 0 var(--space-small);
-    color: var(--text-dark);
-}
-
-.fileInput {
-    display: none;
-}
-
-.errorMessage {
-    color: var(--text-error);
-    height: 10px;
-    text-align: center;
-    font-size: var(--small-font-size);
-}
-
-/* ******************* IMAGE PREVIEW ******************* */
-
-/* Image preview container */
-.imagePreviewContainer {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-small);
-    background-color: var(--primary-color-light);
-    border: 1px solid var(--primary-color);
-    padding: var(--space-small);
-    border-radius: var(--border-radius-small);
-    overflow: hidden;
-}
-
-.imagePreview {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--box-shadow-base);
-}
-
-/* ******************* BUTTONS ******************* */
-
+/* Buttons container */
 .buttonsContainer {
     display: flex;
     flex-direction: column;
-    gap: var(--space-small);
+    gap: var(--space-x-small);
     width: 100%;
-    height: 90px;
 }
-
-/* ******************* RESPONSIVE ******************* */
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
@@ -113,10 +46,6 @@
     .signUpForm {
         width: 100%;
         padding: var(--space-medium);
-    }
-
-    .formInput {
-        height: 40px;
     }
 }
 

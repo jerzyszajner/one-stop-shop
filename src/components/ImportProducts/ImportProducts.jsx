@@ -2,7 +2,15 @@
 import { collection, addDoc } from "firebase/firestore";
 import { database } from "../../../firebaseConfig";
 
+// Hooks
+import { useToast } from "../../hooks/useToast";
+
+// Components
+import Button from "../Button/Button";
+
 const ImportProducts = () => {
+  // Hooks
+  const { showToast } = useToast();
   // Import products from external API to Firestore
   const handleImportProducts = async () => {
     try {
@@ -19,12 +27,14 @@ const ImportProducts = () => {
       }
       console.log("🎉 All products added successfully!");
     } catch (error) {
-      console.error("❌ Error adding products:", error);
+      showToast("❌ Error adding products:", error, "error");
     }
   };
 
   return (
-    <button onClick={handleImportProducts}>Import Products to Firestore</button>
+    <Button onClick={handleImportProducts} type="primary">
+      Import Products to Firestore
+    </Button>
   );
 };
 

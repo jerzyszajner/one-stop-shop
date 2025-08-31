@@ -1,8 +1,9 @@
 /* Base link styles  */
 .link {
-    transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+    transition: color 0.2s ease, border-bottom 0.2s ease;
     font-size: var(--base-font-size);
     text-decoration: none;
+    text-wrap: nowrap;
 }
 
 /* Primary variant - with underline */
@@ -14,4 +15,10 @@
 .primary:hover {
     color: var(--link-color-hover);
     border-bottom: 2px solid var(--text-light);
+}
+
+@media screen and (max-width: 768px) {
+    .primary {
+        font-size: var(--medium-small-font-size);
+    }
 }

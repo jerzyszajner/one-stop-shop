@@ -6,6 +6,7 @@ import { collection, getDocs } from "firebase/firestore";
 
 // Config
 import { database } from "../../firebaseConfig";
+
 // Custom hook for fetching products from Firestore
 export const useFetchProducts = () => {
   // Fetch state management
@@ -25,7 +26,6 @@ export const useFetchProducts = () => {
         }));
         setProducts(productsList);
       } catch (error) {
-        console.error("Error fetching products:", error);
         setError(error);
       } finally {
         setIsLoading(false);

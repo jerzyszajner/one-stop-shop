@@ -4,28 +4,38 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  line-height: 1.6;
-  padding: var(--space-medium);
+  line-height: 1.4;
+  padding: var(--space-large);
   border-radius: var(--border-radius-medium);
   transition: all 0.3s ease;
-  background: var(--card-color);
+  background: var(--secondary-color-light);
+  position: relative;
 }
 
 /* Product image container */
 .imageContainer {
   width: 100%;
-  height: 150px;
+  height: 200px;
   overflow: hidden;
   border-radius: var(--border-radius-small);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-color-image);
+  position: relative;
 }
 
 .productImage {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.3s ease;
-  background: var(--background-color-image);
+  transition: transform 0.3s ease, opacity 0.3s ease;
   padding: var(--space-small);
+  opacity: 0;
+}
+
+.productImage.loaded {
+  opacity: 1;
 }
 
 .productCard:hover .productImage {
@@ -33,55 +43,62 @@
 }
 
 .productInfoContainer {
-  text-align: center;
-  padding: var(--space-small);
-}
-
-.buttonsContainer {
+  padding: var(--space-small) 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--space-small);
+}
+
+.productTitle {
+  font-size: var(--medium-small-font-size);
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: var(--space-small);
+}
+
+.productBrand,
+.productPrice,
+.discountPercentage {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--base-font-size);
+}
+
+.productLabel {
+  font-weight: bold;
+}
+
+.productRating {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: var(--base-font-size);
+  color: var(--text-dark);
+  font-weight: bold;
+}
+
+.productRatingIcon {
+  color: var(--star-icon);
+  margin-right: var(--space-x-small);
+}
+
+.buttonsContainer {
   width: 100%;
-  height: 90px;
   margin-top: var(--space-small);
+  display: flex;
+  gap: var(--space-small);
 }
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
-  .productCard {
-    padding: var(--space-small);
-    gap: var(--space-small);
-  }
+  .productCard {}
 }
 
 @media screen and (max-width: 480px) {
-  .productCard {
-    padding: var(--space-x-small);
-    gap: 0;
-    font-size: var(--small-font-size);
-  }
-
-  .imageContainer {
-    height: 100px;
-  }
 
   .productImage {
     object-fit: contain;
     padding: 0;
-  }
-
-  .productTitle {
-    font-size: var(--base-font-size);
-    margin-bottom: var(--space-x-small);
-  }
-
-  .productInfoContainer {
-    padding: 0 var(--space-x-small);
-  }
-
-  .buttonsContainer {
-    gap: var(--space-x-small);
-    height: 70px;
-    margin-top: var(--space-x-small);
   }
 }

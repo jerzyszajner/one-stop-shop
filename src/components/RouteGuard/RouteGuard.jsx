@@ -2,16 +2,14 @@
 import { Navigate } from "react-router-dom";
 
 // Context
-import { getAuthContext } from "../../context/AuthContext";
-
-// Components
-import Spinner from "../Spinner/Spinner";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const RouteGuard = ({ children }) => {
-  const { user, loading } = getAuthContext();
+  // State
+  const { user, isLoading } = useAuthContext();
 
-  if (loading) {
-    return <Spinner />;
+  if (isLoading) {
+    return;
   }
 
   if (!user) {

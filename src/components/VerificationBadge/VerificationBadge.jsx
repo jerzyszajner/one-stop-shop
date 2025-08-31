@@ -1,4 +1,4 @@
-// FontAwesome
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
@@ -8,9 +8,9 @@ import {
 // Styles
 import styles from "./VerificationBadge.module.css";
 
-const VerificationBadge = ({ isVerified, className = "" }) => {
+const VerificationBadge = ({ isVerified }) => {
   return (
-    <div className={`${styles.verificationBadge} ${className}`}>
+    <div className={styles.verificationBadge}>
       {/* Email verification status indicator */}
       {isVerified ? (
         <FontAwesomeIcon

@@ -4,13 +4,21 @@ import { useState, useEffect } from "react";
 // Firebase
 import { collection, query, where, getDocs } from "firebase/firestore";
 
+// Hooks
+import { useFirebaseValidation } from "./useFirebaseValidation";
+
 // Config
 import { database } from "../../firebaseConfig";
 
-const useOrderDetails = (orderNumber, userId) => {
+// Custom hook to fetch order details
+export const useOrderDetails = (orderNumber, userId) => {
+  // State
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Hooks
+  const { getErrorMessage } = useFirebaseValidation();
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -41,17 +49,14 @@ const useOrderDetails = (orderNumber, userId) => {
           setError("Order not found");
         }
       } catch (error) {
-        console.error("Error fetching order:", error);
-        setError("Failed to fetch order details");
+        setError(getErrorMessage(error));
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchOrder();
-  }, [orderNumber, userId]);
+  }, [orderNumber, userId, getErrorMessage]);
 
   return { order, isLoading, error };
 };
-
-export default useOrderDetails;

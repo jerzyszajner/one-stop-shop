@@ -1,0 +1,22 @@
+/* Address preview styling */
+.addressContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+    font-size: var(--base-font-size);
+    color: var(--text-dark);
+}
+
+.addressRow {
+    display: flex;
+    justify-content: space-between;
+}
+
+.addressLabel {
+    font-weight: bold;
+    text-wrap: nowrap;
+}
+
+.addressValue {
+    text-wrap: nowrap;
+}

@@ -1,46 +1,42 @@
-.orderConfirmationContainer {
+/* Order confirmation page styling */
+.orderConfirmationWrapper {
     width: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--background-gradient-light);
+    background: var(--background-color-light);
     font-family: var(--font-family);
     padding: var(--space-large) 0;
 }
 
 .confirmationHeader {
-    background: var(--secondary-color-light);
-    border-radius: var(--border-radius-medium);
-    padding: var(--space-large);
-    max-width: 700px;
-    width: 100%;
     text-align: center;
-    margin-bottom: var(--space-medium);
-}
-
-.successIcon {
-    font-size: var(--medium-font-size);
+    margin-bottom: var(--space-large);
+    width: 100%;
 }
 
 .confirmationTitle {
     color: var(--primary-color);
-    margin-bottom: var(--space-medium);
-    font-size: var(--medium-font-size);
+    margin-bottom: var(--space-small);
+    font-size: var(--large-font-size);
+    font-weight: bold;
 }
 
-.thankYou {
+.confirmationText {
     color: var(--text-dark);
     font-size: var(--base-font-size);
+    line-height: 1.5;
 }
 
-.orderCard {
+.orderConfirmationContainer {
     background: var(--secondary-color-light);
     border-radius: var(--border-radius-medium);
     padding: var(--space-large);
-    max-width: 700px;
+    max-width: 800px;
     width: 100%;
+    box-shadow: var(--box-shadow-base);
 }
 
 .orderHeader {
@@ -48,95 +44,116 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--space-medium);
-    padding-bottom: var(--space-medium);
-    border-bottom: 1px solid var(--secondary-color);
+    padding-bottom: var(--space-small);
+    border-bottom: 2px solid var(--primary-color);
 }
 
 .orderHeaderTitle {
     color: var(--primary-color);
     font-size: var(--medium-font-size);
+    font-weight: bold;
 }
 
-.orderActions {
+.actionsContainer {
     display: flex;
     gap: var(--space-medium);
 }
 
+/* Customer info styles */
 .customerName,
-.customerEmail {
+.customerEmail,
+.customerPhone {
     color: var(--text-dark);
     font-size: var(--base-font-size);
-    margin-bottom: var(--space-small);
+    display: flex;
+    justify-content: space-between;
 }
 
 .orderLabel {
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--primary-color);
+    margin-right: var(--space-small);
 }
 
-.customerEmail {
-    margin-bottom: var(--space-small);
+.customerPhone {
     padding-bottom: var(--space-small);
     border-bottom: 1px solid var(--secondary-color);
 }
 
-.orderInfo {
+/* Section styles */
+.orderInfoSection,
+.orderItemsSection,
+.orderSummarySection,
+.paymentSection,
+.shippingSection,
+.deliveryMethodSection,
+.courierInstructionsSection,
+.nextStepsSection {
     margin-bottom: var(--space-medium);
     padding: var(--space-medium);
-    background: var(--secondary-color-light);
+    background: var(--primary-color-light);
     border-radius: var(--border-radius-medium);
-    border: 1px solid var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+
 }
 
+/* Section titles */
+.sectionTitle {
+    color: var(--primary-color);
+    margin-bottom: var(--space-medium);
+    font-size: var(--medium-font-size);
+    font-weight: bold;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: var(--space-x-small);
+}
+
+/* Order info items */
 .orderNumber,
-.orderDate {
-    margin-bottom: var(--space-small);
+.orderDate,
+.estimatedDelivery,
+.deliveryMethodInfo {
     color: var(--text-dark);
+    font-size: var(--base-font-size);
+    display: flex;
+    justify-content: space-between;
 }
 
-.estimatedDelivery {
-    color: var(--text-dark);
+.deliveryMethodInfo {
+    display: flex;
+    justify-content: space-between;
 }
 
 .orderNumber {
     font-size: var(--base-font-size);
     color: var(--primary-color);
+    font-weight: bold;
 }
 
-.orderItems {
-    margin-bottom: var(--space-medium);
-}
-
-.orderItemsTitle {
-    color: var(--primary-color);
-    margin-bottom: var(--space-medium);
-    font-size: var(--medium-font-size);
-}
-
+/* Order items */
 .itemsList {
-    border: 1px solid var(--secondary-color);
-    border-radius: var(--border-radius-medium);
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
 }
 
 .orderItem {
     display: flex;
     align-items: center;
-    padding: var(--space-medium);
-    border-bottom: 1px solid var(--secondary-color);
+    padding: var(--space-small);
     background: var(--secondary-color-light);
-}
-
-.orderItem:last-child {
-    border-bottom: none;
+    border-radius: var(--border-radius-medium);
+    gap: var(--space-small);
 }
 
 .itemImage {
     width: 60px;
     height: 60px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: var(--border-radius-small);
-    margin-right: var(--space-small);
+    background: var(--background-color-image);
+    padding: var(--space-x-small);
 }
 
 .itemDetails {
@@ -144,154 +161,118 @@
 }
 
 .itemTitle {
-    margin-bottom: var(--space-small);
+    margin-bottom: var(--space-x-small);
     color: var(--text-dark);
     font-size: var(--base-font-size);
+    font-weight: 600;
 }
 
 .itemPrice {
     color: var(--text-dark);
     font-size: var(--small-font-size);
+    margin-bottom: var(--space-x-small);
 }
 
 .itemBrand {
     color: var(--text-dark);
     font-size: var(--small-font-size);
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
 .itemTotal {
     color: var(--primary-color);
     font-size: var(--base-font-size);
-    font-weight: 600;
+    font-weight: bold;
 }
 
-.orderSummary {
+/* Payment info */
+.paymentContent {
     background: var(--secondary-color-light);
     padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
-    margin-bottom: var(--space-small);
-    border: 1px solid var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
 }
 
-.summaryRow {
+.paymentMethodInfo {
+    color: var(--text-dark);
+    font-size: var(--base-font-size);
     display: flex;
     justify-content: space-between;
-    margin-bottom: var(--space-small);
-    color: var(--text-dark);
-}
-
-.totalRow {
-    padding-top: var(--space-small);
-    border-top: 1px solid var(--secondary-color);
-    font-size: var(--medium-font-size);
-    color: var(--primary-color);
-    margin-bottom: 0;
-}
-
-.totalLabel,
-.totalAmount {
-    font-weight: 600;
-    color: var(--primary-color);
-}
-
-.paymentInfo,
-.shippingInfo {
-    margin-bottom: var(--space-medium);
-}
-
-.paymentTitle,
-.shippingTitle {
-    color: var(--primary-color);
-    margin-bottom: var(--space-medium);
-    font-size: var(--medium-font-size);
-}
-
-.paymentDetails {
-    background: var(--secondary-color-light);
-    padding: var(--space-medium);
-    border-radius: var(--border-radius-medium);
-    border: 1px solid var(--secondary-color);
-}
-
-.paymentMethod {
-    margin-bottom: var(--space-small);
-    color: var(--text-dark);
 }
 
 .paymentStatus {
     color: var(--text-dark);
+    font-size: var(--base-font-size);
+    display: flex;
+    justify-content: space-between;
 }
 
 .paymentLabel {
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--primary-color);
+    margin-right: var(--space-small);
 }
 
-.statusPaid {
+.statusPaidIcon {
     color: var(--text-success);
-    font-weight: bold;
+    font-size: var(--base-font-size);
+    margin-right: var(--space-x-small);
 }
 
-.shippingAddress {
+/* Shipping content */
+.shippingContent {
     background: var(--secondary-color-light);
     padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
-    border: 1px solid var(--secondary-color);
 }
 
-.shippingAddressText {
+/* Delivery method content */
+.deliveryMethodContent {
+    background: var(--secondary-color-light);
+    padding: var(--space-medium);
+    border-radius: var(--border-radius-medium);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+}
+
+/* Courier instructions */
+.courierMessage {
+    background: var(--secondary-color-light);
+    padding: var(--space-medium);
+    border-radius: var(--border-radius-medium);
     color: var(--text-dark);
     line-height: 1.5;
+    font-size: var(--base-font-size);
 }
 
-.nextSteps {
-    margin-bottom: var(--space-medium);
-}
-
-.nextStepsTitle {
-    color: var(--primary-color);
-    margin-bottom: var(--space-medium);
-    font-size: var(--medium-font-size);
-}
-
+/* Next steps */
 .nextStepsList {
     background: var(--secondary-color-light);
     padding: var(--space-medium);
     border-radius: var(--border-radius-medium);
     list-style: none;
-    border: 1px solid var(--secondary-color);
 }
 
 .nextStepsItem {
     padding: var(--space-x-small) 0;
     color: var(--text-dark);
     line-height: 1.5;
+    font-size: var(--base-font-size);
+    border-bottom: 1px solid var(--secondary-color);
 }
 
-.buttonContainer {
+.nextStepsItem:last-child {
+    border-bottom: none;
+}
+
+/* Buttons container */
+.buttonsContainer {
     display: flex;
     justify-content: center;
-    padding: var(--space-small) 0;
-}
-
-.errorContainer {
-    text-align: center;
-    padding: var(--space-medium);
-    background: var(--secondary-color-light);
-    border-radius: var(--border-radius-medium);
-    max-width: 600px;
-    width: 100%;
-}
-
-.errorTitle {
-    color: var(--text-error);
-    margin-bottom: var(--space-medium);
-}
-
-.errorText {
-    color: var(--text-dark);
-    margin-bottom: var(--space-medium);
+    margin-top: var(--space-medium);
 }
 
 /* Print styles */
@@ -302,18 +283,18 @@
     }
 
     /* Hide interactive elements and navigation */
-    .buttonContainer {
+    .buttonsContainer {
         display: none;
     }
 
-    .orderInfo,
-    .orderItem,
-    .orderItemsTitle,
-    .orderSummary,
-    .paymentInfo,
-    .shippingInfo,
-    .nextStepsTitle,
-    .nextStepsList {
+    .orderInfoSection,
+    .orderItemsSection,
+    .orderSummarySection,
+    .paymentSection,
+    .shippingSection,
+    .deliveryMethodSection,
+    .courierInstructionsSection,
+    .nextStepsSection {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
     }
@@ -321,12 +302,23 @@
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
-    .orderConfirmationContainer {
+    .orderConfirmationWrapper {
         padding: var(--space-medium) var(--space-small);
     }
 
-    .orderCard {
-        padding: var(--space-small);
+    .orderConfirmationContainer {
+        padding: var(--space-medium);
+    }
+
+    .orderInfoSection,
+    .orderItemsSection,
+    .orderSummarySection,
+    .paymentSection,
+    .shippingSection,
+    .deliveryMethodSection,
+    .courierInstructionsSection,
+    .nextStepsSection {
+        padding: var(--space-medium);
     }
 
     .orderItem {
@@ -337,14 +329,34 @@
         margin-right: 0;
     }
 
-    .actionButton {
+    .orderHeader {
         flex-direction: column;
+        gap: var(--space-medium);
+        text-align: center;
     }
 }
 
 @media screen and (max-width: 480px) {
+    .actionsContainer {
+        display: none;
+    }
 
-    .orderCard {
+    .orderConfirmationContainer {
         padding: var(--space-small);
+    }
+
+    .orderInfoSection,
+    .orderItemsSection,
+    .orderSummarySection,
+    .paymentSection,
+    .shippingSection,
+    .deliveryMethodSection,
+    .courierInstructionsSection,
+    .nextStepsSection {
+        padding: var(--space-small);
+    }
+
+    .confirmationTitle {
+        font-size: var(--medium-font-size);
     }
 }

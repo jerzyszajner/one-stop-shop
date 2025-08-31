@@ -7,6 +7,8 @@ import { RouterProvider } from "react-router-dom";
 // Context
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
+import { UserProvider } from "./context/UserContext.jsx";
+import { DeliveryProvider } from "./context/DeliveryContext.jsx";
 
 // Routes
 import { router } from "./routes/routes.jsx";
@@ -17,8 +19,12 @@ import "./index.css";
 // Application entry point with context providers
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
-    <CartProvider>
-      <RouterProvider router={router} />
-    </CartProvider>
+    <DeliveryProvider>
+      <CartProvider>
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
+      </CartProvider>
+    </DeliveryProvider>
   </AuthProvider>
 );

@@ -1,0 +1,40 @@
+/* Base link styles  */
+.link {
+    transition: color 0.2s ease, background 0.2s ease;
+    font-size: var(--base-font-size);
+    text-decoration: none;
+    text-wrap: nowrap;
+}
+
+/* Primary variant */
+.primary {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    font-weight: bold;
+    padding: 0 var(--space-medium);
+    border-radius: var(--border-radius-medium);
+    line-height: 1;
+}
+
+.primary:hover {
+    color: var(--active-link-color);
+    background: var(--glass-bg-hover);
+}
+
+.activeLink {
+    color: var(--active-link-color);
+    background: var(--active-link-bg);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .primary {
+        height: 50px;
+        width: 100%;
+        font-size: var(--medium-small-font-size);
+        border: 1px solid var(--border-light);
+    }
+}
