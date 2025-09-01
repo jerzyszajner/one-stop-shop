@@ -303,7 +303,7 @@
 /* Responsive design */
 @media screen and (max-width: 768px) {
     .orderConfirmationWrapper {
-        padding: var(--space-medium) var(--space-small);
+        padding: 0;
     }
 
     .orderConfirmationContainer {
@@ -339,10 +339,6 @@
 @media screen and (max-width: 480px) {
     .actionsContainer {
         display: none;
-    }
-
-    .orderConfirmationContainer {
-        padding: var(--space-small);
     }
 
     .orderInfoSection,

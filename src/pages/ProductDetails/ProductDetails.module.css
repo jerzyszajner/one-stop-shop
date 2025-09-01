@@ -140,6 +140,10 @@
 }
 
 @media screen and (max-width: 768px) {
+  .wrapper {
+    padding: 0;
+  }
+
   .productDetailsContainer {
     width: 100%;
   }

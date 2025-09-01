@@ -71,3 +71,9 @@
     font-size: var(--medium-small-font-size);
   }
 }
+
+@media screen and (max-width: 480px) {
+  .formWrapper {
+    padding: 0;
+  }
+}

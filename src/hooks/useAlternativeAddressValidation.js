@@ -1,15 +1,18 @@
 // React
 import { useState } from "react";
 
-// Custom hook for delivery form validation
+// Regex patterns
+import {
+  cityRegex,
+  streetRegex,
+  zipCodeRegex,
+  phoneRegex,
+} from "../config/regexPatterns";
+// Custom hook for alternative address validation
 export const useAlternativeAddressValidation = () => {
   const [alternativeAddressErrors, setAlternativeAddressErrors] = useState({});
-  const cityRegex = /^[a-zA-ZæøåÆØÅ\s]+$/;
-  const streetRegex = /^[a-zA-ZæøåÆØÅ\s]+\s\d+[a-zA-ZæøåÆØÅ]*$/;
-  const zipCodeRegex = /^\d{4}$/;
-  const phoneRegex = /^[0-9]{8}$/;
 
-  // Validate delivery form fields
+  // Validate alternative address form fields
   const validateAlternativeAddress = (values) => {
     let newErrors = {};
 
@@ -57,7 +60,7 @@ export const useAlternativeAddressValidation = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Clear all delivery errors
+  // Clear all errors
   const clearAlternativeAddressErrors = () => {
     if (alternativeAddressErrors) {
       setAlternativeAddressErrors({});

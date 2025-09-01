@@ -41,11 +41,10 @@
 @media screen and (max-width: 480px) {
   .productsContainer {
     gap: var(--space-small);
+    padding: 0;
   }
 
   .sortFilterContainer {
-    padding: var(--space-medium) var(--space-small);
-    gap: var(--space-small);
     flex-direction: column;
   }
 

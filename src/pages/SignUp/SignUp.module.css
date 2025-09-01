@@ -50,6 +50,10 @@
 }
 
 @media screen and (max-width: 480px) {
+    .formWrapper {
+        padding: 0;
+    }
+
     .signUpForm {
         padding: var(--space-medium);
     }
