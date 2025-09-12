@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 
 // React Router
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Firebase
 import { signOut } from "firebase/auth";
@@ -28,12 +28,12 @@ import CustomNavLink from "../CustomNavLink/CustomNavLink";
 import Toast from "../Toast/Toast";
 
 // State
-import { useCartContext } from "../../hooks/useCartContext";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useCartContext } from "../../context/CartContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 // Hooks
 import { useToast } from "../../hooks/useToast";
-import { useUserContext } from "../../hooks/useUserContext";
+import { useUserContext } from "../../context/UserContext";
 
 // Config
 import { auth } from "../../../firebaseConfig";
@@ -186,13 +186,7 @@ const Navbar = () => {
       )}
 
       {/* Toast notifications */}
-      <Toast
-        title={toast.title}
-        description={toast.description}
-        isVisible={toast.isVisible}
-        onHide={hideToast}
-        type={toast.type}
-      />
+      <Toast {...toast} hideToast={hideToast} />
     </nav>
   );
 };

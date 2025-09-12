@@ -1,5 +1,7 @@
+// Third-party
 import { NavLink } from "react-router-dom";
 
+// Styles
 import styles from "./CustomNavLink.module.css";
 
 const CustomNavLink = ({

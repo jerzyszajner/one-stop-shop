@@ -13,7 +13,7 @@ const TextField = ({
   onChange,
   value,
   errors,
-  maxLength,
+  maxLength = 200,
   className,
   rows = 3,
   required = true,
@@ -28,7 +28,6 @@ const TextField = ({
         name={name}
         placeholder={placeholder}
         rows={rows}
-        maxLength={maxLength}
         className={`${styles.fieldInput} ${className || ""}`}
         onChange={onChange}
         value={value}

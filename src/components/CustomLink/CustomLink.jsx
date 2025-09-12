@@ -1,4 +1,4 @@
-// React Router
+// Third-party
 import { Link as RouterLink } from "react-router-dom";
 
 // Styles

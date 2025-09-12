@@ -8,7 +8,7 @@ const Toast = ({
   title,
   description,
   isVisible,
-  onHide,
+  hideToast,
   duration,
   type = "info", // success, error, warning, info
 }) => {
@@ -18,12 +18,12 @@ const Toast = ({
   useEffect(() => {
     if (isVisible && autoDuration) {
       const timer = setTimeout(() => {
-        onHide();
+        hideToast();
       }, autoDuration);
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, onHide, autoDuration]);
+  }, [isVisible, hideToast, autoDuration]);
 
   if (!isVisible) return null;
 

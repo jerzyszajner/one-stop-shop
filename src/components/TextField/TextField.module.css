@@ -13,10 +13,6 @@
     margin-bottom: var(--space-x-small);
 }
 
-.fieldRequired {
-    margin-left: var(--space-x-small);
-}
-
 .fieldInput {
     width: 100%;
     padding: var(--space-small);

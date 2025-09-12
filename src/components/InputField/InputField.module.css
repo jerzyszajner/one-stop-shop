@@ -11,10 +11,6 @@
     margin-bottom: var(--space-x-small);
 }
 
-.fieldRequired {
-    margin-left: var(--space-x-small);
-}
-
 .fieldInput {
     font-size: var(--base-font-size);
     height: 34px;
