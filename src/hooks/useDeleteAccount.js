@@ -1,5 +1,5 @@
 // React
-import { useState, useCallback } from "react";
+import { useState } from "react";
 
 // Firebase
 import { doc, deleteDoc } from "firebase/firestore";
@@ -13,20 +13,20 @@ import {
 import { database } from "../../firebaseConfig";
 
 // Hooks
-import { useAuthContext } from "./useAuthContext";
-import { useDeleteAccountValidation } from "./useDeleteFormValidation";
+import { useAuthContext } from "../context/AuthContext";
+import { useFormValidation } from "./useFormValidation";
+import { useFirebaseValidation } from "./useFirebaseValidation";
 
-export const useDeleteAccount = () => {
+export const useDeleteAccount = (showToast) => {
   // State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [error, setError] = useState(null);
 
   // Hooks
   const { user } = useAuthContext();
-  const { deleteFormErrors, validateDeleteAccount, clearDeleteAccountErrors } =
-    useDeleteAccountValidation();
+  const { validateForm, errors, clearErrors } = useFormValidation();
+  const { getErrorMessage } = useFirebaseValidation();
 
   const openDeleteModal = () => {
     setShowDeleteModal(true);
@@ -35,29 +35,20 @@ export const useDeleteAccount = () => {
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
     setCurrentPassword("");
-    clearDeleteAccountErrors();
-    setError(null);
+    clearErrors();
   };
 
   const handleDeleteInputChange = (e) => {
     setCurrentPassword(e.target.value);
   };
 
-  const handleDeleteSubmit = (e) => {
-    e.preventDefault();
-    deleteAccount();
-  };
-
   // Delete account function
-  const deleteAccount = useCallback(async () => {
-    if (!user?.uid) return;
-
-    if (!validateDeleteAccount({ currentPassword })) {
+  const deleteAccount = async () => {
+    if (!validateForm({ currentPassword }, "delete")) {
       return;
     }
 
     setIsDeleting(true);
-    setError(null);
 
     try {
       // Re-authenticate user
@@ -67,32 +58,35 @@ export const useDeleteAccount = () => {
       );
       await reauthenticateWithCredential(user, credential);
 
-      // Delete user authentication account
-      await deleteUser(user);
-
       // Delete user document from Firestore
       const userDocRef = doc(database, "users", user.uid);
       await deleteDoc(userDocRef);
+
+      // Delete user authentication
+      await deleteUser(user);
     } catch (error) {
-      setError(error);
+      showToast("Delete failed", getErrorMessage(error), "error");
     } finally {
       setIsDeleting(false);
     }
-  }, [user, currentPassword, validateDeleteAccount]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    deleteAccount();
+  };
 
   return {
-    // State
-    showDeleteModal,
-    currentPassword,
-    isDeleting,
-    error,
-    deleteFormErrors,
+    deleteAccount: {
+      onSubmit: handleSubmit,
+      onInputChange: handleDeleteInputChange,
+      onCancel: handleCancelDelete,
+      currentPassword,
+      errors,
+      isDeleting,
+    },
 
-    // Actions
-    openDeleteModal,
-    handleCancelDelete,
-    handleDeleteInputChange,
-    handleDeleteSubmit,
-    deleteAccount,
+    showDeleteModal,
+    onOpenDeleteModal: openDeleteModal,
   };
 };

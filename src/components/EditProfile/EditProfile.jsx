@@ -1,3 +1,9 @@
+// Config
+import { getCountryOptions } from "../../config/countriesConfig";
+
+// Utils
+import { formatDigits } from "../../utils/helpers";
+
 // Components
 import Button from "../Button/Button";
 import FormGroup from "../../components/FormGroup/FormGroup";
@@ -6,27 +12,23 @@ import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import InputField from "../../components/InputField/InputField";
 import SelectField from "../../components/SelectField/SelectField";
 
-// Config
-import { getCountryOptions } from "../../config/countriesConfig";
-
 // Styles
 import styles from "./EditProfile.module.css";
 
 // Edit profile form
 const EditProfile = ({
-  onSubmit,
-  onInputChange,
-  errors,
-  onFormatDigits,
   formData,
+  errors,
+  isSaving,
+  onSubmit,
+  onCancel,
+  onInputChange,
   selectedFile,
   previewUrl,
   fileInputRef,
   onFileInputClick,
   onImageChange,
   onRemoveImage,
-  isSaving,
-  onCancelEdit,
 }) => {
   return (
     <form className={styles.editProfileForm} onSubmit={onSubmit} noValidate>
@@ -111,7 +113,7 @@ const EditProfile = ({
             inputMode="numeric"
             autoComplete="postal-code"
             onChange={onInputChange}
-            onInput={onFormatDigits}
+            onInput={formatDigits}
             value={formData.zipCode}
             errors={errors.zipCode}
           />
@@ -157,7 +159,7 @@ const EditProfile = ({
           maxLength={8}
           autoComplete="tel"
           onChange={onInputChange}
-          onInput={onFormatDigits}
+          onInput={formatDigits}
           value={formData.phone}
           errors={errors.phone}
         />
@@ -172,7 +174,7 @@ const EditProfile = ({
         >
           {isSaving ? "Saving..." : "Save"}
         </Button>
-        <Button onClick={onCancelEdit} variant="primary" type="button">
+        <Button onClick={onCancel} variant="primary" type="button">
           Cancel
         </Button>
       </div>

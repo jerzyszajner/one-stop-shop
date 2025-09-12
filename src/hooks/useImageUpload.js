@@ -1,23 +1,21 @@
 // Custom hook to handle image uploads to Cloudinary
-export const useImageUpload = () => {
+export const useImageUpload = (showToast) => {
   const cloudinaryKey = import.meta.env.VITE_CLOUDINARY_NAME;
 
-  // Upload file to Cloudinary and return result object
+  // Upload file to Cloudinary
   const uploadImage = async (file) => {
     if (!cloudinaryKey) {
-      return {
-        success: false,
-        url: null,
-        error: "Image upload is not configured.",
-      };
+      showToast(
+        "❌ Image upload failed",
+        "Image upload is not configured.",
+        "error"
+      );
+      return null;
     }
-    // Validate file type
-    if (!file || !file.type || !file.type.startsWith("image/")) {
-      return {
-        success: false,
-        url: null,
-        error: "Please select an image file.",
-      };
+
+    if (!file) {
+      showToast("❌ Image upload failed", "No file selected.", "error");
+      return null;
     }
 
     try {
@@ -33,29 +31,16 @@ export const useImageUpload = () => {
         }
       );
 
+      // Get the secure URL from the response
       const data = await response.json();
-
-      // Check if upload was successful
-      if (!response.ok) {
-        return {
-          success: false,
-          url: null,
-          error: "Failed to upload image. Please try again.",
-        };
-      }
-
-      return {
-        success: true,
-        url: data.secure_url,
-        error: null,
-      };
-    } catch {
-      return {
-        success: false,
-        url: null,
-        error: "Network error. Please check your connection.",
-      };
+      return data.secure_url;
+    } catch (error) {
+      showToast("❌ Image upload failed", error.message, "error");
+      return null;
     }
   };
-  return { uploadImage };
+
+  return {
+    uploadImage,
+  };
 };

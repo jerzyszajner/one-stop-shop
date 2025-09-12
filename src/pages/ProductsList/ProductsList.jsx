@@ -12,7 +12,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
 
 // Context
-import { useCartContext } from "../../hooks/useCartContext";
+import { useCartContext } from "../../context/CartContext";
 
 // Reducer
 import { CART_ACTIONS } from "../../reducers/cartReducer";
@@ -116,13 +116,7 @@ const ProductsList = () => {
       </ul>
 
       {/* Toast notifications */}
-      <Toast
-        title={toast.title}
-        description={toast.description}
-        isVisible={toast.isVisible}
-        onHide={hideToast}
-        type={toast.type}
-      />
+      <Toast {...toast} hideToast={hideToast} />
     </div>
   );
 };

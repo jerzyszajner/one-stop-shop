@@ -14,13 +14,14 @@ import Spinner from "../../components/Spinner/Spinner";
 import Toast from "../../components/Toast/Toast";
 
 // Context
-import { useCartContext } from "../../hooks/useCartContext";
+import { useCartContext } from "../../context/CartContext";
 
 // Reducer
 import { CART_ACTIONS } from "../../reducers/cartReducer";
 
 // Hooks
 import { useToast } from "../../hooks/useToast";
+import { useImageLoader } from "../../hooks/useImageLoader";
 
 // Config
 import { database } from "../../../firebaseConfig";
@@ -33,17 +34,12 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const { imageLoaded, handleImageLoad } = useImageLoader();
 
   // Hooks
   const { id } = useParams();
   const { toast, showToast, hideToast } = useToast();
   const { dispatch } = useCartContext();
-
-  // Handle image load
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-  };
 
   // Add product to cart
   const handleAddToCart = () => {
@@ -174,13 +170,7 @@ const ProductDetails = () => {
         </div>
       </div>
       {/* Toast notifications */}
-      <Toast
-        title={toast.title}
-        description={toast.description}
-        isVisible={toast.isVisible}
-        onHide={hideToast}
-        type={toast.type}
-      />
+      <Toast {...toast} hideToast={hideToast} />
     </div>
   );
 };

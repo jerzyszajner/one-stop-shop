@@ -8,14 +8,13 @@ import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { database } from "../../firebaseConfig";
 
 // Hooks
-import { useAuthContext } from "./useAuthContext";
+import { useAuthContext } from "../context/AuthContext";
 
 // Fetch and update user data with realtime listener
-export const useUserData = () => {
+export const useUserData = (showToast) => {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [error, setError] = useState(null);
 
   const { user } = useAuthContext();
 
@@ -25,7 +24,6 @@ export const useUserData = () => {
 
     if (user?.uid) {
       setIsLoading(true);
-      setError(null);
 
       const userDocRef = doc(database, "users", user.uid);
 
@@ -41,7 +39,7 @@ export const useUserData = () => {
           setIsLoading(false);
         },
         (error) => {
-          setError(error);
+          showToast("Error fetching user data", error.message, "error");
           setIsLoading(false);
         }
       );
@@ -57,7 +55,7 @@ export const useUserData = () => {
         unsubscribe();
       }
     };
-  }, [user?.uid]);
+  }, [user?.uid, showToast]);
 
   // Update data
   const updateUserData = useCallback(
@@ -65,25 +63,23 @@ export const useUserData = () => {
       if (!user?.uid) return;
 
       setIsUpdating(true);
-      setError(null);
 
       try {
         const userDocRef = doc(database, "users", user.uid);
         await updateDoc(userDocRef, updates);
       } catch (error) {
-        setError(error);
+        showToast("Error updating user data", error.message, "error");
       } finally {
         setIsUpdating(false);
       }
     },
-    [user]
+    [user, showToast]
   );
 
   return {
     userData,
     isLoading,
     isUpdating,
-    error,
     updateUserData,
   };
 };

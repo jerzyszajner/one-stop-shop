@@ -27,7 +27,6 @@
 /* Product sections */
 .productInfoContainer,
 .productImageContainer {
-  padding: var(--space-small);
   flex: 1;
 }
 
@@ -102,7 +101,7 @@
 .productTitle {
   font-size: var(--medium-font-size);
   color: var(--text-dark);
-  margin-bottom: var(--space-medium);
+  margin: var(--space-medium) 0;
   text-align: center;
 }
 

@@ -20,121 +20,11 @@
   background-color: var(--primary-color-light);
 }
 
-/* ---------------- Profile header ---------------- */
-.profileHeader {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-medium);
-}
-
-.profileImageWrapper {
-  width: 150px;
-  height: 150px;
-  border-radius: var(--border-radius-circle);
-  position: relative;
-}
-
-.profileImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0;
-  border-radius: var(--border-radius-circle);
-}
-
-.profileImage.loaded {
-  opacity: 1;
-}
-
-.profileImage.fallback {
-  border: 1px dashed var(--primary-color);
-}
-
-.profileImageWrapper:hover .profileImage {
-  transform: scale(1.05);
-}
-
-.profileTitle {
-  font-size: var(--medium-small-font-size);
-  font-weight: bold;
-  text-align: center;
-}
-
-.emailStatusContainer {
-  text-align: center;
-  padding: var(--space-small);
-}
-
-.emailStatus {
-  font-size: var(--base-font-size);
-  font-weight: bold;
-}
-
-.buttonsContainer {
-  display: flex;
-  gap: var(--space-x-small);
-  width: 100%;
-}
-
-/* ---------------- Profile details ---------------- */
-.profileDetails {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-medium-large);
-  font-size: var(--base-font-size);
-}
-
-.profileSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-medium);
-  border: 1px solid var(--primary-color);
-  border-radius: var(--border-radius-medium);
-  padding: var(--space-medium-large);
-  position: relative;
-}
-
-.sectionTitle {
-  font-weight: bold;
-  font-size: var(--base-font-size);
-  position: absolute;
-  top: -12px;
-  background-color: var(--primary-color-light);
-}
-
-.infoRow {
-  display: flex;
-  justify-content: space-between;
-}
-
-.infoLabel {
-  font-weight: bold;
-}
-
-.statusVerified {
-  color: var(--text-success);
-}
-
-.statusNotVerified {
-  color: var(--text-warning);
-}
 
 @media screen and (max-width: 768px) {
   .profileContainer {
     flex-direction: column;
     align-items: center;
-  }
-
-  .profileHeader {
-    width: 100%;
-  }
-
-  .profileDetails {
-    width: 100%;
   }
 }
 
@@ -142,9 +32,4 @@
   .profileWrapper {
     padding: 0;
   }
-
-  .buttonsContainer {
-    flex-direction: column;
-  }
-
 }
