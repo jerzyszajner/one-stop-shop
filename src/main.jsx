@@ -19,12 +19,12 @@ import "./index.css";
 // Application entry point with context providers
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
-    <DeliveryProvider>
-      <CartProvider>
-        <UserProvider>
+    <UserProvider>
+      <DeliveryProvider>
+        <CartProvider>
           <RouterProvider router={router} />
-        </UserProvider>
-      </CartProvider>
-    </DeliveryProvider>
+        </CartProvider>
+      </DeliveryProvider>
+    </UserProvider>
   </AuthProvider>
 );

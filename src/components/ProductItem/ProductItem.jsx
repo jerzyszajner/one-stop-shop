@@ -1,9 +1,9 @@
-// React
-import { useState } from "react";
-
 // Components
 import ButtonLink from "../ButtonLink/ButtonLink";
 import Button from "../Button/Button";
+
+// Hooks
+import { useImageLoader } from "../../hooks/useImageLoader";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,13 +13,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import styles from "./ProductItem.module.css";
 
 const ProductItem = ({ product, onAddToCart }) => {
-  // State for image loading
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  // Handle image load
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-  };
+  const { imageLoaded, handleImageLoad } = useImageLoader();
 
   return (
     <div className={styles.productCard}>

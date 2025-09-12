@@ -23,6 +23,12 @@ button {
     cursor: pointer;
 }
 
+img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
 /* CSS Custom Properties (Variables) */
 :root {
     /* Colors */
@@ -130,15 +136,6 @@ input[type="date"] {
 
 @media print {
 
-    /* Reset margins */
-    body,
-    html {
-        margin: 0;
-        padding: 0;
-        background: var(--secondary-color-light);
-        color: var(--text-dark);
-    }
-
     /* Hide elements not needed for printing */
     nav,
     footer,
@@ -154,16 +151,5 @@ input[type="date"] {
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
-    }
-
-    /* Remove background colors, shadows, and decorative styles */
-    * {
-        background: var(--secondary-color-light) !important;
-        box-shadow: none !important;
-        color: var(--text-dark) !important;
-    }
-
-    .page-break {
-        page-break-before: avoid !important;
     }
 }

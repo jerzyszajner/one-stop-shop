@@ -8,15 +8,15 @@ import styles from "./DeleteForm.module.css";
 
 // Delete form component
 const DeleteForm = ({
-  onDeleteSubmit,
-  onDeleteInputChange,
-  onCancelDelete,
+  onSubmit,
+  onInputChange,
+  onCancel,
   currentPassword,
   isProcessing,
   errors,
 }) => {
   return (
-    <form className={styles.deleteFormContainer} onSubmit={onDeleteSubmit}>
+    <form className={styles.deleteFormContainer} onSubmit={onSubmit}>
       <FormGroup title="Delete Account Information">
         <p className={styles.deleteFormDescription}>
           Are you sure you want to delete your account? This action cannot be
@@ -36,7 +36,7 @@ const DeleteForm = ({
           type="password"
           id="currentPassword"
           name="currentPassword"
-          onChange={onDeleteInputChange}
+          onChange={onInputChange}
           placeholder="Enter your password"
           value={currentPassword}
           errors={errors.currentPassword}
@@ -55,7 +55,7 @@ const DeleteForm = ({
         <Button
           variant="primary"
           type="button"
-          onClick={onCancelDelete}
+          onClick={onCancel}
           disabled={isProcessing}
           ariaLabel="Cancel"
         >

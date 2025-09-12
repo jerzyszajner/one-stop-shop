@@ -5,9 +5,9 @@ export const formatDigits = (e) => {
 
 // Formats date to be readable
 export const formatDate = (date) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
+  return new Date(date).toLocaleDateString("en-GB", {
     day: "numeric",
+    month: "short",
+    year: "numeric",
   });
 };

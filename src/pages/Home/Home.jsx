@@ -54,24 +54,13 @@ const Home = () => {
               </ButtonLink>
             </div>
           </div>
-          <Link
-            to="/contact"
-            aria-label="Contact Us"
-            title="Not happy? Contact us"
-          >
-            <div className={styles.heroImage}>
-              <img
-                src="/assets/images/shopping-hero.webp"
-                alt="Shopping Experience"
-                className={styles.heroMainImage}
-              />
-              <img
-                src="/assets/images/shopping-hero-hover.webp"
-                alt="Shopping Experience"
-                className={styles.heroHoverImage}
-              />
-            </div>
-          </Link>
+          <div className={styles.heroImage}>
+            <img
+              src="/assets/images/shopping-hero.webp"
+              alt="Shopping Experience"
+              className={styles.heroMainImage}
+            />
+          </div>
         </div>
       </section>
       <section className={styles.categories}>

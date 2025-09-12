@@ -6,6 +6,7 @@ import {
   faBank,
 } from "@fortawesome/free-solid-svg-icons";
 
+// Styles
 import styles from "./Footer.module.css";
 
 const Footer = () => {
