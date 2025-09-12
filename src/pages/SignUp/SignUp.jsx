@@ -1,6 +1,5 @@
 // Hooks
-import { useToast } from "../../hooks/useToast";
-import { useSignUp } from "../../hooks/useSignUp";
+import { useSignUp, useToast } from "../../hooks";
 
 // Components
 import { SignUpForm, Spinner, Toast } from "../../components";

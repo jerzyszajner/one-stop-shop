@@ -17,8 +17,7 @@ import { database } from "../../../firebaseConfig";
 import { CART_ACTIONS } from "../../reducers/cartReducer";
 
 // Hooks
-import { useToast } from "../../hooks/useToast";
-import { useImageLoader } from "../../hooks/useImageLoader";
+import { useImageLoader, useToast } from "../../hooks";
 
 // Components
 import { Button, ButtonLink, Spinner, Toast } from "../../components";

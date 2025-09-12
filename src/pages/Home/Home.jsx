@@ -15,7 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 // Hooks
-import { useFetchProducts } from "../../hooks/useFetchProducts";
+import { useFetchProducts } from "../../hooks";
 
 // Components
 import { ButtonLink, Spinner } from "../../components";

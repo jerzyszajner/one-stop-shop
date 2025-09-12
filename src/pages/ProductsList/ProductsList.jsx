@@ -11,8 +11,7 @@ import { useCartContext } from "../../context/CartContext";
 import { CART_ACTIONS } from "../../reducers/cartReducer";
 
 // Hooks
-import { useFetchProducts } from "../../hooks/useFetchProducts";
-import { useToast } from "../../hooks/useToast";
+import { useFetchProducts, useToast } from "../../hooks";
 
 // Components
 import { Filter, ProductItem, Sort, Spinner, Toast } from "../../components";

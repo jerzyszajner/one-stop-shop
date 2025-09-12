@@ -1,14 +1,18 @@
 // React
 import { useState } from "react";
 
-// Hooks
-import { useEmailVerification } from "../../hooks/useEmailVerification";
-import { useToast } from "../../hooks/useToast";
+// Context
 import { useAuthContext } from "../../context/AuthContext";
 import { useUserContext } from "../../context/UserContext";
-import { useFetchLastOrder } from "../../hooks/useFetchLastOrder";
-import { useDeleteAccount } from "../../hooks/useDeleteAccount";
-import { useEditProfileForm } from "../../hooks/useEditProfileForm";
+
+// Hooks
+import {
+  useDeleteAccount,
+  useEditProfileForm,
+  useEmailVerification,
+  useFetchLastOrder,
+  useToast,
+} from "../../hooks";
 
 // Components
 import {

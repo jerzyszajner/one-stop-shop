@@ -11,10 +11,12 @@ import { sendEmailVerification } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 
 // Hooks
-import { useEmailVerification } from "../../hooks/useEmailVerification";
-import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
-import { useNavigation } from "../../hooks/useNavigation";
-import { useToast } from "../../hooks/useToast";
+import {
+  useEmailVerification,
+  useFirebaseValidation,
+  useNavigation,
+  useToast,
+} from "../../hooks";
 
 // Components
 import { Button, Toast } from "../../components";

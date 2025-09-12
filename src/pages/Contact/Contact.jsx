@@ -1,6 +1,5 @@
 // Hooks
-import { useToast } from "../../hooks/useToast";
-import { useContactForm } from "../../hooks/useContactForm";
+import { useContactForm, useToast } from "../../hooks";
 
 // Components
 import {

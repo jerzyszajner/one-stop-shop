@@ -1,7 +1,5 @@
 // Hooks
-import { useSignIn } from "../../hooks/useSignIn";
-import { useResetPassword } from "../../hooks/useResetPassword";
-import { useToast } from "../../hooks/useToast";
+import { useResetPassword, useSignIn, useToast } from "../../hooks";
 
 // Components
 import {

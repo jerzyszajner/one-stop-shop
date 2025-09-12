@@ -10,8 +10,7 @@ import { useDeliveryContext } from "../../context/DeliveryContext";
 import { CART_ACTIONS } from "../../reducers/cartReducer";
 
 // Hooks
-import { useCartCalculations } from "../../hooks/useCartCalculations";
-import { useNavigation } from "../../hooks/useNavigation";
+import { useCartCalculations, useNavigation } from "../../hooks";
 
 // Components
 import { Button, ButtonLink, CartItem } from "../../components";

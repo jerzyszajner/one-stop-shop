@@ -16,8 +16,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useUserContext } from "../../context/UserContext";
 
 // Hooks
-import { useToast } from "../../hooks/useToast";
-import { useOrderDetails } from "../../hooks/useOrderDetails";
+import { useOrderDetails, useToast } from "../../hooks";
 
 // Components
 import {

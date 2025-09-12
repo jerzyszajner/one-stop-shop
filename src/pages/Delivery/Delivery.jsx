@@ -4,13 +4,17 @@ import { useNavigate } from "react-router-dom";
 // Config
 import { DELIVERY_OPTIONS } from "../../config/deliveryConfig";
 
-// Hooks
-import { useAlternativeAddressForm } from "../../hooks/useAlternativeAddressForm";
-import { useCartCalculations } from "../../hooks/useCartCalculations";
+// Context
 import { useDeliveryContext } from "../../context/DeliveryContext";
-import { useFormValidation } from "../../hooks/useFormValidation";
-import { useToast } from "../../hooks/useToast";
 import { useUserContext } from "../../context/UserContext";
+
+// Hooks
+import {
+  useAlternativeAddressForm,
+  useCartCalculations,
+  useFormValidation,
+  useToast,
+} from "../../hooks";
 
 // Components
 import {
