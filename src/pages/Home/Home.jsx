@@ -1,9 +1,8 @@
-import { Link } from "react-router-dom";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
+// React
 import { useEffect, useState } from "react";
-import styles from "./Home.module.css";
-import { useFetchProducts } from "../../hooks/useFetchProducts";
-import Spinner from "../../components/Spinner/Spinner";
+
+// Third-party
+import { Link } from "react-router-dom";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +13,15 @@ import {
   faLock,
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
+
+// Hooks
+import { useFetchProducts } from "../../hooks/useFetchProducts";
+
+// Components
+import { ButtonLink, Spinner } from "../../components";
+
+// Styles
+import styles from "./Home.module.css";
 
 const Home = () => {
   // State

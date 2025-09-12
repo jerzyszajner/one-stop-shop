@@ -1,17 +1,15 @@
 // React
 import { useEffect } from "react";
 
-// React Router
+// Third-party
 import { useParams } from "react-router-dom";
 
-// Components
-import Button from "../../components/Button/Button";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import Link from "../../components/CustomLink/CustomLink";
-import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
-import AddressPreview from "../../components/AddressPreview/AddressPreview";
-import OrderSummary from "../../components/OrderSummary/OrderSummary";
+// Utils
+import { formatDate } from "../../utils/helpers";
+
+// Icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 // Context
 import { useAuthContext } from "../../context/AuthContext";
@@ -21,12 +19,16 @@ import { useUserContext } from "../../context/UserContext";
 import { useToast } from "../../hooks/useToast";
 import { useOrderDetails } from "../../hooks/useOrderDetails";
 
-// Utils
-import { formatDate } from "../../utils/helpers";
-
-// Icons
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+// Components
+import {
+  AddressPreview,
+  Button,
+  ButtonLink,
+  CustomLink,
+  OrderSummary,
+  Spinner,
+  Toast,
+} from "../../components";
 
 // Styles
 import styles from "./OrderConfirmation.module.css";
@@ -213,16 +215,16 @@ const OrderConfirmation = () => {
             </li>
             <li className={styles.nextStepsItem}>
               You can track your shipment in{" "}
-              <Link to="/orders" variant="primary">
+              <CustomLink to="/orders" variant="primary">
                 My Orders
-              </Link>{" "}
+              </CustomLink>{" "}
               section
             </li>
             <li className={styles.nextStepsItem}>
               Have questions?{" "}
-              <Link to="/contact" variant="primary">
+              <CustomLink to="/contact" variant="primary">
                 Contact us!
-              </Link>
+              </CustomLink>
             </li>
           </ul>
         </div>

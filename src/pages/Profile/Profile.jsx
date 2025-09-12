@@ -11,12 +11,14 @@ import { useDeleteAccount } from "../../hooks/useDeleteAccount";
 import { useEditProfileForm } from "../../hooks/useEditProfileForm";
 
 // Components
-import Modal from "../../components/Modal/Modal";
-import Toast from "../../components/Toast/Toast";
-import DeleteForm from "../../components/DeleteForm/DeleteForm";
-import EditProfile from "../../components/EditProfile/EditProfile";
-import ProfileHeader from "../../components/ProfileHeader/ProfileHeader";
-import ProfileDetails from "../../components/ProfileDetails/ProfileDetails";
+import {
+  DeleteForm,
+  EditProfile,
+  Modal,
+  ProfileHeader,
+  ProfileDetails,
+  Toast,
+} from "../../components";
 
 // Styles
 import styles from "./Profile.module.css";

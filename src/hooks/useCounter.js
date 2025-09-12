@@ -1,8 +1,8 @@
-// Context
-import { useCartContext } from "../context/CartContext";
-
 // Reducer
 import { CART_ACTIONS } from "../reducers/cartReducer";
+
+// Context
+import { useCartContext } from "../context/CartContext";
 
 export const useCounter = (itemId, quantity) => {
   // State

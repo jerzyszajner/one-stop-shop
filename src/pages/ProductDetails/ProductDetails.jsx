@@ -1,20 +1,17 @@
 // React
 import { useEffect, useState } from "react";
 
-// React Router
+// Third-party
 import { useParams } from "react-router-dom";
 
 // Firebase
 import { doc, getDoc } from "firebase/firestore";
 
-// Components
-import Button from "../../components/Button/Button";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
-
 // Context
 import { useCartContext } from "../../context/CartContext";
+
+// Config
+import { database } from "../../../firebaseConfig";
 
 // Reducer
 import { CART_ACTIONS } from "../../reducers/cartReducer";
@@ -23,8 +20,8 @@ import { CART_ACTIONS } from "../../reducers/cartReducer";
 import { useToast } from "../../hooks/useToast";
 import { useImageLoader } from "../../hooks/useImageLoader";
 
-// Config
-import { database } from "../../../firebaseConfig";
+// Components
+import { Button, ButtonLink, Spinner, Toast } from "../../components";
 
 // Styles
 import styles from "./ProductDetails.module.css";

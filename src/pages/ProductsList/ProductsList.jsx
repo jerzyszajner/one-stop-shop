@@ -1,15 +1,8 @@
 // React
 import { useEffect, useState, useCallback } from "react";
 
-// React Router
+// Third-party
 import { useSearchParams } from "react-router-dom";
-
-// Components
-import Filter from "../../components/Filter/Filter";
-import ProductItem from "../../components/ProductItem/ProductItem";
-import Sort from "../../components/Sort/Sort";
-import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
 
 // Context
 import { useCartContext } from "../../context/CartContext";
@@ -20,6 +13,9 @@ import { CART_ACTIONS } from "../../reducers/cartReducer";
 // Hooks
 import { useFetchProducts } from "../../hooks/useFetchProducts";
 import { useToast } from "../../hooks/useToast";
+
+// Components
+import { Filter, ProductItem, Sort, Spinner, Toast } from "../../components";
 
 // Styles
 import styles from "./ProductsList.module.css";

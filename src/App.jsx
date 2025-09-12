@@ -2,8 +2,7 @@
 import { Outlet } from "react-router-dom";
 
 // Components
-import Footer from "./components/Footer/Footer";
-import Navbar from "./components/Navbar/Navbar";
+import { Footer, Navbar } from "./components";
 
 // Styles
 import styles from "./App.module.css";

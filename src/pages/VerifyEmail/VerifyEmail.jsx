@@ -17,8 +17,7 @@ import { useNavigation } from "../../hooks/useNavigation";
 import { useToast } from "../../hooks/useToast";
 
 // Components
-import Button from "../../components/Button/Button";
-import Toast from "../../components/Toast/Toast";
+import { Button, Toast } from "../../components";
 
 // Styles
 import styles from "./VerifyEmail.module.css";

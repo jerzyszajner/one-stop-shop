@@ -4,11 +4,13 @@ import { useResetPassword } from "../../hooks/useResetPassword";
 import { useToast } from "../../hooks/useToast";
 
 // Components
-import Modal from "../../components/Modal/Modal";
-import ResetPasswordForm from "../../components/ResetPasswordForm/ResetPasswordForm";
-import SignInForm from "../../components/SignInForm/SignInForm";
-import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
+import {
+  Modal,
+  ResetPasswordForm,
+  SignInForm,
+  Spinner,
+  Toast,
+} from "../../components";
 
 // Styles
 import styles from "./SignIn.module.css";

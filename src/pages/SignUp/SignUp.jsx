@@ -3,9 +3,7 @@ import { useToast } from "../../hooks/useToast";
 import { useSignUp } from "../../hooks/useSignUp";
 
 // Components
-import SignUpForm from "../../components/SignUpForm/SignUpForm";
-import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
+import { SignUpForm, Spinner, Toast } from "../../components";
 
 // Styles
 import styles from "./SignUp.module.css";

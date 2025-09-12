@@ -1,25 +1,27 @@
-// Context
-import { useCartContext } from "../../context/CartContext";
-import { useDeliveryContext } from "../../context/DeliveryContext";
-
 // Config
 import { DELIVERY_OPTIONS } from "../../config/deliveryConfig";
 
 // Reducer
 import { CART_ACTIONS } from "../../reducers/cartReducer";
 
-// Components
-import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
-import PurchaseOverview from "../../components/PurchaseOverview/PurchaseOverview";
-import PaymentForm from "../../components/PaymentForm/PaymentForm";
-import DeliverySummary from "../../components/DeliverySummary/DeliverySummary";
+// Context
+import { useCartContext } from "../../context/CartContext";
+import { useDeliveryContext } from "../../context/DeliveryContext";
 
 // Hooks
 import { useToast } from "../../hooks/useToast";
 import { useCartCalculations } from "../../hooks/useCartCalculations";
 import { usePaymentForm } from "../../hooks/usePaymentForm";
 import { useOrderSubmission } from "../../hooks/useOrderSubmission";
+
+// Components
+import {
+  DeliverySummary,
+  PaymentForm,
+  PurchaseOverview,
+  Spinner,
+  Toast,
+} from "../../components";
 
 // Styles
 import styles from "./Checkout.module.css";

@@ -9,7 +9,7 @@ import {
 import App from "../App";
 
 // Components
-import RouteGuard from "../components/RouteGuard/RouteGuard";
+import { RouteGuard } from "../components";
 
 // Pages
 import About from "../pages/About/About";

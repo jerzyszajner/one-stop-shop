@@ -14,9 +14,7 @@ import { useCartCalculations } from "../../hooks/useCartCalculations";
 import { useNavigation } from "../../hooks/useNavigation";
 
 // Components
-import Button from "../../components/Button/Button";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import CartItem from "../../components/CartItem/CartItem";
+import { Button, ButtonLink, CartItem } from "../../components";
 
 // Styles
 import styles from "./Cart.module.css";

@@ -13,16 +13,18 @@ import { useToast } from "../../hooks/useToast";
 import { useUserContext } from "../../context/UserContext";
 
 // Components
-import AddressPreview from "../../components/AddressPreview/AddressPreview";
-import AlternativeAddressForm from "../../components/AlternativeAddressForm/AlternativeAddressForm";
-import Button from "../../components/Button/Button";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import DeliveryOptions from "../../components/DeliveryOptions/DeliveryOptions";
-import Modal from "../../components/Modal/Modal";
-import OrderSummary from "../../components/OrderSummary/OrderSummary";
-import Spinner from "../../components/Spinner/Spinner";
-import TextField from "../../components/TextField/TextField";
-import Toast from "../../components/Toast/Toast";
+import {
+  AddressPreview,
+  AlternativeAddressForm,
+  Button,
+  ButtonLink,
+  DeliveryOptions,
+  Modal,
+  OrderSummary,
+  Spinner,
+  TextField,
+  Toast,
+} from "../../components";
 
 // Styles
 import styles from "./Delivery.module.css";

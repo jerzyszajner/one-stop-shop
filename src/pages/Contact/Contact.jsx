@@ -1,13 +1,15 @@
-// Components
-import Modal from "../../components/Modal/Modal";
-import Spinner from "../../components/Spinner/Spinner";
-import Toast from "../../components/Toast/Toast";
-import ContactForm from "../../components/ContactForm/ContactForm";
-import ContactSucces from "../../components/ContactSucces/ContactSucces";
-
 // Hooks
 import { useToast } from "../../hooks/useToast";
 import { useContactForm } from "../../hooks/useContactForm";
+
+// Components
+import {
+  ContactForm,
+  ContactSucces,
+  Modal,
+  Spinner,
+  Toast,
+} from "../../components";
 
 // Styles
 import styles from "./Contact.module.css";
