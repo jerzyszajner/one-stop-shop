@@ -1,22 +1,21 @@
 // React
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Config
 import { auth } from "../../firebaseConfig";
 
-/**
- * Email verification hook - checks Firebase to detect verification
- * Needed when user skips verify-email page and clicks verification link elsewhere
- */
+// Email verification hook to check if user is verified and update state
 export const useEmailVerification = (
   user,
   onVerified,
   onVerificationComplete = null,
   interval = 2000
 ) => {
+  const [verificationUpdate, setVerificationUpdate] = useState(0);
+
   useEffect(() => {
     if (!user || user.emailVerified) {
-      return; // Don't start interval if user is verified or doesn't exist
+      return;
     }
 
     const checkEmailVerification = async () => {
@@ -24,21 +23,23 @@ export const useEmailVerification = (
         await auth.currentUser.reload();
         const isVerified = auth.currentUser.emailVerified;
 
-        if (onVerified) {
-          onVerified(isVerified); // Pass verification status to callback
-        }
+        if (isVerified) {
+          setVerificationUpdate((prev) => prev + 1);
 
-        // Call completion callback only when email becomes verified
-        if (isVerified && onVerificationComplete) {
-          onVerificationComplete();
+          if (onVerified) {
+            onVerified(isVerified);
+          }
+
+          if (onVerificationComplete) {
+            onVerificationComplete();
+          }
         }
       }
     };
 
     const checkInterval = setInterval(checkEmailVerification, interval);
-
-    return () => {
-      clearInterval(checkInterval);
-    };
+    return () => clearInterval(checkInterval);
   }, [user, onVerified, onVerificationComplete, interval]);
+
+  return { verificationUpdate };
 };

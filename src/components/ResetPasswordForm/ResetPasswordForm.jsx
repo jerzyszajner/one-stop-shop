@@ -7,9 +7,9 @@ import InputField from "../InputField/InputField";
 import styles from "./ResetPasswordForm.module.css";
 
 const ResetPasswordForm = ({
-  onResetInputChange,
+  onInputChange,
   onSubmit,
-  onCancelResetPassword,
+  onClose,
   formData,
   errors,
 }) => {
@@ -33,7 +33,7 @@ const ResetPasswordForm = ({
           name="email"
           placeholder="Enter your email address"
           autoComplete="email"
-          onChange={onResetInputChange}
+          onChange={onInputChange}
           value={formData.email}
           errors={errors.email}
         />
@@ -43,7 +43,7 @@ const ResetPasswordForm = ({
           Reset password
         </Button>
         <Button
-          onClick={onCancelResetPassword}
+          onClick={onClose}
           variant="primary"
           type="button"
           ariaLabel="Close"

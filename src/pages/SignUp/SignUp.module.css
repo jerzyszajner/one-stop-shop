@@ -12,39 +12,9 @@
     position: relative;
 }
 
-/* Sign up form */
-.signUpForm {
-    width: 100%;
-    max-width: 670px;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-small);
-    padding: var(--space-large);
-    background-color: var(--secondary-color-light);
-    border-radius: var(--border-radius-medium);
-}
-
-.formTitle {
-    font-weight: bold;
-    font-size: var(--medium-font-size);
-}
-
-/* Buttons container */
-.buttonsContainer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-x-small);
-    width: 100%;
-}
-
 /* Responsive design */
 @media screen and (max-width: 768px) {
     .formWrapper {
-        padding: var(--space-medium);
-    }
-
-    .signUpForm {
-        width: 100%;
         padding: var(--space-medium);
     }
 }
@@ -52,13 +22,5 @@
 @media screen and (max-width: 480px) {
     .formWrapper {
         padding: 0;
-    }
-
-    .signUpForm {
-        padding: var(--space-medium);
-    }
-
-    .formGroup {
-        padding: var(--space-medium);
     }
 }

@@ -12,63 +12,11 @@
   position: relative;
 }
 
-/* Sign in form container */
-.signInForm {
-  width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-small);
-  padding: var(--space-large);
-  background-color: var(--secondary-color-light);
-  border-radius: var(--border-radius-medium);
-}
-
-.formTitle {
-  font-weight: bold;
-  font-size: var(--medium-font-size);
-}
-
-/* Form group styling */
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-x-small);
-  padding: var(--space-medium);
-  border-radius: var(--border-radius-medium);
-}
-
-.formGroupTitle {
-  font-weight: bold;
-}
-
-.createAccountText,
-.forgotPasswordText {
-  font-size: var(--base-font-size);
-}
-
-/* Buttons container */
-.buttonsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-x-small);
-  width: 100%;
-}
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
   .formWrapper {
     padding: var(--space-medium);
-  }
-
-  .signInForm {
-    width: 100%;
-    padding: var(--space-medium);
-  }
-
-  .createAccountText,
-  .forgotPasswordText {
-    font-size: var(--medium-small-font-size);
   }
 }
 

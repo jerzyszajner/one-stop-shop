@@ -1,23 +1,24 @@
 // React
 import { useState } from "react";
 
-// React Router
-import { useNavigate, useLocation } from "react-router-dom";
+// Third-party
+import { useLocation } from "react-router-dom";
 
 // Firebase
 import { sendEmailVerification } from "firebase/auth";
 
-// Components
-import Button from "../../components/Button/Button";
-import Toast from "../../components/Toast/Toast";
+// Config
+import { auth } from "../../../firebaseConfig";
 
 // Hooks
 import { useEmailVerification } from "../../hooks/useEmailVerification";
 import { useFirebaseValidation } from "../../hooks/useFirebaseValidation";
+import { useNavigation } from "../../hooks/useNavigation";
 import { useToast } from "../../hooks/useToast";
 
-// Config
-import { auth } from "../../../firebaseConfig";
+// Components
+import Button from "../../components/Button/Button";
+import Toast from "../../components/Toast/Toast";
 
 // Styles
 import styles from "./VerifyEmail.module.css";
@@ -28,23 +29,15 @@ const VerifyEmail = () => {
 
   // Hooks
   const { getErrorMessage } = useFirebaseValidation();
+  const { navigateTo } = useNavigation();
   const { toast, showToast, hideToast } = useToast();
 
   // Navigation
-  const navigate = useNavigate();
   const location = useLocation();
 
   // Handle navigation after verification
   const handleVerificationComplete = () => {
-    const from = location.state?.from;
-
-    if (from === "cart") {
-      navigate("/delivery");
-    } else if (from === "profile") {
-      navigate("/profile");
-    } else {
-      navigate("/");
-    }
+    navigateTo("verification", { from: location.state?.from });
   };
 
   // Use email verification hook with navigation
@@ -101,13 +94,7 @@ const VerifyEmail = () => {
       )}
 
       {/* Toast notifications */}
-      <Toast
-        title={toast.title}
-        description={toast.description}
-        isVisible={toast.isVisible}
-        onHide={hideToast}
-        type={toast.type}
-      />
+      <Toast {...toast} hideToast={hideToast} />
     </div>
   );
 };
