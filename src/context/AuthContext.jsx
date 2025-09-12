@@ -1,5 +1,5 @@
 // React
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 
 // Firebase
 import { onAuthStateChanged } from "firebase/auth";
@@ -31,4 +31,11 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export { AuthContext };
+/* eslint-disable react-refresh/only-export-components */
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuthContext must be used within a AuthProvider");
+  }
+  return context;
+};
