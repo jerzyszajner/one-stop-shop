@@ -1,36 +1,28 @@
-// React
-import { useState, useEffect } from "react";
+// Third-party
 import { useNavigate } from "react-router-dom";
 
+// Config
+import { DELIVERY_OPTIONS } from "../../config/deliveryConfig";
+
 // Hooks
-import { useDeliveryValidation } from "../../hooks/useDeliveryValidation";
-import { useAlternativeAddressValidation } from "../../hooks/useAlternativeAddressValidation";
-import { useToast } from "../../hooks/useToast";
+import { useAlternativeAddressForm } from "../../hooks/useAlternativeAddressForm";
 import { useCartCalculations } from "../../hooks/useCartCalculations";
-import { useDeliveryContext } from "../../hooks/useDeliveryContext";
-import { useUserContext } from "../../hooks/useUserContext";
+import { useDeliveryContext } from "../../context/DeliveryContext";
+import { useFormValidation } from "../../hooks/useFormValidation";
+import { useToast } from "../../hooks/useToast";
+import { useUserContext } from "../../context/UserContext";
 
 // Components
-import Button from "../../components/Button/Button";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import Modal from "../../components/Modal/Modal";
-import Toast from "../../components/Toast/Toast";
 import AddressPreview from "../../components/AddressPreview/AddressPreview";
 import AlternativeAddressForm from "../../components/AlternativeAddressForm/AlternativeAddressForm";
+import Button from "../../components/Button/Button";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
+import DeliveryOptions from "../../components/DeliveryOptions/DeliveryOptions";
+import Modal from "../../components/Modal/Modal";
 import OrderSummary from "../../components/OrderSummary/OrderSummary";
-import TextField from "../../components/TextField/TextField";
-import DeliveryOption from "../../components/DeliveryOption/DeliveryOption";
 import Spinner from "../../components/Spinner/Spinner";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
-
-// Utils
-import { formatDigits } from "../../utils/helpers";
-
-// Config
-import {
-  DELIVERY_METHODS,
-  MESSAGE_MAX_LENGTH,
-} from "../../config/deliveryConfig";
+import TextField from "../../components/TextField/TextField";
+import Toast from "../../components/Toast/Toast";
 
 // Styles
 import styles from "./Delivery.module.css";
@@ -41,133 +33,53 @@ const Delivery = () => {
     useDeliveryContext();
   const {
     isAlternativeAddress,
-    alternativeAddress,
-    deliveryMessage,
-    selectedMethod,
+    messageOptional,
+    selectedOption,
     deliveryPrice,
   } = deliveryData;
-  const [showAddressModal, setShowAddressModal] = useState(false);
-  const [modalFormData, setModalFormData] = useState(alternativeAddress);
-
   // Hooks
-  const { deliveryErrors, validateDeliveryMethod, validateMessageLength } =
-    useDeliveryValidation();
-  const {
-    alternativeAddressErrors,
-    validateAlternativeAddress,
-    clearAlternativeAddressErrors,
-  } = useAlternativeAddressValidation();
+  const { validateForm, errors } = useFormValidation();
   const { toast, showToast, hideToast } = useToast();
   const { subtotalPrice, totalPrice } = useCartCalculations();
-  const { userData, isLoading, error } = useUserContext();
+  const { isLoading } = useUserContext();
+  const alternativeAddressForm = useAlternativeAddressForm(showToast);
 
   // Navigation
   const navigate = useNavigate();
 
-  // Handle error message
-  useEffect(() => {
-    if (error) {
-      showToast("❌ User Data Error", error.message, "error");
-    }
-  }, [error, showToast]);
-
-  // Fetch user data and copy to standard address
-  useEffect(() => {
-    if (userData) {
-      updateDeliveryData({
-        standardAddress: {
-          firstname: userData?.firstname || "",
-          lastname: userData?.lastname || "",
-          street: userData?.street || "",
-          zipCode: userData?.zipCode || "",
-          city: userData?.city || "",
-          country: userData?.country || "",
-          phone: userData?.phone || "",
-        },
-      });
-    }
-  }, [userData, updateDeliveryData]);
-
   // Handle delivery option click
   const handleDeliveryOptionClick = (optionId) => {
-    const config = DELIVERY_METHODS[optionId];
+    const config = DELIVERY_OPTIONS[optionId];
     updateDeliveryData({
-      selectedMethod: optionId,
+      selectedOption: optionId,
       deliveryPrice: config?.price || 0,
     });
   };
 
-  // Handle open modal
-  const handleOpenModal = () => {
-    setShowAddressModal(true);
-    setModalFormData(alternativeAddress);
-    updateDeliveryData({ isAlternativeAddress: true });
-    clearAlternativeAddressErrors();
-  };
-
-  // Handle checkbox change
+  // Checkbox toggle
   const handleCheckboxChange = (e) => {
     const { checked } = e.target;
-
-    if (checked) {
-      handleOpenModal();
-    } else {
-      updateDeliveryData({ isAlternativeAddress: false });
-    }
+    if (checked) alternativeAddressForm.openAddressModal();
+    else updateDeliveryData({ isAlternativeAddress: false });
   };
 
-  // Handle close modal
-  const handleCloseModal = () => {
-    setShowAddressModal(false);
-    setModalFormData(alternativeAddress);
-    updateDeliveryData({ isAlternativeAddress: false });
-    clearAlternativeAddressErrors();
-  };
-
-  // Handle modal form changes
-  const handleModalInputChange = (e) => {
-    const { name, value } = e.target;
-    setModalFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // Handle message input changes with validation
+  // Message change with validation
   const handleMessageInputChange = (e) => {
     const { value } = e.target;
-    updateDeliveryData({ deliveryMessage: value });
-    validateMessageLength(value, MESSAGE_MAX_LENGTH);
+    updateDeliveryData({ messageOptional: value });
+    validateForm({ ...deliveryData, messageOptional: value }, "delivery");
   };
 
-  // Handle save modal
-  const handleModalSubmit = (e) => {
-    e.preventDefault();
-
-    if (!validateAlternativeAddress(modalFormData)) {
-      return;
-    }
-
-    updateDeliveryData({
-      alternativeAddress: modalFormData,
-      isAlternativeAddress: true,
-    });
-
-    setShowAddressModal(false);
-    showToast("Success", "Alternative address saved", "success");
+  // Submit main form
+  const proceedToCheckout = () => {
+    updateDeliveryData({ messageOptional, subtotalPrice });
+    navigate("/checkout");
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (validateDeliveryMethod(deliveryData)) {
-      // Update delivery data with final values
-      updateDeliveryData({
-        deliveryMessage,
-        subtotalPrice,
-      });
-      navigate("/checkout");
+    if (validateForm(deliveryData, "delivery")) {
+      proceedToCheckout();
     }
   };
 
@@ -176,35 +88,20 @@ const Delivery = () => {
       <div className={styles.deliveryContainer}>
         <h1 className={styles.deliveryTitle}>Delivery Information</h1>
 
-        {/* ---------------- Delivery Method Section ---------------- */}
-        <div className={styles.deliverySection}>
-          <h2 className={styles.sectionTitle}>Delivery Method *</h2>
-          <div className={styles.deliveryOptions}>
-            {Object.entries(DELIVERY_METHODS).map(
-              ([deliveryMethod, deliveryInfo]) => (
-                <DeliveryOption
-                  key={deliveryMethod}
-                  deliveryMethod={deliveryMethod}
-                  deliveryInfo={deliveryInfo}
-                  isSelected={selectedMethod === deliveryMethod}
-                  onSelect={handleDeliveryOptionClick}
-                />
-              )
-            )}
-          </div>
-          <div className={styles.errorContainer}>
-            {deliveryErrors && (
-              <ErrorMessage message={deliveryErrors.selectedMethod} />
-            )}
-          </div>
-        </div>
+        {/* Delivery Method Section */}
+        <DeliveryOptions
+          selectedOption={selectedOption}
+          onSelect={handleDeliveryOptionClick}
+          errors={errors}
+          options={DELIVERY_OPTIONS}
+        />
 
         <form onSubmit={handleSubmit} className={styles.deliveryForm}>
-          {/* ---------------- Delivery Address Section ---------------- */}
+          {/* Delivery Address Section */}
           <div className={styles.deliverySection}>
             <h2 className={styles.sectionTitle}>Delivery Address</h2>
 
-            {/* ---------------- Delivery Address preview ---------------- */}
+            {/* Delivery Address preview */}
             <div className={styles.defaultAddress}>
               <h3 className={styles.addressTitle}>Current delivery address</h3>
               <AddressPreview previewData={currentAddress} />
@@ -215,7 +112,6 @@ const Delivery = () => {
                 className={styles.checkboxLabel}
                 htmlFor="alternativeAddress"
               >
-                {/* ---------------- Alternative address checkbox ---------------- */}
                 <input
                   id="alternativeAddress"
                   type="checkbox"
@@ -229,21 +125,22 @@ const Delivery = () => {
             </div>
           </div>
 
-          {/* ---------------- Delivery Message Section ---------------- */}
+          {/* Delivery Message Section */}
           <div className={styles.deliverySection}>
             <TextField
               label="Delivery Message"
-              id="message"
-              name="message"
+              id="messageOptional"
+              name="messageOptional"
               placeholder="Enter your delivery message"
-              maxLength={MESSAGE_MAX_LENGTH}
+              maxLength={200}
               onChange={handleMessageInputChange}
-              value={deliveryMessage}
-              errors={deliveryErrors.message}
+              value={messageOptional}
+              errors={errors.messageOptional}
               required={false}
             />
           </div>
-          {/* ---------------- Order Summary Section ---------------- */}
+
+          {/* Order Summary Section */}
           <div className={styles.deliverySection}>
             <OrderSummary
               title="Delivery Summary"
@@ -253,7 +150,7 @@ const Delivery = () => {
             />
           </div>
 
-          {/* ---------------- Action Buttons ---------------- */}
+          {/* Action Buttons */}
           <div className={styles.buttonsContainer}>
             <Button type="submit" variant="primary">
               Proceed to Checkout
@@ -266,27 +163,21 @@ const Delivery = () => {
       </div>
 
       {/* Alternative delivery address modal */}
-      {showAddressModal && (
+      {alternativeAddressForm.showAddressModal && (
         <Modal title="Delivery Address Form">
           <AlternativeAddressForm
-            onSubmit={handleModalSubmit}
-            onInputChange={handleModalInputChange}
-            onFormatDigits={formatDigits}
-            onClose={handleCloseModal}
-            formData={modalFormData}
-            errors={alternativeAddressErrors}
+            formData={alternativeAddressForm.formData}
+            errors={alternativeAddressForm.errors}
+            isSaving={alternativeAddressForm.isSaving}
+            onSubmit={alternativeAddressForm.handleSubmit}
+            onCancel={alternativeAddressForm.handleCancelEdit}
+            onInputChange={alternativeAddressForm.handleInputChange}
           />
         </Modal>
       )}
 
       {/* Toast notification */}
-      <Toast
-        title={toast.title}
-        description={toast.description}
-        isVisible={toast.isVisible}
-        onHide={hideToast}
-        type={toast.type}
-      />
+      <Toast {...toast} hideToast={hideToast} />
 
       {/* Spinner notification */}
       {isLoading && <Spinner />}

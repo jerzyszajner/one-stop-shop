@@ -19,28 +19,18 @@
 }
 
 /* ******************* Delivery Method Section ******************* */
+
 .deliverySection {
     background: var(--secondary-color-light);
-    border-radius: var(--border-radius-medium);
     padding: var(--space-small) 0;
 }
+
 
 .sectionTitle {
     font-size: var(--base-font-size);
     margin-bottom: var(--space-small);
     color: var(--text-dark);
     font-weight: bold;
-}
-
-.deliveryOptions {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-small);
-}
-
-.errorContainer {
-    margin-top: var(--space-x-small);
-    height: 10px;
 }
 
 /* ******************* Delivery Address Section ******************* */

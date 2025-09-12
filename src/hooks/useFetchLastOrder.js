@@ -8,13 +8,13 @@ import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { database } from "../../firebaseConfig";
 
 // Context
-import { useAuthContext } from "./useAuthContext";
+import { useAuthContext } from "../context/AuthContext";
 
 // Custom hook for fetching user's last order from Firestore
 export const useFetchLastOrder = () => {
   // State
   const [lastPurchase, setLastPurchase] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Auth Context
@@ -23,12 +23,15 @@ export const useFetchLastOrder = () => {
   // Fetch last order
   useEffect(() => {
     const fetchLastOrder = async () => {
+      setLastPurchase(null);
+      setError(null);
+
       try {
         if (!user?.uid) {
           setIsLoading(false);
           return;
         }
-
+        setIsLoading(true);
         const ordersQuery = query(
           collection(database, "users", user.uid, "orders"),
           orderBy("createdAt", "desc"),

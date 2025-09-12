@@ -1,24 +1,22 @@
-// React Router
-import { useNavigate } from "react-router-dom";
-
-// Hooks
-import { useAuthContext } from "../../hooks/useAuthContext";
+// React
 import { useEffect } from "react";
 
-// Components
-import Button from "../../components/Button/Button";
-import ButtonLink from "../../components/ButtonLink/ButtonLink";
-import CartItem from "../../components/CartItem/CartItem";
-
 // Context
-import { useCartContext } from "../../hooks/useCartContext";
-import { useDeliveryContext } from "../../hooks/useDeliveryContext";
+import { useAuthContext } from "../../context/AuthContext";
+import { useCartContext } from "../../context/CartContext";
+import { useDeliveryContext } from "../../context/DeliveryContext";
 
 // Reducer
 import { CART_ACTIONS } from "../../reducers/cartReducer";
 
 // Hooks
 import { useCartCalculations } from "../../hooks/useCartCalculations";
+import { useNavigation } from "../../hooks/useNavigation";
+
+// Components
+import Button from "../../components/Button/Button";
+import ButtonLink from "../../components/ButtonLink/ButtonLink";
+import CartItem from "../../components/CartItem/CartItem";
 
 // Styles
 import styles from "./Cart.module.css";
@@ -31,7 +29,7 @@ const Cart = () => {
   const { clearDeliveryData } = useDeliveryContext();
 
   // Navigation
-  const navigate = useNavigate();
+  const { navigateTo } = useNavigation();
 
   // Clear delivery data when cart becomes empty
   useEffect(() => {
@@ -47,15 +45,7 @@ const Cart = () => {
 
   // Handle checkout
   const handleCheckout = () => {
-    if (user) {
-      if (user.emailVerified) {
-        navigate("/delivery");
-      } else {
-        navigate("/verify-email", { state: { from: "cart" } });
-      }
-    } else {
-      navigate("/sign-in", { state: { from: "cart" } });
-    }
+    navigateTo("cart", { user });
   };
 
   return (

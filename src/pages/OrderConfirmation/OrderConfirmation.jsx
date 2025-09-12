@@ -14,9 +14,8 @@ import AddressPreview from "../../components/AddressPreview/AddressPreview";
 import OrderSummary from "../../components/OrderSummary/OrderSummary";
 
 // Context
-import { useAuthContext } from "../../hooks/useAuthContext";
-import { useUserContext } from "../../hooks/useUserContext";
-import { useDeliveryContext } from "../../hooks/useDeliveryContext";
+import { useAuthContext } from "../../context/AuthContext";
+import { useUserContext } from "../../context/UserContext";
 
 // Hooks
 import { useToast } from "../../hooks/useToast";
@@ -39,16 +38,10 @@ const OrderConfirmation = () => {
   // State
   const { user } = useAuthContext();
   const { userData } = useUserContext();
-  const { clearDeliveryData } = useDeliveryContext();
 
   // Hooks
   const { order, isLoading, error } = useOrderDetails(orderNumber, user?.uid);
   const { toast, showToast, hideToast } = useToast();
-
-  useEffect(() => {
-    // Clear delivery data when order confirmation page loads
-    clearDeliveryData();
-  }, [clearDeliveryData]);
 
   // Handle order errors
   useEffect(() => {
@@ -66,17 +59,17 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <div className={styles.orderConfirmationWrapper}>
-      <div className={styles.orderConfirmationContainer}>
-        <div className={styles.confirmationHeader}>
-          <h1 className={styles.confirmationTitle}>Order Confirmed!</h1>
-          <p className={styles.confirmationText}>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Order Confirmed!</h1>
+          <p className={styles.subtitle}>
             Thank you for your purchase! Your order has been successfully
             placed.
           </p>
         </div>
-        <div className={styles.orderHeader}>
-          <h2 className={styles.orderHeaderTitle}>Order Details</h2>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Order Details</h2>
           <div className={styles.actionsContainer}>
             <Button onClick={handlePrint} variant="print">
               🖨️ Print Receipt
@@ -84,35 +77,36 @@ const OrderConfirmation = () => {
           </div>
         </div>
 
-        <div className={styles.orderInfoSection}>
-          <div className={styles.customerName}>
-            <span className={styles.orderLabel}>Name:</span>
-            {userData?.firstname} {userData?.lastname}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Order Information</h3>
+          <div className={styles.infoRow}>
+            <span className={styles.label}>Name:</span>
+            {userData?.firstname || "N/A"} {userData?.lastname || "N/A"}
           </div>
-          <div className={styles.customerEmail}>
-            <span className={styles.orderLabel}>Email:</span>
-            {userData?.email || user?.email}
+          <div className={styles.infoRow}>
+            <span className={styles.label}>Email:</span>
+            {userData?.email || user?.email || "N/A"}
           </div>
-          <div className={styles.customerPhone}>
-            <span className={styles.orderLabel}>Phone:</span>
-            {order?.deliveryAddress?.phone}
+          <div className={styles.infoRow}>
+            <span className={styles.label}>Phone:</span>
+            {order?.deliveryAddress?.phone || "N/A"}
           </div>
-          <div className={styles.orderNumber}>
-            <span className={styles.orderLabel}>Order Number:</span>#
-            {order?.orderNumber}
+          <div className={styles.infoRow}>
+            <span className={styles.label}>Order Number:</span>#
+            {order?.orderNumber || "N/A"}
           </div>
-          <div className={styles.orderDate}>
-            <span className={styles.orderLabel}>Order Date:</span>
-            {formatDate(order?.createdAt)}
+          <div className={styles.infoRow}>
+            <span className={styles.label}>Order Date:</span>
+            {formatDate(order?.createdAt) || "N/A"}
           </div>
-          <div className={styles.estimatedDelivery}>
-            <span className={styles.orderLabel}>Estimated Delivery Time:</span>
-            {order?.deliveryMethod?.time}
+          <div className={styles.infoRow}>
+            <span className={styles.label}>Estimated Delivery Time:</span>
+            {order?.deliveryOption?.time || "N/A"}
           </div>
         </div>
 
-        <div className={styles.orderItemsSection}>
-          <h3 className={styles.sectionTitle}>Ordered Products:</h3>
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Ordered Products</h3>
           <div className={styles.itemsList}>
             {order?.cartItems?.map((item) => (
               <div key={item.id} className={styles.orderItem}>
@@ -142,8 +136,9 @@ const OrderConfirmation = () => {
           </div>
         </div>
 
-        <div className={styles.orderSummarySection}>
+        <div className={styles.section}>
           <OrderSummary
+            className={styles.sectionTitle}
             title="Order Summary"
             subtotalPrice={order?.orderSummary?.subtotalPrice || 0}
             deliveryPrice={order?.orderSummary?.deliveryPrice || 0}
@@ -151,15 +146,15 @@ const OrderConfirmation = () => {
           />
         </div>
 
-        <div className={styles.paymentSection}>
-          <h3 className={styles.sectionTitle}>Payment Information:</h3>
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Payment Information</h3>
           <div className={styles.paymentContent}>
-            <div className={styles.paymentMethodInfo}>
-              <span className={styles.paymentLabel}>Payment Method:</span>
-              {order.paymentDetails?.paymentMethod}
+            <div className={styles.paymentInfo}>
+              <span className={styles.label}>Payment Method:</span>
+              {order?.paymentDetails?.paymentMethod || "N/A"}
             </div>
             <div className={styles.paymentStatus}>
-              <span className={styles.paymentLabel}>Payment Status:</span>
+              <span className={styles.label}>Payment Status:</span>
               <span className={styles.statusPaid}>
                 <FontAwesomeIcon
                   icon={faCheckCircle}
@@ -171,54 +166,54 @@ const OrderConfirmation = () => {
           </div>
         </div>
 
-        <div className={styles.shippingSection}>
-          <h3 className={styles.sectionTitle}>Delivery Address:</h3>
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Delivery Address</h3>
           <div className={styles.shippingContent}>
             <AddressPreview previewData={order?.deliveryAddress} />
           </div>
         </div>
 
-        <div className={styles.deliveryMethodSection}>
-          <h3 className={styles.sectionTitle}>Delivery Method:</h3>
-          <div className={styles.deliveryMethodContent}>
-            <div className={styles.deliveryMethodInfo}>
-              <span className={styles.orderLabel}>Name:</span>
-              {order?.deliveryMethod?.name}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Delivery Option</h3>
+          <div className={styles.deliveryContent}>
+            <div className={styles.deliveryInfo}>
+              <span className={styles.label}>Name:</span>
+              {order?.deliveryOption?.name || "N/A"}
             </div>
-            <div className={styles.deliveryMethodInfo}>
-              <span className={styles.orderLabel}>Price:</span>$
-              {order?.deliveryMethod?.price}
+            <div className={styles.deliveryInfo}>
+              <span className={styles.label}>Price:</span>$
+              {order?.deliveryOption?.price || 0}
             </div>
-            <div className={styles.deliveryMethodInfo}>
-              <span className={styles.orderLabel}>Time:</span>
-              {order?.deliveryMethod?.time}
+            <div className={styles.deliveryInfo}>
+              <span className={styles.label}>Time:</span>
+              {order?.deliveryOption?.time || "N/A"}
             </div>
-            <div className={styles.deliveryMethodInfo}>
-              <span className={styles.orderLabel}>Description:</span>
-              {order?.deliveryMethod?.description}
+            <div className={styles.deliveryInfo}>
+              <span className={styles.label}>Description:</span>
+              {order?.deliveryOption?.description || "N/A"}
             </div>
           </div>
         </div>
 
-        <div className={styles.courierInstructionsSection}>
-          <h3 className={styles.sectionTitle}>Delivery Instructions:</h3>
-          <p className={styles.courierMessage}>
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Delivery Instructions</h3>
+          <p className={styles.messageContent}>
             {order?.message || "No delivery instructions provided."}
           </p>
         </div>
 
-        <div className={styles.nextStepsSection}>
+        <div className={styles.section}>
           <h3 className={styles.sectionTitle}>What&apos;s Next?</h3>
           <ul className={styles.nextStepsList}>
             <li className={styles.nextStepsItem}>
               You&apos;ll receive an order confirmation email
             </li>
             <li className={styles.nextStepsItem}>
-              We&apos;ll send you shipping information
+              We will send you shipping information
             </li>
             <li className={styles.nextStepsItem}>
               You can track your shipment in{" "}
-              <Link to="/profile" variant="primary">
+              <Link to="/orders" variant="primary">
                 My Orders
               </Link>{" "}
               section
@@ -240,13 +235,7 @@ const OrderConfirmation = () => {
       </div>
 
       {/* Toast notifications */}
-      <Toast
-        title={toast.title}
-        description={toast.description}
-        isVisible={toast.isVisible}
-        onHide={hideToast}
-        type={toast.type}
-      />
+      <Toast {...toast} hideToast={hideToast} />
     </div>
   );
 };

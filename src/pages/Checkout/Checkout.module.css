@@ -13,7 +13,7 @@
 .checkoutContainer {
   width: 100%;
   flex: 1;
-  max-width: 1100px;
+  max-width: 1200px;
   height: auto;
   display: flex;
   padding: var(--space-large);
@@ -25,53 +25,7 @@
   flex-direction: column;
   gap: var(--space-medium);
   width: 100%;
-}
-
-/* Purchase overview and payment sections */
-.purchaseOverviewContainer {
-  width: 100%;
-  color: var(--text-light);
-}
-
-.emptyCard {
-  font-size: var(--medium-font-size);
-  font-weight: bold;
-  color: var(--text-dark);
-}
-
-/* Cart list container - simplified class */
-.cartListContainer {
-  width: 100%;
-  border-radius: var(--border-radius-medium);
-  background: var(--secondary-color-light);
-  padding: var(--space-large);
-}
-
-.cartList {
-  width: 100%;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-small);
-}
-
-.orderSummarySection {
-  padding: var(--space-medium) 0 0;
-  background: var(--secondary-color-light);
-  border-radius: var(--border-radius-medium);
-}
-
-/* Delivery information styles */
-.deliverySection {
-  width: 100%;
-  height: fit-content;
-  background: var(--secondary-color-light);
-  border-radius: var(--border-radius-medium);
-  padding: var(--space-large);
-  color: var(--text-dark);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-small);
+  max-width: 50%;
 }
 
 .paymentSection {
@@ -86,104 +40,6 @@
   gap: var(--space-small);
 }
 
-.deliveryContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-small);
-}
-
-.deliveryTitle {
-  font-size: var(--medium-small-font-size);
-  font-weight: bold;
-  color: var(--text-dark);
-}
-
-.methodSection,
-.deliveryAddressSection,
-.deliveryMessageSection {
-  display: flex;
-  flex-direction: column;
-}
-
-.sectionTitle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: var(--basic-font-size);
-  font-weight: bold;
-  color: var(--text-dark);
-  margin-bottom: var(--space-x-small);
-}
-
-.methodInfo {
-  color: var(--text-dark);
-  border: 1px dashed var(--secondary-color);
-  padding: var(--space-small);
-  border-radius: var(--border-radius-small);
-  display: flex;
-  justify-content: space-between;
-}
-
-.method {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-x-small);
-}
-
-.methodName {
-  font-size: var(--basic-font-size);
-  font-weight: bold;
-}
-
-.methodTime,
-.methodDescription {
-  font-size: var(--small-font-size);
-  text-align: left;
-}
-
-.deliveryMessageText {
-  color: var(--text-dark);
-  border: 1px dashed var(--secondary-color);
-  padding: var(--space-small);
-  border-radius: var(--border-radius-small);
-}
-
-.methodPrice {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.addressCard {
-  border: 1px dashed var(--secondary-color);
-  border-radius: var(--border-radius-small);
-  padding: var(--space-small);
-}
-
-/****************************** Payment details section ******************************/
-
-/* Payment form */
-.paymentForm {
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
-  gap: var(--space-x-small);
-}
-
-.formTitle {
-  font-size: var(--medium-small-font-size);
-  font-weight: bold;
-  color: var(--text-dark);
-  margin-bottom: var(--space-x-small);
-}
-
-.buttonsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-x-small);
-  width: 100%;
-  margin-top: var(--space-small);
-}
 
 /* Responsive design */
 @media screen and (max-width: 868px) {
@@ -193,20 +49,15 @@
     padding: var(--space-medium);
   }
 
-  .cartListContainer {
-    width: 100%;
-  }
-
-  .purchaseOverviewContainer,
   .paymentSection {
     width: 100%;
   }
 
   .checkoutFormsContainer {
+    max-width: 100%;
     gap: var(--space-medium);
   }
 
-  .deliverySection,
   .paymentSection {
     padding: var(--space-medium);
   }
@@ -223,12 +74,6 @@
     gap: var(--space-small);
   }
 
-  .cartListContainer {
-    width: 100%;
-    padding: var(--space-medium);
-  }
-
-  .purchaseOverviewContainer,
   .paymentSection {
     width: 100%;
     max-width: 100%;
