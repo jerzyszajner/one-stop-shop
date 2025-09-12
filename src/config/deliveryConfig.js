@@ -1,5 +1,5 @@
 // Delivery methods configuration
-export const DELIVERY_METHODS = {
+export const DELIVERY_OPTIONS = {
   standard: {
     name: "Standard Delivery",
     time: "3-5 business days",
@@ -22,9 +22,9 @@ export const DELIVERY_METHODS = {
 
 // Initial delivery data for delivery context
 export const initialDeliveryData = {
-  selectedMethod: null,
+  selectedOption: null,
   deliveryPrice: 0,
-  deliveryMessage: "",
+  messageOptional: "",
   isAlternativeAddress: false,
   // Standard address (from user profile)
   standardAddress: {
@@ -47,6 +47,3 @@ export const initialDeliveryData = {
     phone: "",
   },
 };
-
-// Delivery message max length constant
-export const MESSAGE_MAX_LENGTH = 150;
