@@ -107,10 +107,6 @@
         padding: var(--space-medium);
     }
 
-    .deliverySection {
-        padding: var(--space-medium);
-    }
-
     .checkbox {
         width: 30px;
         height: 30px;
@@ -118,7 +114,7 @@
 
     .buttonsContainer {
         flex-direction: column;
-        padding: 0 var(--space-medium) var(--space-medium);
+        padding: 0;
     }
 }
 
@@ -126,14 +122,5 @@
     .deliveryWrapper {
         padding: 0;
         background: var(--background-color-light);
-    }
-
-    .deliveryContainer {
-        padding: var(--space-medium) 0;
-    }
-
-    .buttonsContainer {
-        flex-direction: column;
-        padding: 0 var(--space-medium);
     }
 }
