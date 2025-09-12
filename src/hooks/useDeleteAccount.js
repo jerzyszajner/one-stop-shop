@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // Firebase
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import {
   deleteUser,
   EmailAuthProvider,
@@ -57,6 +57,15 @@ export const useDeleteAccount = (showToast) => {
         currentPassword.trim()
       );
       await reauthenticateWithCredential(user, credential);
+
+      // Delete user orders from Firestore
+      const ordersRef = collection(database, "users", user.uid, "orders");
+      const ordersSnapshot = await getDocs(ordersRef);
+
+      const deletePromises = ordersSnapshot.docs.map((orderDoc) =>
+        deleteDoc(orderDoc.ref)
+      );
+      await Promise.all(deletePromises);
 
       // Delete user document from Firestore
       const userDocRef = doc(database, "users", user.uid);
