@@ -1,5 +1,5 @@
 // Context
-import { useCartContext } from "./useCartContext";
+import { useCartContext } from "../context/CartContext";
 
 // Reducer
 import { CART_ACTIONS } from "../reducers/cartReducer";

@@ -1,10 +1,15 @@
+// Config
+import { getCountryOptions } from "../../config/countriesConfig";
+
+// Utils
+import { formatDigits } from "../../utils/helpers";
+
 // Components
 import Button from "../Button/Button";
 import FormGroup from "../FormGroup/FormGroup";
 import FieldRow from "../FieldRow/FieldRow";
 import InputField from "../InputField/InputField";
 import SelectField from "../SelectField/SelectField";
-import { getCountryOptions } from "../../config/countriesConfig";
 
 // Styles
 import styles from "./AlternativeAddressForm.module.css";
@@ -13,10 +18,10 @@ import styles from "./AlternativeAddressForm.module.css";
 const AlternativeAddressForm = ({
   formData,
   errors,
-  onInputChange,
+  isSaving,
   onSubmit,
-  onClose,
-  onFormatDigits,
+  onCancel,
+  onInputChange,
 }) => {
   return (
     <form
@@ -38,7 +43,7 @@ const AlternativeAddressForm = ({
             autoComplete="given-name"
             onChange={onInputChange}
             value={formData.firstname}
-            errors={errors.firstname}
+            errors={errors?.firstname}
           />
           {/*----------------Last Name----------------*/}
           <InputField
@@ -51,7 +56,7 @@ const AlternativeAddressForm = ({
             autoComplete="family-name"
             onChange={onInputChange}
             value={formData.lastname}
-            errors={errors.lastname}
+            errors={errors?.lastname}
           />
         </FieldRow>
         {/*----------------Street----------------*/}
@@ -65,7 +70,7 @@ const AlternativeAddressForm = ({
           autoComplete="address-line1"
           onChange={onInputChange}
           value={formData.street}
-          errors={errors.street}
+          errors={errors?.street}
         />
         {/*----------------Zip Code and City----------------*/}
         <FieldRow>
@@ -79,10 +84,10 @@ const AlternativeAddressForm = ({
             maxLength={4}
             inputMode="numeric"
             autoComplete="postal-code"
+            onInput={formatDigits}
             onChange={onInputChange}
-            onInput={onFormatDigits}
             value={formData.zipCode}
-            errors={errors.zipCode}
+            errors={errors?.zipCode}
           />
           {/*----------------City----------------*/}
           <InputField
@@ -95,7 +100,7 @@ const AlternativeAddressForm = ({
             autoComplete="address-level2"
             onChange={onInputChange}
             value={formData.city}
-            errors={errors.city}
+            errors={errors?.city}
           />
         </FieldRow>
         {/*----------------Country----------------*/}
@@ -108,7 +113,7 @@ const AlternativeAddressForm = ({
           options={getCountryOptions()}
           onChange={onInputChange}
           value={formData.country}
-          errors={errors.country}
+          errors={errors?.country}
         />
         {/*----------------Phone Number----------------*/}
         <InputField
@@ -119,19 +124,24 @@ const AlternativeAddressForm = ({
           placeholder="Enter your phone number"
           maxLength={8}
           autoComplete="tel"
+          onInput={formatDigits}
           onChange={onInputChange}
-          onInput={onFormatDigits}
           value={formData.phone}
-          errors={errors.phone}
+          errors={errors?.phone}
         />
       </FormGroup>
 
       {/*----------------Action Buttons----------------*/}
       <div className={styles.buttonsContainer}>
-        <Button type="submit" variant="primary" ariaLabel="Save address ">
-          Save
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={isSaving}
+          ariaLabel="Save address"
+        >
+          {isSaving ? "Saving..." : "Save"}
         </Button>
-        <Button type="button" onClick={onClose} variant="primary">
+        <Button type="button" onClick={onCancel} variant="primary">
           Close
         </Button>
       </div>

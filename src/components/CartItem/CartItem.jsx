@@ -1,10 +1,10 @@
-// Components
-import Counter from "../Counter/Counter";
-import Button from "../Button/Button";
-
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+
+// Components
+import Counter from "../Counter/Counter";
+import Button from "../Button/Button";
 
 // Styles
 import styles from "./CartItem.module.css";
@@ -12,7 +12,7 @@ import styles from "./CartItem.module.css";
 const CartItem = ({ item, onRemove }) => {
   return (
     <>
-      <li key={item.id} className={styles.cartItem}>
+      <li className={styles.cartItem}>
         <div className={styles.productImageContainer}>
           <img
             src={

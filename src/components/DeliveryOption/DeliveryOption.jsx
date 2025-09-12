@@ -6,8 +6,8 @@ import styles from "./DeliveryOption.module.css";
 
 // Delivery option component
 const DeliveryOption = ({
-  deliveryMethod,
-  deliveryInfo,
+  option,
+  optionInfo,
   isSelected,
   onSelect,
   className,
@@ -18,14 +18,14 @@ const DeliveryOption = ({
     className={`${styles.option} ${isSelected ? styles.selected : ""} ${
       className || ""
     }`}
-    onClick={() => onSelect(deliveryMethod)}
+    onClick={() => onSelect(option)}
   >
     <div className={styles.optionInfo}>
-      <h3 className={styles.optionName}>{deliveryInfo.name}</h3>
-      <p className={styles.optionTime}>{deliveryInfo.time}</p>
-      <p className={styles.optionDescription}>{deliveryInfo.description}</p>
+      <h3 className={styles.optionName}>{optionInfo.name}</h3>
+      <p className={styles.optionTime}>{optionInfo.time}</p>
+      <p className={styles.optionDescription}>{optionInfo.description}</p>
     </div>
-    <div className={styles.optionPrice}>${deliveryInfo.price}</div>
+    <div className={styles.optionPrice}>${optionInfo.price}</div>
   </Button>
 );
 

@@ -1,12 +1,12 @@
-// Components
-import Button from "../Button/Button";
+// Icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 // Hooks
 import { useCounter } from "../../hooks/useCounter";
 
-// Icons
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+// Components
+import Button from "../Button/Button";
 
 // Styles
 import styles from "./Counter.module.css";

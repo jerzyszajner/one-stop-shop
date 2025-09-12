@@ -2,7 +2,7 @@
 import { Navigate } from "react-router-dom";
 
 // Context
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 const RouteGuard = ({ children }) => {
   // State
