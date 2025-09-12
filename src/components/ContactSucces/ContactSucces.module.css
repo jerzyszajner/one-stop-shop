@@ -1,0 +1,17 @@
+    /* Contact success styling */
+    .contactSuccess {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-medium);
+    }
+
+    .contactSuccessTitle {
+        font-weight: bold;
+        font-size: var(--medium-font-size);
+        text-align: center;
+    }
+
+    .contactSuccessText {
+        text-align: center;
+        line-height: 1.5;
+    }

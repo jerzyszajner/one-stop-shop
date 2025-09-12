@@ -1,0 +1,95 @@
+/* Delivery summary styles */
+.deliverySection {
+    width: 100%;
+    height: fit-content;
+    background: var(--secondary-color-light);
+    border-radius: var(--border-radius-medium);
+    padding: var(--space-large);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+}
+
+.deliveryTitle {
+    font-size: var(--medium-small-font-size);
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.deliveryContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+}
+
+.deliveryOptionSection,
+.deliveryAddressSection,
+.deliveryMessageSection {
+    display: flex;
+    flex-direction: column;
+}
+
+.sectionTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--basic-font-size);
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: var(--space-x-small);
+}
+
+.optionInfo {
+    color: var(--text-dark);
+    border: 1px dashed var(--secondary-color);
+    padding: var(--space-small);
+    border-radius: var(--border-radius-small);
+    display: flex;
+    justify-content: space-between;
+}
+
+.option {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+}
+
+.optionName {
+    font-size: var(--base-font-size);
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.optionTime,
+.optionDescription {
+    font-size: var(--small-font-size);
+    color: var(--text-dark);
+}
+
+.optionPrice {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addressCard {
+    border: 1px dashed var(--secondary-color);
+    border-radius: var(--border-radius-small);
+    padding: var(--space-small);
+}
+
+.deliveryMessageText {
+    color: var(--text-dark);
+    border: 1px dashed var(--secondary-color);
+    padding: var(--space-small);
+    border-radius: var(--border-radius-small);
+    word-wrap: break-word;
+}
+
+/* Responsive design */
+@media screen and (max-width: 868px) {
+    .deliverySection {
+        padding: var(--space-medium);
+    }
+}

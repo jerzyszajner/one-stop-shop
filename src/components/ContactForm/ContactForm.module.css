@@ -1,0 +1,72 @@
+/* Contact form */
+.contactForm {
+    width: 100%;
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-small);
+    padding: var(--space-large);
+    background-color: var(--secondary-color-light);
+    border-radius: var(--border-radius-medium);
+}
+
+.formTitle {
+    font-weight: bold;
+    font-size: var(--medium-font-size);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+    padding: var(--space-medium);
+    border-radius: var(--border-radius-medium);
+}
+
+.formGroupTitle {
+    font-weight: bold;
+}
+
+/* Field rows */
+.fieldRow {
+    display: flex;
+    gap: var(--space-medium);
+}
+
+.fieldContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Form inputs */
+.formInput {
+    width: 100%;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-x-small);
+    width: 100%;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+
+    .contactForm {
+        width: 100%;
+        padding: var(--space-medium);
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+    .formGroup {
+        padding: var(--space-medium);
+    }
+
+    .fieldRow {
+        flex-direction: column;
+    }
+}

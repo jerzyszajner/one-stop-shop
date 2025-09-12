@@ -1,0 +1,72 @@
+/* Profile header styles */
+.profileHeader {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-medium);
+}
+
+.profileImageWrapper {
+    width: 150px;
+    height: 150px;
+    border-radius: var(--border-radius-circle);
+    position: relative;
+}
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    border-radius: var(--border-radius-circle);
+}
+
+.profileImage.loaded {
+    opacity: 1;
+}
+
+.profileImage.fallback {
+    border: 1px dashed var(--primary-color);
+}
+
+.profileImageWrapper:hover .profileImage {
+    transform: scale(1.05);
+}
+
+.profileTitle {
+    font-size: var(--medium-small-font-size);
+    font-weight: bold;
+    text-align: center;
+}
+
+.emailStatusContainer {
+    text-align: center;
+    padding: var(--space-small);
+}
+
+.emailStatus {
+    font-size: var(--base-font-size);
+    font-weight: bold;
+}
+
+.buttonsContainer {
+    display: flex;
+    gap: var(--space-x-small);
+    width: 100%;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .profileHeader {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .buttonsContainer {
+        flex-direction: column;
+    }
+
+}
