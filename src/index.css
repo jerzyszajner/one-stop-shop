@@ -42,6 +42,7 @@ img {
     --input-color-focus: #3b82f6;
     --input-shadow-focus: 0 0 0 2px rgba(59, 130, 246, 0.4);
     --link-color-hover: #3b82f6;
+    --button-gray-bg: #e7e7e7;
     --button-hover-bg: #dadada;
     --cart-badge-color: #c53030;
     --remove-button-color: #c53030;
@@ -67,6 +68,7 @@ img {
     --icon-shadow-dark: drop-shadow(0 0 1px var(--text-dark)) drop-shadow(0 0 2px var(--text-dark));
     --border-color-active-thumbnails: #b3b3b4;
     --background-color-light: #d6d7d8;
+    --background-color-lighter: #d1d1d157;
     --background-color-image: #ebeced;
     --background-color-light-blue: #e7f0fe;
     --background-color-input-edit: #e7f0fe;

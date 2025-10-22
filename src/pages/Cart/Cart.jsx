@@ -13,7 +13,7 @@ import { CART_ACTIONS } from "../../reducers/cartReducer";
 import { useCartCalculations, useNavigation } from "../../hooks";
 
 // Components
-import { Button, ButtonLink, CartItem } from "../../components";
+import { Button, ButtonLink, CartItem, EmptyState } from "../../components";
 
 // Styles
 import styles from "./Cart.module.css";
@@ -48,7 +48,7 @@ const Cart = () => {
   return (
     <div className={styles.cartContainer}>
       {cart.length === 0 ? (
-        <p className={styles.emptyCard}>Your cart is empty.</p>
+        <EmptyState message="Your cart is empty!" />
       ) : (
         <div className={styles.cartListContainer}>
           <ul className={styles.cartList}>

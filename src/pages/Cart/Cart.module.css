@@ -51,13 +51,6 @@
   width: 100%;
 }
 
-/* Empty cart message */
-.emptyCard {
-  font-size: var(--medium-font-size);
-  font-weight: bold;
-  color: var(--text-dark);
-}
-
 /* Responsive design */
 @media screen and (max-width: 480px) {
   .cartContainer {

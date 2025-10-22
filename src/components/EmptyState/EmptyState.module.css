@@ -1,0 +1,8 @@
+/* Empty cart message */
+.emptyState {
+    font-size: var(--medium-font-size);
+    font-weight: bold;
+    color: var(--text-dark);
+    text-align: center;
+    padding: var(--space-large);
+}

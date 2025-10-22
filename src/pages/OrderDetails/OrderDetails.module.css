@@ -1,4 +1,4 @@
-/* Order confirmation page styling */
+/* Order details page styling */
 .wrapper {
     width: 100%;
     flex: 1;
@@ -63,7 +63,7 @@
 .section {
     margin-bottom: var(--space-medium);
     padding: var(--space-medium);
-    background: var(--primary-color-light);
+    background: var(--background-color-lighter);
     border-radius: var(--border-radius-medium);
     display: flex;
     flex-direction: column;
@@ -103,7 +103,6 @@
     padding: var(--space-medium);
     background: var(--secondary-color-light);
     border-radius: var(--border-radius-small);
-    border: 1px solid var(--secondary-color);
 }
 
 .itemImage {
@@ -111,7 +110,6 @@
     height: 80px;
     object-fit: cover;
     border-radius: var(--border-radius-small);
-    /* flex-shrink: 0; */
 }
 
 .itemDetails {
@@ -177,13 +175,6 @@
     color: var(--text-success);
 }
 
-/* Shipping content */
-.shippingContent {
-    background: var(--secondary-color-light);
-    border-radius: var(--border-radius-small);
-    padding: var(--space-medium);
-}
-
 /* Delivery method content */
 .deliveryContent {
     display: flex;
@@ -244,6 +235,10 @@
 @media screen and (max-width: 480px) {
     .container {
         padding: var(--space-medium);
+    }
+
+    .actionsContainer {
+        display: none;
     }
 }
 

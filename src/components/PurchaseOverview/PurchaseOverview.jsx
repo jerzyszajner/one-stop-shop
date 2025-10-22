@@ -1,6 +1,7 @@
 // Components
 import CartItem from "../CartItem/CartItem";
 import OrderSummary from "../OrderSummary/OrderSummary";
+import EmptyState from "../EmptyState/EmptyState";
 
 // Styles
 import styles from "./PurchaseOverview.module.css";
@@ -15,7 +16,7 @@ const PurchaseOverview = ({
   return (
     <div className={styles.purchaseOverviewContainer}>
       {cart.length === 0 ? (
-        <p className={styles.emptyCard}>Your cart is empty.</p>
+        <EmptyState message="Your cart is empty!" />
       ) : (
         <div className={styles.cartListContainer}>
           <ul className={styles.cartList}>

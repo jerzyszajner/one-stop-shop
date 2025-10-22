@@ -53,6 +53,7 @@
 
 .buttonsContainer {
     display: flex;
+    flex-direction: column;
     gap: var(--space-x-small);
     width: 100%;
 }
@@ -68,5 +69,4 @@
     .buttonsContainer {
         flex-direction: column;
     }
-
 }

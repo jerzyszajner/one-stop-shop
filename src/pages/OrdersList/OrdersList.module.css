@@ -1,0 +1,67 @@
+/* Orders List styles */
+.ordersWrapper {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-large) 0;
+    background: var(--secondary-color-light);
+}
+
+.title {
+    font-size: var(--large-font-size);
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: var(--space-large);
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--border-radius-small);
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    background: var(--secondary-color);
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.headerCell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-wrap: nowrap;
+}
+
+.orderDate {
+    border-left: 1px solid var(--primary-color-light);
+    border-right: 1px solid var(--primary-color-light);
+}
+
+.ordersList {
+    width: 100%;
+}
+
+@media screen and (max-width: 480px) {
+    .ordersWrapper {
+        padding: 0;
+    }
+
+    .title {
+        font-size: var(--medium-font-size);
+        margin: var(--space-medium);
+    }
+}

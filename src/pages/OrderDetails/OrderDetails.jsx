@@ -30,9 +30,9 @@ import {
 } from "../../components";
 
 // Styles
-import styles from "./OrderConfirmation.module.css";
+import styles from "./OrderDetails.module.css";
 
-const OrderConfirmation = () => {
+const OrderDetails = () => {
   // Params
   const { orderNumber } = useParams();
 
@@ -241,4 +241,4 @@ const OrderConfirmation = () => {
   );
 };
 
-export default OrderConfirmation;
+export default OrderDetails;

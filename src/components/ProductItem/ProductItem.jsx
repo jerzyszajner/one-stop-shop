@@ -3,7 +3,7 @@ import ButtonLink from "../ButtonLink/ButtonLink";
 import Button from "../Button/Button";
 
 // Hooks
-import { useImageLoader } from "../../hooks/useImageLoader";
+import { useImageLoader } from "../../hooks";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +16,7 @@ const ProductItem = ({ product, onAddToCart }) => {
   const { imageLoaded, handleImageLoad } = useImageLoader();
 
   return (
-    <div className={styles.productCard}>
+    <li className={styles.productCard}>
       <ButtonLink to={`/products/${product.documentId}`} variant="details">
         {/* Product image */}
         <div className={styles.imageContainer}>
@@ -76,7 +76,7 @@ const ProductItem = ({ product, onAddToCart }) => {
           Add to cart
         </Button>
       </div>
-    </div>
+    </li>
   );
 };
 

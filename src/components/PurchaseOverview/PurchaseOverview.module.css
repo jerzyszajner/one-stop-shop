@@ -3,12 +3,6 @@
     color: var(--text-light);
 }
 
-.emptyCard {
-    font-size: var(--medium-font-size);
-    font-weight: bold;
-    color: var(--text-dark);
-}
-
 .cartListContainer {
     width: 100%;
     border-radius: var(--border-radius-medium);

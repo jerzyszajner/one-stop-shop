@@ -20,10 +20,14 @@ export const useFetchProducts = () => {
       try {
         const querySnapshot = await getDocs(collection(database, "products"));
 
-        const productsList = querySnapshot.docs.map((doc) => ({
-          documentId: doc.id,
-          ...doc.data(),
-        }));
+        const productsList = querySnapshot.docs.map((doc) => {
+          const productData = doc.data();
+          return {
+            documentId: doc.id,
+            ...productData,
+          };
+        });
+
         setProducts(productsList);
       } catch (error) {
         setError(error);

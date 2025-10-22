@@ -19,7 +19,8 @@ import Checkout from "../pages/Checkout/Checkout";
 import Contact from "../pages/Contact/Contact";
 import Home from "../pages/Home/Home";
 import NotFound from "../pages/NotFound/NotFound";
-import OrderConfirmation from "../pages/OrderConfirmation/OrderConfirmation";
+import OrdersList from "../pages/OrdersList/OrdersList";
+import OrderDetails from "../pages/OrderDetails/OrderDetails";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import ProductsList from "../pages/ProductsList/ProductsList";
 import Profile from "../pages/Profile/Profile";
@@ -67,10 +68,18 @@ export const router = createBrowserRouter(
         }
       />
       <Route
-        path="order-confirmation/:orderNumber"
+        path="order-details/:orderNumber"
         element={
           <RouteGuard>
-            <OrderConfirmation />
+            <OrderDetails />
+          </RouteGuard>
+        }
+      />
+      <Route
+        path="orders"
+        element={
+          <RouteGuard>
+            <OrdersList />
           </RouteGuard>
         }
       />

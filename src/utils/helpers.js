@@ -7,7 +7,12 @@ export const formatDigits = (e) => {
 export const formatDate = (date) => {
   return new Date(date).toLocaleDateString("en-GB", {
     day: "numeric",
-    month: "short",
+    month: "numeric",
     year: "numeric",
   });
+};
+
+// Formats a value as a string with 2 decimals
+export const formatPrice = (amount) => {
+  return Number(amount).toFixed(2);
 };

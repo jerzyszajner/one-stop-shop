@@ -2,6 +2,7 @@
 import VerificationBadge from "../VerificationBadge/VerificationBadge";
 import CustomLink from "../CustomLink/CustomLink";
 import Button from "../Button/Button";
+import ButtonLink from "../ButtonLink/ButtonLink";
 
 // Hooks
 import { useImageLoader } from "../../hooks/useImageLoader";
@@ -60,10 +61,13 @@ const ProfileHeader = ({
           onClick={onOpenEditModal}
           disabled={isUpdating}
         >
-          Edit profile
+          Edit Profile
         </Button>
+        <ButtonLink to="/orders" variant="primary">
+          My Orders
+        </ButtonLink>
         <Button variant="primary" type="button" onClick={onOpenDeleteModal}>
-          Delete account
+          Delete Account
         </Button>
       </div>
     </section>

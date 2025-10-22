@@ -52,6 +52,18 @@
     color: var(--text-dark);
 }
 
+/*** Order details button ***/
+.orders {
+    background: var(--button-gray-bg);
+    color: var(--text-dark);
+    width: 100%;
+    height: 40px;
+}
+
+.orders:hover {
+    background: var(--button-hover-bg);
+}
+
 /*** Details button ***/
 .details {
     height: auto;
@@ -93,6 +105,10 @@
 
     .circle {
         width: 50px;
+        height: 50px;
+    }
+
+    .orders {
         height: 50px;
     }
 }
