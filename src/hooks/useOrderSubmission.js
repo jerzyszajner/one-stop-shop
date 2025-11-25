@@ -93,7 +93,7 @@ export const useOrderSubmission = (showToast) => {
       clearCart();
       clearDeliveryData();
       showToast("Success", "Order created successfully", "success");
-      navigate(`/order-confirmation/${orderData.orderNumber}`);
+      navigate(`/order-details/${orderData.orderNumber}`);
 
       return orderData;
     } catch (error) {
